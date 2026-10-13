@@ -54,11 +54,11 @@ export default function LoginPage() {
       {/* Top Navbar */}
       <header className="h-16 px-6 sm:px-10 border-b border-slate-200 bg-white flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-blue-700 text-white flex items-center justify-center font-bold text-sm shadow-xs">
-            G
+          <div className="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center font-bold text-sm shadow-xs">
+            M
           </div>
           <span className="font-extrabold text-base tracking-tight text-slate-900">
-            GuruHub AI
+            ModulKu
           </span>
         </Link>
 
@@ -207,8 +207,8 @@ export default function LoginPage() {
       </main>
 
       {/* Footer */}
-      <footer className="py-4 border-t border-slate-200 bg-white text-center text-xs text-slate-600">
-        GuruHub AI - Platform Otomasi Administrasi & Evaluasi Kurikulum Merdeka
+      <footer className="py-4 border-t border-slate-200 bg-white text-center text-xs text-slate-600 font-mono">
+        ModulKu - Platform Otomasi Administrasi & Evaluasi Kurikulum Merdeka
       </footer>
     </div>
   );

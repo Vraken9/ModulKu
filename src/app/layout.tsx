@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "GuruHub AI - Platform Administrasi & Evaluasi Kurikulum Merdeka",
+  title: "ModulKu - Platform Administrasi & Evaluasi Kurikulum Merdeka",
   description:
     "Platform terpadu guru Indonesia untuk pembuatan Modul Ajar BSKAP 2024, Soal Evaluasi AKM/HOTS, Kisi-kisi, ATP, Prota, Promes, dan Media Ajar PPTX.",
 };
