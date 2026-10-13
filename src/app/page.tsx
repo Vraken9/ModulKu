@@ -1,62 +1,27 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
 import {
-  FileCheck2,
-  FileText,
-  CalendarDays,
-  Presentation,
-  ShieldCheck,
-  CheckCircle2,
   Sparkles,
   ArrowRight,
-  ChevronDown,
-  Layers,
-  Clock,
-  Award,
-  BookOpen,
-  School,
-  Sliders,
   Check,
-  HelpCircle,
-  Download,
+  ShieldCheck,
+  Zap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
 import { SmoothCursor } from "@/components/ui/smooth-cursor";
-import { PlusSeparator } from "@/components/ui/plus-separator";
 import { InteractiveTicker } from "@/components/landing/InteractiveTicker";
 import { BauhausCanvasBanner } from "@/components/landing/BauhausCanvasBanner";
+import { WorkflowSteps } from "@/components/landing/WorkflowSteps";
+import { BentoEfficiency } from "@/components/landing/BentoEfficiency";
+import { BentoPedagogical } from "@/components/landing/BentoPedagogical";
+import { ModernFaq } from "@/components/landing/ModernFaq";
+import { RadialCtaBanner } from "@/components/landing/RadialCtaBanner";
+import { ModernFooter } from "@/components/landing/ModernFooter";
 
 export default function LandingPage() {
-  const [activeFaq, setActiveFaq] = useState<number | null>(null);
-  const [previewTab, setPreviewTab] = useState<"soal" | "kisi" | "modul">("soal");
-
-  const faqs = [
-    {
-      q: "Apakah seluruh dokumen luaran sesuai regulasi Kurikulum Merdeka terbaru?",
-      a: "Ya. Sistem GuruHub AI dikembangkan mengacu langsung pada Keputusan Kepala BSKAP Kemendikbudristek No. 032/H/KR/2024 tentang Capaian Pembelajaran, Permendikbudristek No. 12 Tahun 2024, serta panduan pembelajaran dan asesmen nasional.",
-    },
-    {
-      q: "Dapatkah berkas yang dihasilkan diedit kembali di Microsoft Word dan PowerPoint?",
-      a: "Tentu saja. Mesin ekspor dokumen kami menghasilkan berkas .DOCX asli dengan margin standar kedinasan 4-3-3-3 cm dan file .PPTX native widescreen 16:9 yang dapat Anda buka, edit, dan cetak langsung di komputer Anda.",
-    },
-    {
-      q: "Bagaimana dokumen GuruHub AI dapat digunakan sebagai bukti dukung di Platform Merdeka Mengajar (PMM)?",
-      a: "Modul Ajar, instrumen asesmen, LKPD, dan media presentasi telah diselaraskan dengan 8 Indikator Observasi Kelas serta Rencana Hasil Kerja (RHK) pada Pengelolaan Kinerja Guru PMM sesuai Perdirjen GTK No. 7607/B.B1/HK.03/2023.",
-    },
-    {
-      q: "Apakah saya harus memasukkan Kop Surat dan profil sekolah berulang kali?",
-      a: "Tidak. Melalui modul Master Profil Sekolah, Anda cukup mengisi data sekolah (nama, NPSN, alamat, logo daerah, logo sekolah) dan data penandatangan satu kali. Seluruh naskah soal, modul ajar, ATP, dan LKPD akan otomatis memuat Kop Surat dan Lembar Pengesahan resmi.",
-    },
-    {
-      q: "Apakah ada biaya langganan untuk mulai menggunakan sistem ini?",
-      a: "GuruHub AI menyediakan akses awal secara gratis bagi seluruh guru di Indonesia untuk menyusun modul ajar, paket soal HOTS, dan perangkat tahunan secara mandiri tanpa batasan komplikasi.",
-    },
-  ];
-
   return (
     <div className="min-h-screen bg-white text-slate-900 flex flex-col font-sans selection:bg-blue-100 selection:text-blue-900">
       {/* 0. Custom Smooth Cursor Interaktif */}
@@ -66,7 +31,7 @@ export default function LandingPage() {
       <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-blue-700 text-white flex items-center justify-center font-black text-base shadow-sm">
+            <div className="w-9 h-9 rounded-xl bg-blue-700 text-white flex items-center justify-center font-black text-base shadow-xs">
               G
             </div>
             <div className="leading-tight">
@@ -74,7 +39,7 @@ export default function LandingPage() {
                 GuruHub AI
               </span>
               <span className="text-[10px] text-slate-600 block uppercase font-medium tracking-wider">
-                Kurikulum Merdeka
+                Kurikulum Merdeka BSKAP
               </span>
             </div>
           </Link>
@@ -82,7 +47,7 @@ export default function LandingPage() {
           {/* Desktop Nav Links */}
           <nav className="hidden md:flex items-center space-x-7 text-xs font-semibold text-slate-600">
             <a href="#fitur" className="hover:text-blue-700 transition-colors">
-              Fitur Unggulan
+              Fitur Pedagogis
             </a>
             <a href="#ticker-interaktif" className="hover:text-blue-700 transition-colors">
               Eksplorasi Modul
@@ -97,7 +62,7 @@ export default function LandingPage() {
               Standar Regulasi
             </a>
             <a href="#faq" className="hover:text-blue-700 transition-colors">
-              FAQ
+              Tanya Jawab (FAQ)
             </a>
           </nav>
 
@@ -118,7 +83,7 @@ export default function LandingPage() {
       </header>
 
       {/* 2. Hero Section */}
-      <section className="relative overflow-hidden pt-12 pb-20 lg:pt-20 lg:pb-28 bg-gradient-to-b from-blue-50/60 via-white to-white">
+      <section className="relative overflow-hidden pt-12 pb-20 lg:pt-20 lg:pb-28 bg-gradient-to-b from-blue-50/60 via-white to-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Left Content */}
@@ -137,7 +102,7 @@ export default function LandingPage() {
               </h1>
 
               <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                Rancang paket asesmen, kuis, latihan HOTS/AKM, modul ajar berdiferensiasi, ATP, dan format kedinasan lengkap dengan Matriks Kisi-Kisi dan rubrik penskoran standar resmi.
+                Rancang paket asesmen, kuis, latihan HOTS/AKM, modul ajar berdiferensiasi 3 pilar, ATP, dan format kedinasan lengkap dengan Matriks Kisi-Kisi dan rubrik penskoran standar resmi.
               </p>
 
               {/* Action Buttons */}
@@ -181,7 +146,7 @@ export default function LandingPage() {
                     <div className="w-3 h-3 rounded-full bg-red-400" />
                     <div className="w-3 h-3 rounded-full bg-amber-400" />
                     <div className="w-3 h-3 rounded-full bg-emerald-400" />
-                    <span className="text-[11px] font-bold text-slate-400 ml-2">Generator Soal & Kisi-Kisi</span>
+                    <span className="text-[11px] font-bold text-slate-400 ml-2 font-mono">Generator Soal & Kisi-Kisi</span>
                   </div>
                   <Badge variant="outline" className="text-[10px] bg-blue-50 text-blue-800 border-blue-200 font-bold">
                     Otomatis 100%
@@ -236,10 +201,10 @@ export default function LandingPage() {
       </section>
 
       {/* 3. Jenjang Bar */}
-      <section className="py-8 bg-slate-50 border-y border-slate-200">
+      <section className="py-7 bg-slate-50 border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-3">
-          <p className="text-[11px] font-bold uppercase tracking-wider text-slate-600">
-            Disediakan untuk Pendidik dari Berbagai Satuan Pendidikan Nasional
+          <p className="text-[11px] font-bold uppercase tracking-wider text-slate-600 font-mono">
+            // DISEDIAKAN UNTUK SELURUH SATUAN PENDIDIKAN NASIONAL
           </p>
           <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-4">
             {["SD / MI", "SMP / MTs", "SMA / MA", "SMK / MAK", "SLB / Inklusi"].map((lvl) => (
@@ -254,283 +219,36 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 3.5. SECTION BARU: Interactive Ticker (Running Text dengan Blind Gradient & Dynamic Detail Switcher) */}
+      {/* 3.5. Running Text Interaktif dengan Blind Gradient & Dynamic Detail Switcher */}
       <section id="ticker-interaktif" className="py-16 bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <InteractiveTicker />
         </div>
       </section>
 
-      {/* 4. Section: Dari Pengaturan Hingga Dokumen Siap Cetak (Interactive Flow) */}
-      <section id="cara-kerja" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-          <div className="text-center max-w-3xl mx-auto space-y-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-blue-700">
-              ALUR KERJA INTUITIF
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-              Dari pengaturan hingga berkas resmi siap cetak
-            </h2>
-            <p className="text-sm text-slate-600 leading-relaxed">
-              Cukup tentukan parameter pembelajaran Anda, sistem akan menyusun naskah lengkap berserta dokumen pendukung supervisi.
-            </p>
-          </div>
-
-          {/* Interactive Preview Tabs */}
-          <div className="space-y-6 max-w-4xl mx-auto">
-            <div className="flex justify-center gap-2 border-b border-slate-200 pb-3">
-              <Button
-                variant={previewTab === "soal" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setPreviewTab("soal")}
-                className="text-xs font-bold"
-              >
-                1. Naskah Soal & Kunci
-              </Button>
-              <Button
-                variant={previewTab === "kisi" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setPreviewTab("kisi")}
-                className="text-xs font-bold"
-              >
-                2. Matriks Kisi-Kisi Ujian
-              </Button>
-              <Button
-                variant={previewTab === "modul" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setPreviewTab("modul")}
-                className="text-xs font-bold"
-              >
-                3. Modul Ajar BSKAP 2024
-              </Button>
-            </div>
-
-            <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm">
-              {previewTab === "soal" && (
-                <div className="space-y-4 text-xs">
-                  <div className="flex justify-between items-center border-b border-slate-200 pb-2">
-                    <span className="font-bold text-slate-800 text-sm">Paket Soal Asesmen Sumatif</span>
-                    <Badge variant="outline" className="text-xs bg-emerald-50 text-emerald-800 font-bold">
-                      Format Cetak A4
-                    </Badge>
-                  </div>
-                  <p className="text-slate-700 leading-relaxed">
-                    Setiap butir soal dilengkapi stimulus kontekstual, opsi jawaban proporsional, kunci jawaban akurat, serta pembahasan pedagogis untuk umpan balik konstruktif siswa.
-                  </p>
-                  <div className="p-3 bg-white rounded border border-slate-200 text-slate-800 italic">
-                    Contoh: Mengapa pemuaian rel kereta api harus diperhitungkan dalam rekayasa jembatan baja? Jelaskan berdasarkan prinsip kalor dan hukum termodinamika.
-                  </div>
-                </div>
-              )}
-
-              {previewTab === "kisi" && (
-                <div className="space-y-4 text-xs">
-                  <div className="flex justify-between items-center border-b border-slate-200 pb-2">
-                    <span className="font-bold text-slate-800 text-sm">Matriks Kisi-Kisi Ujian Resmi</span>
-                    <Badge variant="outline" className="text-xs bg-blue-50 text-blue-800 font-bold">
-                      Standar Arsip Dinas
-                    </Badge>
-                  </div>
-                  <p className="text-slate-700 leading-relaxed">
-                    Tabel matriks memetakan Capaian Pembelajaran (CP), Tujuan Pembelajaran (TP), Indikator Soal, Level Kognitif (LOTS/MOTS/HOTS), dan Bobot Nilai tanpa hitungan manual.
-                  </p>
-                </div>
-              )}
-
-              {previewTab === "modul" && (
-                <div className="space-y-4 text-xs">
-                  <div className="flex justify-between items-center border-b border-slate-200 pb-2">
-                    <span className="font-bold text-slate-800 text-sm">Modul Ajar Supervisi BSKAP 2024</span>
-                    <Badge variant="outline" className="text-xs bg-purple-50 text-purple-800 font-bold">
-                      3 Pilar Diferensiasi
-                    </Badge>
-                  </div>
-                  <p className="text-slate-700 leading-relaxed">
-                    Lengkap dengan diferensiasi konten, proses, dan produk, serta lampiran Lembar Kerja Peserta Didik (LKPD), bahan bacaan, glosarium, dan lembar pengesahan kepala sekolah.
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 5. Section: Waktu Anda Lebih Baik Digunakan untuk Mendampingi Siswa */}
-      <section id="efisiensi" className="py-20 bg-slate-50 border-t border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-          <div className="text-center max-w-3xl mx-auto space-y-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-blue-700">
-              EFISIENSI WAKTU GURU
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-              Waktu Anda lebih baik digunakan untuk mendampingi siswa
-            </h2>
-            <p className="text-sm text-slate-600 leading-relaxed">
-              Beban administrasi menyita lebih dari 40% jam kerja guru. GuruHub AI mengotomasi proses klerikal agar fokus Anda kembali pada interaksi bermakna di ruang kelas.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card className="border-slate-200 bg-white shadow-xs p-6 space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-800 flex items-center justify-center font-bold">
-                <Clock className="w-5 h-5" />
-              </div>
-              <h3 className="text-base font-bold text-slate-900">Hemat Waktu Penyusunan</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Pembuatan naskah soal, kisi-kisi, dan modul ajar yang biasa memakan waktu berjam-jam dapat diselesaikan dalam beberapa detik.
-              </p>
-            </Card>
-
-            <Card className="border-slate-200 bg-white shadow-xs p-6 space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold">
-                <ShieldCheck className="w-5 h-5" />
-              </div>
-              <h3 className="text-base font-bold text-slate-900">Dokumentasi Standar Dinas</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Format berkas mengikuti standar kedinasan dengan margin 4-3-3-3 cm, Kop Surat dua logo, dan kolom tanda tangan pengawas.
-              </p>
-            </Card>
-
-            <Card className="border-slate-200 bg-white shadow-xs p-6 space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-800 flex items-center justify-center font-bold">
-                <Sliders className="w-5 h-5" />
-              </div>
-              <h3 className="text-base font-bold text-slate-900">Guru Memegang Kendali</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Setiap butir soal dan skenario ajar dapat disunting secara langsung (in-line edit) sebelum disimpan atau dicetak.
-              </p>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* 6. Section Dark: Tiga Langkah Menuju Soal Siap Pakai */}
-      <section className="py-20 bg-slate-900 text-white">
+      {/* 4. Section: Alur Kerja Terpandu BSKAP (Workflow Steps ala 21st.dev) */}
+      <section id="cara-kerja" className="py-20 bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            <div className="lg:col-span-5 space-y-4">
-              <span className="text-xs font-bold uppercase tracking-wider text-blue-400">
-                PROSES CEPAT & SEDERHANA
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-black tracking-tight leading-snug">
-                Tiga langkah menuju perangkat siap pakai
-              </h2>
-              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                Tidak perlu perintah prompt yang rumit. Sistem kami menyediakan formulir wizard terpandu dengan istilah pedagogis yang sudah akrab bagi Anda.
-              </p>
-              <div className="pt-2">
-                <Link href="/login">
-                  <Button className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs h-10 px-6 shadow-sm">
-                    Mulai Sekarang
-                  </Button>
-                </Link>
-              </div>
-            </div>
-
-            <div className="lg:col-span-7 space-y-4">
-              <div className="p-4 rounded-xl bg-slate-800/80 border border-slate-700 flex items-start gap-4">
-                <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-extrabold text-sm shrink-0">
-                  1
-                </div>
-                <div>
-                  <h4 className="font-bold text-sm text-white">Pilih Jenjang, Fase, & Lingkup Materi</h4>
-                  <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                    Tentukan tingkat kelas, fase kurikulum (A s/d F), serta topik materi yang ingin diujikan atau diajarkan.
-                  </p>
-                </div>
-              </div>
-
-              <div className="p-4 rounded-xl bg-slate-800/80 border border-slate-700 flex items-start gap-4">
-                <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-extrabold text-sm shrink-0">
-                  2
-                </div>
-                <div>
-                  <h4 className="font-bold text-sm text-white">Atur Standar & Komposisi Kognitif</h4>
-                  <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                    Sesuaikan persentase tingkat kesulitan (mudah, sedang, sulit) serta taksonomi Bloom (C1 s/d C6) secara instan.
-                  </p>
-                </div>
-              </div>
-
-              <div className="p-4 rounded-xl bg-slate-800/80 border border-slate-700 flex items-start gap-4">
-                <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-extrabold text-sm shrink-0">
-                  3
-                </div>
-                <div>
-                  <h4 className="font-bold text-sm text-white">Periksa, Edit, dan Ekspor Berkas Resmi</h4>
-                  <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                    Tinjau naskah di layar, lakukan penyesuaian jika diperlukan, lalu unduh dalam format Microsoft Word (.DOCX) atau PowerPoint (.PPTX).
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+          <WorkflowSteps />
         </div>
       </section>
 
-      {/* 7. Section: Bukan Sekadar Generator Biasa (Feature Grid) */}
-      <section id="fitur" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-          <div className="text-center max-w-3xl mx-auto space-y-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-blue-700">
-              KEMAMPUAN PEDAGOGIS MENDALAM
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-              Bukan sekadar membuat pertanyaan
-            </h2>
-            <p className="text-sm text-slate-600 leading-relaxed">
-              Setiap keluaran dokumen dikonstruksi secara ilmiah agar dapat dipertanggungjawabkan dalam supervisi akademik dan penilaian PMM.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="p-5 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2">
-              <span className="font-bold text-sm text-slate-900 block">Stimulus Variatif AKM</span>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Mendukung stimulus kutipan teks, studi kasus kontekstual, data tabel, dan permasalahan dunia nyata.
-              </p>
-            </div>
-
-            <div className="p-5 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2">
-              <span className="font-bold text-sm text-slate-900 block">Tingkat Kesulitan Akurat</span>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Pengaturan proporsi tingkat kesulitan (Mudah, Sedang, Sulit) dengan validasi otomatis total 100%.
-              </p>
-            </div>
-
-            <div className="p-5 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2">
-              <span className="font-bold text-sm text-slate-900 block">Kunci & Pembahasan Lengkap</span>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Disertai penjelasan penalaran ilmiah per butir soal untuk mempermudah evaluasi dan remedial siswa.
-              </p>
-            </div>
-
-            <div className="p-5 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2">
-              <span className="font-bold text-sm text-slate-900 block">Taksonomi Bloom C1 s/d C6</span>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Pemetaan ranah berpikir dari mengingat (C1) hingga mencipta (C6) sesuai format asesmen modern.
-              </p>
-            </div>
-
-            <div className="p-5 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2">
-              <span className="font-bold text-sm text-slate-900 block">3 Pilar Pembelajaran Berdiferensiasi</span>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Modul ajar merinci diferensiasi konten, proses, dan produk sesuai kesiapan belajar peserta didik.
-              </p>
-            </div>
-
-            <div className="p-5 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2">
-              <span className="font-bold text-sm text-slate-900 block">Dukungan Formula KaTeX & Sains</span>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Formula matematika, reaksi kimia, dan simbol fisika dirender rapi dan dapat diedit di Word.
-              </p>
-            </div>
-          </div>
+      {/* 5. Section: Efisiensi Waktu Guru (Bento Efficiency ala 21st.dev) */}
+      <section id="efisiensi" className="py-20 bg-slate-50 border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <BentoEfficiency />
         </div>
       </section>
 
-      {/* 7.5. SECTION BARU: Spanduk Kanvas Geometris Presisi (Bauhaus Dynamic Canvas Banner) */}
-      <section id="kanvas-seni" className="py-16 bg-slate-50 border-t border-slate-200">
+      {/* 6. Section: Kemampuan Pedagogis Mendalam (Bento Pedagogical ala 21st.dev) */}
+      <section id="fitur" className="py-20 bg-white border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <BentoPedagogical />
+        </div>
+      </section>
+
+      {/* 7. Section: Spanduk Kanvas Geometris Presisi (Bauhaus Dynamic Canvas Banner) */}
+      <section id="kanvas-seni" className="py-16 bg-slate-50 border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
           <div className="text-center max-w-3xl mx-auto space-y-2">
             <span className="text-xs font-mono text-blue-700 font-bold uppercase tracking-wider">
@@ -547,130 +265,22 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 8. Section FAQ Accordion */}
-      <section id="faq" className="py-20 bg-white border-t border-slate-200">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 space-y-10">
-          <div className="text-center space-y-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-blue-700">
-              PERTANYAAN UMUM
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-              Masih ingin tahu tentang GuruHub AI?
-            </h2>
-            <p className="text-sm text-slate-600">
-              Pertanyaan yang paling sering diajukan oleh para pendidik mengenai platform ini
-            </p>
-          </div>
-
-          <div className="space-y-3">
-            {faqs.map((faq, idx) => {
-              const isOpen = activeFaq === idx;
-              return (
-                <div
-                  key={idx}
-                  className="bg-white rounded-xl border border-slate-200 overflow-hidden transition-all shadow-xs"
-                >
-                  <button
-                    onClick={() => setActiveFaq(isOpen ? null : idx)}
-                    className="w-full p-4.5 sm:p-5 text-left flex justify-between items-center gap-4 focus:outline-none"
-                  >
-                    <span className="font-bold text-sm text-slate-900">{faq.q}</span>
-                    <ChevronDown
-                      className={`w-4 h-4 text-slate-500 shrink-0 transition-transform duration-200 ${
-                        isOpen ? "rotate-180" : ""
-                      }`}
-                    />
-                  </button>
-                  {isOpen && (
-                    <div className="px-5 pb-5 pt-0 text-xs text-slate-600 leading-relaxed border-t border-slate-100 mt-1">
-                      <p className="pt-3">{faq.a}</p>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* 9. Bottom CTA Banner */}
-      <section className="py-16 bg-white">
+      {/* 8. Section FAQ Accordion (Modern FAQ ala 21st.dev) */}
+      <section id="faq" className="py-20 bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-gradient-to-r from-blue-700 via-blue-800 to-indigo-900 rounded-3xl p-8 sm:p-12 text-center text-white space-y-6 shadow-xl relative overflow-hidden">
-            <div className="max-w-2xl mx-auto space-y-3 relative z-10">
-              <span className="inline-block text-xs font-bold uppercase tracking-wider text-blue-200 bg-blue-800/80 px-3 py-1 rounded-full border border-blue-400/30">
-                Akses Gratis untuk Pendidik Indonesia
-              </span>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight leading-tight">
-                Punya materi untuk diajarkan? Susun perangkatnya sekarang.
-              </h2>
-              <p className="text-xs sm:text-sm text-blue-100/90 leading-relaxed">
-                Bergabunglah bersama ribuan guru yang telah menghemat waktu administrasi dan menghadirkan pembelajaran berkualitas di kelas.
-              </p>
-              <div className="pt-2">
-                <Link href="/login">
-                  <Button size="lg" className="bg-white text-blue-900 hover:bg-blue-50 font-extrabold text-sm h-11 px-8 shadow-md gap-2">
-                    <span>Mulai Buat Perangkat Ajar Sekarang</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </Button>
-                </Link>
-              </div>
-            </div>
-
-            <div className="absolute right-0 top-0 w-80 h-80 rounded-full bg-blue-500/20 blur-3xl pointer-events-none" />
-          </div>
+          <ModernFaq />
         </div>
       </section>
 
-      {/* 10. Footer */}
-      <footer className="bg-slate-900 text-slate-400 text-xs py-12 border-t border-slate-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="space-y-3 md:col-span-2">
-              <div className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-xs">
-                  G
-                </div>
-                <span className="font-extrabold text-base text-white tracking-tight">
-                  GuruHub AI
-                </span>
-              </div>
-              <p className="text-slate-400 text-xs max-w-sm leading-relaxed">
-                Platform terpadu otomasi administrasi Kurikulum Merdeka, Soal AKM/HOTS, Modul Ajar BSKAP 2024, ATP, dan Media Presentasi untuk kemajuan pendidikan Indonesia.
-              </p>
-            </div>
-
-            <div className="space-y-2">
-              <span className="font-bold text-white uppercase tracking-wider text-[11px] block">
-                Modul Generator
-              </span>
-              <ul className="space-y-1.5 text-slate-400">
-                <li><Link href="/login" className="hover:text-white transition-colors">Soal & Kisi-Kisi</Link></li>
-                <li><Link href="/login" className="hover:text-white transition-colors">Modul Ajar BSKAP</Link></li>
-                <li><Link href="/login" className="hover:text-white transition-colors">ATP & Pekan Efektif</Link></li>
-                <li><Link href="/login" className="hover:text-white transition-colors">Slide PPTX & LKPD</Link></li>
-              </ul>
-            </div>
-
-            <div className="space-y-2">
-              <span className="font-bold text-white uppercase tracking-wider text-[11px] block">
-                Regulasi & Standar
-              </span>
-              <ul className="space-y-1.5 text-slate-400">
-                <li>BSKAP No. 032/H/KR/2024</li>
-                <li>Permendikbudristek No. 12/2024</li>
-                <li>Perdirjen GTK Kinerja PMM</li>
-                <li>Format Kedinasan 4-3-3-3 cm</li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-600 gap-3">
-            <span>Hak Cipta 2026 GuruHub AI. Seluruh hak cipta dilindungi undang-undang.</span>
-            <span>Security by Design & Standar Pendidikan Nasional Indonesia</span>
-          </div>
+      {/* 9. Bottom CTA Banner (Radial Mesh Glow Banner ala 21st.dev) */}
+      <section className="py-20 bg-slate-50 border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <RadialCtaBanner />
         </div>
-      </footer>
+      </section>
+
+      {/* 10. Modern Bento Footer ala 21st.dev */}
+      <ModernFooter />
     </div>
   );
 }
