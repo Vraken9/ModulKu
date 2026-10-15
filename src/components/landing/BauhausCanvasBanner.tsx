@@ -164,9 +164,9 @@ export function BauhausCanvasBanner() {
       {/* Spanduk Narasi di Bawah Kanvas */}
       <div className="p-6 sm:p-8 bg-white border-t border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="space-y-1.5 max-w-2xl">
-          <div className="inline-flex items-center gap-2 text-[11px] font-mono text-slate-800 bg-slate-100 px-2.5 py-1 rounded border border-slate-300 font-bold">
-            <Sparkles className="w-3 h-3 text-slate-700" />
-            <span>STANDAR BSKAP KEMENDIKBUDRISTEK NO. 032/H/KR/2024</span>
+          <div className="inline-flex items-center gap-2 text-xs text-slate-700 bg-slate-100 px-3 py-1 rounded-full border border-slate-200 font-semibold">
+            <Sparkles className="w-3.5 h-3.5 text-slate-700" />
+            <span>Standar BSKAP Kemendikbudristek No. 032/H/KR/2024</span>
           </div>
           <h3 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
             Presisi Struktur Dokumen Tanpa Kompromi

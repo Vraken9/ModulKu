@@ -142,18 +142,18 @@ export default function LandingPage() {
                 </div>
 
                 {/* Trust Checkmarks Monochromatic (Neutral SVG Icons) */}
-                <div className="pt-3 flex flex-wrap items-center justify-center lg:justify-start gap-y-2 gap-x-5 text-xs font-semibold text-slate-600 font-mono">
+                <div className="pt-3 flex flex-wrap items-center justify-center lg:justify-start gap-y-2 gap-x-5 text-xs font-medium text-slate-600">
                   <div className="flex items-center gap-1.5">
                     <Check className="w-4 h-4 text-slate-900 stroke-[2.5]" />
-                    <span>BEBAS KERJA KLERIKAL</span>
+                    <span>Bebas Kerja Klerikal</span>
                   </div>
                   <div className="flex items-center gap-1.5">
                     <Check className="w-4 h-4 text-slate-900 stroke-[2.5]" />
-                    <span>STANDAR BSKAP 032/2024</span>
+                    <span>Standar BSKAP 032/2024</span>
                   </div>
                   <div className="flex items-center gap-1.5">
                     <Check className="w-4 h-4 text-slate-900 stroke-[2.5]" />
-                    <span>DOCX MARGIN 4-3-3-3 CM</span>
+                    <span>DOCX Margin 4-3-3-3 cm</span>
                   </div>
                 </div>
               </div>
@@ -202,9 +202,9 @@ export default function LandingPage() {
       <section id="kanvas-seni" className="py-16 sm:py-20 bg-slate-50/50 border-b border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
           <div className="text-center max-w-3xl mx-auto space-y-2">
-            <span className="text-xs font-mono text-slate-800 font-bold uppercase tracking-wider">
-              [arsitektur_dokumen_resmi]
-            </span>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-700">
+              Arsitektur Dokumen Resmi
+            </div>
             <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
               Standar Regulasi BSKAP Terpetakan Rapi
             </h2>

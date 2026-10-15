@@ -38,8 +38,8 @@ export function BentoPedagogical() {
                   3 Pilar Pembelajaran Berdiferensiasi
                 </span>
               </div>
-              <Badge variant="outline" className="text-[10px] font-mono bg-slate-100 text-slate-800 border-slate-300 font-bold">
-                STANDAR BSKAP 2024
+              <Badge variant="outline" className="text-[10px] font-medium bg-slate-100 text-slate-700 border-slate-200">
+                Standar BSKAP 2024
               </Badge>
             </div>
 
@@ -152,8 +152,8 @@ export function BentoPedagogical() {
               <div className="w-9 h-9 rounded-xl bg-slate-900 text-white flex items-center justify-center font-bold">
                 <Sparkles className="w-4.5 h-4.5 text-white" />
               </div>
-              <span className="text-[10px] font-mono text-slate-600 font-bold">
-                [BLOOM_C1-C6]
+              <span className="text-[11px] font-semibold text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full border border-slate-200/60">
+                Taksonomi Bloom C1-C6
               </span>
             </div>
 

@@ -20,7 +20,11 @@ export function RadialCtaBanner() {
         </div>
 
         <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight">
-          Punya Materi untuk Diajarkan? Susun Bersama ModulKu Sekarang.
+          Punya Materi untuk Diajarkan? Susun Bersama{" "}
+          <span className="relative inline-block px-2.5 sm:px-3.5 py-0.5 sm:py-1 mx-1 rounded-xl bg-white text-slate-950 shadow-md">
+            ModulKu
+          </span>{" "}
+          Sekarang.
         </h2>
 
         <p className="text-xs sm:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed">

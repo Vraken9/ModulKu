@@ -22,10 +22,25 @@ export function Hero3DModuleCard() {
   const [rotateY, setRotateY] = useState<number>(-12);
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const [glarePosition, setGlarePosition] = useState<{ x: number; y: number }>({ x: 50, y: 50 });
+  const [isMobile, setIsMobile] = useState<boolean>(false);
 
-  // Handle interactive 3D mouse move tilt
+  useEffect(() => {
+    const checkMobile = () => {
+      const mobile = window.innerWidth < 640;
+      setIsMobile(mobile);
+      if (mobile) {
+        setRotateX(0);
+        setRotateY(0);
+      }
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // Handle interactive 3D mouse move tilt (only on desktop/tablet)
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
+    if (isMobile || !cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
@@ -47,12 +62,16 @@ export function Hero3DModuleCard() {
     });
   };
 
-  const handleMouseEnter = () => setIsHovered(true);
+  const handleMouseEnter = () => {
+    if (!isMobile) setIsHovered(true);
+  };
+
   const handleMouseLeave = () => {
-    setIsHovered(false);
-    // Smoothly return to pleasant isometric resting angle
-    setRotateX(8);
-    setRotateY(-10);
+    if (!isMobile) {
+      setIsHovered(false);
+      setRotateX(8);
+      setRotateY(-10);
+    }
   };
 
   const resetAngle = (e: React.MouseEvent) => {
@@ -63,8 +82,8 @@ export function Hero3DModuleCard() {
 
   return (
     <div
-      className="relative w-full max-w-[540px] mx-auto select-none py-4"
-      style={{ perspective: "1200px" }}
+      className="relative w-full max-w-[540px] mx-auto select-none py-2 sm:py-4 px-2 sm:px-0"
+      style={{ perspective: isMobile ? "none" : "1200px" }}
     >
       {/* Interactive 3D Perspective Container */}
       <div
@@ -72,24 +91,28 @@ export function Hero3DModuleCard() {
         onMouseMove={handleMouseMove}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        className="relative transition-transform duration-200 ease-out cursor-grab active:cursor-grabbing"
+        className={`relative transition-transform duration-200 ease-out ${
+          isMobile ? "" : "cursor-grab active:cursor-grabbing"
+        }`}
         style={{
-          transformStyle: "preserve-3d",
-          transform: `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
+          transformStyle: isMobile ? "flat" : "preserve-3d",
+          transform: isMobile
+            ? "none"
+            : `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
         }}
       >
         {/* Layer 0: 3D Cast Shadow Dasar */}
         <div
-          className="absolute inset-4 rounded-3xl bg-slate-900/15 blur-2xl -z-10 pointer-events-none transition-opacity duration-300"
+          className="absolute inset-4 rounded-3xl bg-slate-900/15 blur-2xl -z-10 pointer-events-none transition-opacity duration-300 hidden sm:block"
           style={{
             transform: "translateZ(-40px) translateY(24px) scale(0.92)",
             opacity: isHovered ? 0.35 : 0.2,
           }}
         />
 
-        {/* Layer 1: Dokumen Belakang (Matriks Kisi-Kisi Ujian) */}
+        {/* Layer 1: Dokumen Belakang (Matriks Kisi-Kisi Ujian) - Ditampilkan hanya di Tablet & Desktop */}
         <div
-          className="absolute -top-4 -right-4 w-full h-full rounded-2xl border border-slate-300 bg-slate-100/90 shadow-md p-5 pointer-events-none transition-transform duration-300"
+          className="absolute -top-4 -right-4 w-full h-full rounded-2xl border border-slate-300 bg-slate-100/90 shadow-md p-5 pointer-events-none transition-transform duration-300 hidden sm:block"
           style={{
             transform: `translateZ(${isHovered ? "20px" : "12px"}) rotateZ(3deg)`,
           }}
