@@ -167,16 +167,16 @@ export default function ModulAjarPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 no-print">
           <div>
             <div className="flex items-center gap-2 text-xs text-slate-500 mb-1">
-              <Link href="/dashboard" className="hover:text-blue-700 transition-colors">
+              <Link href="/dashboard" className="hover:text-slate-900 transition-colors">
                 Dashboard
               </Link>
               <span>/</span>
               <span className="text-slate-700 font-medium">Perangkat Ajar</span>
               <span>/</span>
-              <span className="text-emerald-700 font-bold">Modul Ajar BSKAP</span>
+              <span className="text-slate-900 font-bold">Modul Ajar BSKAP</span>
             </div>
             <h1 className="text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2.5">
-              <FileText className="w-6 h-6 text-emerald-700" />
+              <FileText className="w-6 h-6 text-slate-900" />
               <span>Generator Modul Ajar Kurikulum Merdeka</span>
             </h1>
             <p className="text-xs text-slate-600 mt-1">
@@ -186,7 +186,7 @@ export default function ModulAjarPage() {
 
           <div className="flex items-center gap-2">
             <Link href="/profil-sekolah">
-              <Button variant="outline" size="sm" className="text-xs font-semibold text-slate-700 border-slate-300 hover:bg-slate-50">
+              <Button variant="outline" size="sm" className="text-xs font-semibold text-slate-800 border-slate-300 hover:bg-slate-100 bg-white">
                 Profil: {teacher.teacher_name}
               </Button>
             </Link>
@@ -194,7 +194,7 @@ export default function ModulAjarPage() {
         </div>
 
         {formError && (
-          <div className="p-4 rounded-lg bg-rose-50 border border-rose-200 text-rose-900 text-xs flex items-center gap-2">
+          <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-900 text-xs flex items-center gap-2">
             <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
             <span>{formError}</span>
           </div>
@@ -203,23 +203,23 @@ export default function ModulAjarPage() {
         {/* JIKA BELUM ADA MODUL: TAMPILKAN FORMULIR WIZARD */}
         {!generatedModule ? (
           <div className="space-y-6">
-            {/* Banner Pengantar Edukatif */}
-            <div className="rounded-xl border border-emerald-300 bg-gradient-to-r from-emerald-800 via-teal-800 to-emerald-900 text-white p-6 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+            {/* Banner Pengantar Edukatif Bersih */}
+            <div className="rounded-2xl border border-slate-200 bg-white text-slate-900 p-6 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div className="space-y-2">
-                <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-emerald-700/80 text-[11px] font-semibold text-emerald-100 border border-emerald-600">
-                  <Sparkles className="w-3 h-3 text-emerald-300" />
-                  <span>Standar BSKAP Kemendikbudristek No. 032/H/KR/2024</span>
+                <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-slate-100 text-[10px] font-mono font-bold text-slate-700 border border-slate-200 uppercase">
+                  <Sparkles className="w-3 h-3 text-slate-700" />
+                  <span>STANDAR_BSKAP_NO_032 // SUPERVISI_RESMI</span>
                 </div>
-                <h2 className="text-xl font-extrabold tracking-tight text-white">
+                <h2 className="text-xl font-black tracking-tight text-slate-900">
                   Susun Modul Ajar Resmi dengan Diferensiasi Terpeta
                 </h2>
-                <p className="text-xs text-emerald-100 max-w-2xl leading-relaxed">
+                <p className="text-xs text-slate-600 max-w-2xl leading-relaxed">
                   Menghasilkan struktur lengkap: Informasi Umum, Komponen Inti (dengan 3 pilar diferensiasi: konten, proses, produk), Asesmen diagnostik/formatif/sumatif, serta lampiran LKPD dan Lembar Pengesahan Pengawas Sekolah.
                 </p>
               </div>
-              <div className="text-right text-xs text-emerald-100 font-mono bg-emerald-950/60 p-3 rounded-lg border border-emerald-700/80 shrink-0">
-                <p className="font-bold text-white">{teacher.teacher_name}</p>
-                <p className="text-emerald-200">{school.school_name}</p>
+              <div className="text-right text-xs text-slate-600 font-mono bg-slate-50 p-3.5 rounded-xl border border-slate-200 shrink-0">
+                <p className="font-bold text-slate-900">{teacher.teacher_name}</p>
+                <p className="text-slate-500">{school.school_name}</p>
               </div>
             </div>
 
@@ -342,9 +342,9 @@ export default function ModulAjarPage() {
                   variant="outline"
                   size="sm"
                   onClick={handleAutoFillCP}
-                  className="text-xs gap-1.5 border-emerald-300 text-emerald-800 bg-emerald-50 hover:bg-emerald-100 font-semibold"
+                  className="text-xs gap-1.5 border-slate-300 text-slate-900 bg-white hover:bg-slate-100 font-bold shadow-xs cursor-pointer"
                 >
-                  <BookOpen className="w-3.5 h-3.5" />
+                  <BookOpen className="w-3.5 h-3.5 text-slate-800" />
                   <span>Ambil CP Resmi BSKAP</span>
                 </Button>
               </CardHeader>
@@ -424,27 +424,31 @@ export default function ModulAjarPage() {
                     <div className="grid grid-cols-2 gap-2 text-xs">
                       <div
                         onClick={() => setFormatMode("lengkap_bskap")}
-                        className={`p-3 rounded-lg border cursor-pointer transition-all ${
+                        className={`p-3 rounded-xl border cursor-pointer transition-all ${
                           formatMode === "lengkap_bskap"
-                            ? "border-emerald-600 bg-emerald-50/80 font-bold text-emerald-950 shadow-xs"
+                            ? "border-slate-900 bg-slate-900 font-bold text-white shadow-xs"
                             : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
                         }`}
                       >
-                        <p className="font-bold text-slate-900">Mode Lengkap BSKAP</p>
-                        <p className="text-[10px] font-normal text-slate-600 mt-0.5">
+                        <p className={`font-bold ${formatMode === "lengkap_bskap" ? "text-white" : "text-slate-900"}`}>
+                          Mode Lengkap BSKAP
+                        </p>
+                        <p className={`text-[10px] font-normal mt-0.5 ${formatMode === "lengkap_bskap" ? "text-slate-300" : "text-slate-500"}`}>
                           Format resmi supervisi (LKPD, Glosarium, Refleksi).
                         </p>
                       </div>
                       <div
                         onClick={() => setFormatMode("ringkas")}
-                        className={`p-3 rounded-lg border cursor-pointer transition-all ${
+                        className={`p-3 rounded-xl border cursor-pointer transition-all ${
                           formatMode === "ringkas"
-                            ? "border-emerald-600 bg-emerald-50/80 font-bold text-emerald-950 shadow-xs"
+                            ? "border-slate-900 bg-slate-900 font-bold text-white shadow-xs"
                             : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
                         }`}
                       >
-                        <p className="font-bold text-slate-900">Mode Ringkas (1-2 Lembar)</p>
-                        <p className="text-[10px] font-normal text-slate-600 mt-0.5">
+                        <p className={`font-bold ${formatMode === "ringkas" ? "text-white" : "text-slate-900"}`}>
+                          Mode Ringkas (1-2 Lembar)
+                        </p>
+                        <p className={`text-[10px] font-normal mt-0.5 ${formatMode === "ringkas" ? "text-slate-300" : "text-slate-500"}`}>
                           Tujuan, langkah, dan asesmen esensial harian.
                         </p>
                       </div>
@@ -460,11 +464,11 @@ export default function ModulAjarPage() {
                     <CardTitle className="text-sm font-bold text-slate-900">
                       Dimensi Profil Pelajar Pancasila
                     </CardTitle>
-                    <CardDescription className="text-xs text-slate-600">
+                    <CardDescription className="text-xs text-slate-500">
                       Pilih 1 s/d 3 dimensi yang paling relevan
                     </CardDescription>
                   </div>
-                  <Badge variant="outline" className="bg-blue-50 text-blue-800 border-blue-200 font-bold">
+                  <Badge variant="outline" className="bg-slate-100 text-slate-800 border-slate-200 font-bold font-mono text-[10px]">
                     {pancasilaDimensions.length} Dipilih
                   </Badge>
                 </CardHeader>
@@ -482,17 +486,17 @@ export default function ModulAjarPage() {
                       <label
                         key={dim}
                         onClick={() => handleDimensionToggle(dim)}
-                        className={`p-2.5 rounded-lg border flex items-center gap-3 cursor-pointer text-xs transition-colors ${
+                        className={`p-2.5 rounded-xl border flex items-center gap-3 cursor-pointer text-xs transition-colors ${
                           isChecked
-                            ? "border-emerald-600 bg-emerald-50/80 font-bold text-emerald-950 shadow-xs"
-                            : "border-slate-200 bg-white hover:bg-slate-50 text-slate-800"
+                            ? "border-slate-900 bg-slate-50 font-bold text-slate-900 shadow-2xs"
+                            : "border-slate-200 bg-white hover:bg-slate-50 text-slate-700"
                         }`}
                       >
                         <input
                           type="checkbox"
                           checked={isChecked}
                           readOnly
-                          className="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300"
+                          className="w-4 h-4 rounded text-slate-900 focus:ring-slate-900 border-slate-300"
                         />
                         <span className="font-medium text-slate-900">{dim}</span>
                       </label>
@@ -509,10 +513,10 @@ export default function ModulAjarPage() {
                 size="lg"
                 onClick={handleGenerate}
                 disabled={isLoading}
-                className="bg-emerald-700 hover:bg-emerald-800 text-white font-bold gap-2 px-8 shadow-sm cursor-pointer"
+                className="bg-slate-900 hover:bg-slate-800 text-white font-bold gap-2 px-8 h-11 rounded-xl shadow-xs cursor-pointer transition-all"
               >
-                <Sparkles className="w-4 h-4" />
-                <span>{isLoading ? "Sedang Menyusun Modul Ajar..." : "Buat Modul Ajar"}</span>
+                <Sparkles className="w-4 h-4 text-white" />
+                <span>{isLoading ? "Sedang Menyusun Modul Ajar BSKAP..." : "Buat Modul Ajar Sekarang"}</span>
               </Button>
             </div>
           </div>

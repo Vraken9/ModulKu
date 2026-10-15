@@ -152,16 +152,16 @@ export default function ProfilSekolahPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 no-print">
           <div>
             <div className="flex items-center gap-2 text-xs text-slate-500 mb-1">
-              <Link href="/dashboard" className="hover:text-blue-700 transition-colors">
+              <Link href="/dashboard" className="hover:text-slate-900 transition-colors">
                 Dashboard
               </Link>
               <span>/</span>
               <span className="text-slate-700 font-medium">Master Data</span>
               <span>/</span>
-              <span className="text-blue-700 font-bold">Profil Sekolah & Kop</span>
+              <span className="text-slate-900 font-bold">Profil Sekolah & Kop</span>
             </div>
             <h1 className="text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2.5">
-              <Building2 className="w-6 h-6 text-blue-700" />
+              <Building2 className="w-6 h-6 text-slate-900" />
               <span>Master Profil Sekolah & Kop Kedinasan</span>
             </h1>
             <p className="text-xs text-slate-600 mt-1">
@@ -170,16 +170,16 @@ export default function ProfilSekolahPage() {
           </div>
 
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={handleReset} className="text-xs gap-1.5 text-slate-700 border-slate-300 hover:bg-slate-50">
-              <RotateCcw className="w-3.5 h-3.5" />
+            <Button variant="outline" size="sm" onClick={handleReset} className="text-xs font-semibold gap-1.5 text-slate-700 border-slate-300 hover:bg-slate-100 bg-white rounded-xl h-9">
+              <RotateCcw className="w-3.5 h-3.5 text-slate-600" />
               Reset
             </Button>
-            <Button variant="outline" size="sm" onClick={handlePrintPreview} className="text-xs gap-1.5 text-slate-700 border-slate-300 hover:bg-slate-50">
-              <Printer className="w-3.5 h-3.5" />
+            <Button variant="outline" size="sm" onClick={handlePrintPreview} className="text-xs font-semibold gap-1.5 text-slate-700 border-slate-300 hover:bg-slate-100 bg-white rounded-xl h-9">
+              <Printer className="w-3.5 h-3.5 text-slate-600" />
               Cetak A4
             </Button>
-            <Button variant="default" size="sm" onClick={handleSave} className="text-xs gap-1.5 bg-blue-700 hover:bg-blue-800 text-white font-semibold">
-              <Save className="w-3.5 h-3.5" />
+            <Button variant="default" size="sm" onClick={handleSave} className="text-xs gap-1.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl h-9 px-4 shadow-xs cursor-pointer">
+              <Save className="w-3.5 h-3.5 text-white" />
               Simpan Profil
             </Button>
           </div>

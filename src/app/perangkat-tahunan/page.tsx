@@ -81,13 +81,13 @@ export default function PerangkatTahunanPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 print:hidden">
           <div>
             <div className="flex items-center gap-2 text-xs text-slate-500 mb-1">
-              <Link href="/dashboard" className="hover:text-blue-700 transition-colors">
+              <Link href="/dashboard" className="hover:text-slate-900 transition-colors">
                 Dashboard
               </Link>
               <span>/</span>
               <span className="text-slate-700 font-medium">Perangkat Ajar</span>
               <span>/</span>
-              <span className="text-blue-700 font-bold">ATP, Prota, & Promes</span>
+              <span className="text-slate-900 font-bold">ATP, Prota, & Promes</span>
             </div>
             <h1 className="text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2.5">
               <span>Perangkat Administrasi Tahunan (ATP, Prota, Promes, RPE)</span>
@@ -103,7 +103,7 @@ export default function PerangkatTahunanPage() {
                 variant="outline"
                 size="sm"
                 onClick={handlePrint}
-                className="text-xs font-semibold bg-slate-900 text-white hover:bg-slate-800"
+                className="text-xs font-bold bg-slate-900 text-white hover:bg-slate-800 h-9 px-4 rounded-xl shadow-xs cursor-pointer"
               >
                 Cetak Dokumen Resmi (A4)
               </Button>
@@ -297,13 +297,13 @@ export default function PerangkatTahunanPage() {
                   </div>
                 )}
 
-                <div className="flex justify-end">
+                <div className="flex justify-end pt-2">
                   <Button
                     type="submit"
                     disabled={loading}
-                    className="text-xs font-bold bg-blue-700 hover:bg-blue-800 text-white px-6 h-9"
+                    className="text-xs font-bold bg-slate-900 hover:bg-slate-800 text-white px-8 h-11 rounded-xl shadow-xs cursor-pointer transition-all"
                   >
-                    {loading ? "Sedang Mengkalkulasi dan Menyusun..." : "Generate Perangkat Tahunan"}
+                    {loading ? "Sedang Mengkalkulasi dan Menyusun..." : "Generate Perangkat Tahunan Sekarang"}
                   </Button>
                 </div>
               </form>

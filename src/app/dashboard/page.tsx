@@ -16,6 +16,10 @@ import {
   Clock,
   Layers,
   Award,
+  Settings,
+  ChevronRight,
+  Check,
+  FileDown,
 } from "lucide-react";
 import { DashboardShell } from "@/components/layout/DashboardShell";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -50,7 +54,7 @@ export default function DashboardPage() {
       href: "/soal-generator",
       icon: FileCheck2,
       badge: "HOTS / AKM",
-      color: "bg-blue-50 text-blue-700 group-hover:bg-blue-700 group-hover:text-white",
+      outputTag: "DOCX & PDF",
       buttonText: "Buka Soal Generator",
     },
     {
@@ -59,7 +63,7 @@ export default function DashboardPage() {
       href: "/modul-ajar",
       icon: FileText,
       badge: "BSKAP 032/2024",
-      color: "bg-emerald-50 text-emerald-700 group-hover:bg-emerald-700 group-hover:text-white",
+      outputTag: "Supervisi KS",
       buttonText: "Buka Modul Generator",
     },
     {
@@ -68,7 +72,7 @@ export default function DashboardPage() {
       href: "/perangkat-tahunan",
       icon: CalendarDays,
       badge: "Pekan Efektif",
-      color: "bg-indigo-50 text-indigo-700 group-hover:bg-indigo-700 group-hover:text-white",
+      outputTag: "1 Tahun Ajaran",
       buttonText: "Buka Perangkat Tahunan",
     },
     {
@@ -77,64 +81,66 @@ export default function DashboardPage() {
       href: "/presentasi",
       icon: Presentation,
       badge: "PowerPoint Native",
-      color: "bg-amber-50 text-amber-700 group-hover:bg-amber-700 group-hover:text-white",
+      outputTag: "PPTX & LKPD A4",
       buttonText: "Buka Presentasi & LKPD",
     },
   ];
 
   return (
     <DashboardShell activeItem="dashboard">
-      <div className="space-y-8 max-w-7xl mx-auto">
-        {/* Welcome Greeting Banner */}
-        <section className="bg-gradient-to-r from-blue-900 via-blue-800 to-indigo-900 text-white rounded-2xl p-6 sm:p-8 shadow-sm relative overflow-hidden">
-          <div className="max-w-3xl space-y-3 relative z-10">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-700/60 border border-blue-500/30 text-xs font-semibold text-blue-100">
-              <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-              <span>Pusat Kendali Administrasi Guru Merdeka</span>
+      <div className="space-y-8 max-w-6xl mx-auto pb-10">
+        {/* Welcome Greeting Header: Bersih, Hangat, & Bebas Gradasi Gelap Pejal */}
+        <section className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-xs relative overflow-hidden">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
+            <div className="space-y-2 max-w-2xl">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-[11px] font-mono font-bold text-slate-700 uppercase tracking-wider">
+                <Sparkles className="w-3.5 h-3.5 text-slate-800" />
+                <span>[RUANG_KERJA_ADMINISTRASI // RESMI_BSKAP]</span>
+              </div>
+
+              <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight leading-snug">
+                Selamat Datang, {teacher.teacher_name}
+              </h1>
+
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Pilih modul administrasi pembelajaran yang ingin Anda susun hari ini. Seluruh berkas otomatis disinkronkan dengan Kop Surat resmi <span className="font-bold text-slate-900">{school.school_name}</span> dan siap diekspor ke format dokumen resmi Microsoft Word serta PowerPoint.
+              </p>
             </div>
 
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight leading-tight">
-              Selamat Datang, {teacher.teacher_name}
-            </h1>
-
-            <p className="text-blue-100/90 text-xs sm:text-sm leading-relaxed">
-              Pilih modul yang ingin Anda susun hari ini. Seluruh dokumen otomatis disesuaikan dengan Kop Surat kedinasan {school.school_name} dan siap diekspor ke Microsoft Word serta PowerPoint.
-            </p>
-
-            <div className="pt-2 flex flex-wrap gap-3">
+            <div className="flex flex-wrap lg:flex-col gap-3 shrink-0">
               <Link href="/soal-generator">
-                <Button size="sm" className="bg-white text-blue-900 hover:bg-blue-50 font-bold text-xs h-9 shadow-xs">
-                  <span>Mulai Buat Soal Sekarang</span>
-                  <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
+                <Button className="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs h-10 px-5 rounded-xl shadow-xs gap-2 cursor-pointer">
+                  <span>Mulai Buat Perangkat Baru</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
                 </Button>
               </Link>
               <Link href="/profil-sekolah">
                 <Button
-                  size="sm"
                   variant="outline"
-                  className="bg-blue-800/60 border-blue-500/40 text-white hover:bg-blue-700/60 text-xs h-9"
+                  className="w-full sm:w-auto bg-white hover:bg-slate-100 text-slate-800 border-slate-300 font-semibold text-xs h-10 px-5 rounded-xl gap-2 cursor-pointer"
                 >
-                  <School className="w-3.5 h-3.5 mr-1.5" />
-                  <span>Cek Profil & Kop Kedinasan</span>
+                  <School className="w-3.5 h-3.5 text-slate-700" />
+                  <span>Kop Surat & Profil NIP</span>
                 </Button>
               </Link>
             </div>
           </div>
-
-          <div className="absolute right-0 bottom-0 translate-x-10 translate-y-10 w-80 h-80 rounded-full bg-blue-600/20 blur-3xl pointer-events-none" />
         </section>
 
         {/* 4 Core Features Grid */}
         <section className="space-y-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 px-1">
             <div>
-              <h2 className="text-base font-bold text-slate-900 uppercase tracking-wide">
-                Menu Utama Perangkat Pembelajaran
+              <div className="text-[11px] font-mono font-bold text-slate-500 uppercase tracking-wider">
+                MODUL UTAMA KURIKULUM MERDEKA
+              </div>
+              <h2 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight">
+                Pilih Modul Perangkat Pembelajaran
               </h2>
-              <p className="text-xs text-slate-500">
-                Pilih modul spesifik untuk memulai generator dengan parameter kurikulum terstruktur
-              </p>
             </div>
+            <p className="text-xs text-slate-500 font-medium">
+              Format kedinasan standar supervisi pengawas & kepala sekolah
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -142,20 +148,23 @@ export default function DashboardPage() {
               const Icon = card.icon;
               return (
                 <Link key={idx} href={card.href} className="block group">
-                  <Card className="h-full border-slate-200 hover:border-blue-400 hover:shadow-md transition-all cursor-pointer">
-                    <CardHeader className="pb-3">
+                  <Card className="h-full border-slate-200 hover:border-slate-400 hover:shadow-sm transition-all bg-white cursor-pointer rounded-2xl">
+                    <CardHeader className="pb-3 space-y-3">
                       <div className="flex items-start justify-between">
-                        <div
-                          className={`w-11 h-11 rounded-xl flex items-center justify-center transition-colors ${card.color}`}
-                        >
-                          <Icon className="w-5 h-5" />
+                        <div className="w-11 h-11 rounded-xl bg-slate-100 text-slate-800 group-hover:bg-slate-900 group-hover:text-white transition-colors flex items-center justify-center shrink-0 border border-slate-200">
+                          <Icon className="w-5 h-5 transition-colors" />
                         </div>
-                        <Badge variant="outline" className="text-[10px] font-bold">
-                          {card.badge}
-                        </Badge>
+                        <div className="flex items-center gap-1.5">
+                          <Badge variant="outline" className="text-[10px] font-mono font-bold bg-slate-50 border-slate-200 text-slate-700">
+                            {card.badge}
+                          </Badge>
+                          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200">
+                            {card.outputTag}
+                          </span>
+                        </div>
                       </div>
 
-                      <CardTitle className="text-base font-bold text-slate-900 group-hover:text-blue-700 transition-colors mt-2">
+                      <CardTitle className="text-base font-black text-slate-900 group-hover:text-slate-950 transition-colors">
                         {card.title}
                       </CardTitle>
 
@@ -165,7 +174,7 @@ export default function DashboardPage() {
                     </CardHeader>
 
                     <CardContent className="pt-0">
-                      <div className="flex items-center text-xs font-bold text-blue-700 gap-1 mt-2">
+                      <div className="flex items-center text-xs font-bold text-slate-900 gap-1.5 pt-2 border-t border-slate-100 group-hover:text-slate-950">
                         <span>{card.buttonText}</span>
                         <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                       </div>
@@ -177,42 +186,128 @@ export default function DashboardPage() {
           </div>
         </section>
 
-        {/* Info Penyelarasan Bukti Dukung Kinerja PMM */}
-        <section id="panduan-pmm">
-          <Card className="border-slate-200 bg-white shadow-xs">
-            <CardHeader className="pb-3 border-b border-slate-100">
+        {/* Info Penyelarasan Bukti Dukung Kinerja PMM (dashboard#panduan-pmm) */}
+        <section id="panduan-pmm" className="space-y-4">
+          <Card className="border-slate-200 bg-white shadow-xs rounded-2xl overflow-hidden">
+            <CardHeader className="pb-4 border-b border-slate-100 space-y-1.5">
               <div className="flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                <CardTitle className="text-sm font-bold text-slate-900 uppercase tracking-wide">
-                  Keselarasan Bukti Dukung Platform Merdeka Mengajar (PMM)
-                </CardTitle>
+                <div className="w-7 h-7 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center">
+                  <ShieldCheck className="w-4 h-4 text-slate-800" />
+                </div>
+                <div>
+                  <CardTitle className="text-sm sm:text-base font-black text-slate-900 tracking-tight">
+                    Panduan Bukti Dukung Platform Merdeka Mengajar (PMM)
+                  </CardTitle>
+                  <span className="text-[10px] font-mono font-bold text-slate-500 uppercase tracking-wider block">
+                    DASAR HUKUM: PERDIRJEN GTK NO. 7607/B.B1/HK.03/2023
+                  </span>
+                </div>
               </div>
-              <CardDescription className="text-xs text-slate-500">
-                Dokumen yang Anda buat di platform ini telah memenuhi kriteria penilaian kinerja guru sesuai Perdirjen GTK No. 7607/B.B1/HK.03/2023.
+              <CardDescription className="text-xs text-slate-600 leading-relaxed pt-1">
+                Seluruh berkas yang dihasilkan pada platform ModulKu telah diselaraskan dengan indikator observasi kelas dan rencana hasil kerja (RHK) pengelolaan kinerja guru di PMM.
               </CardDescription>
             </CardHeader>
 
-            <CardContent className="pt-4 space-y-3">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-                <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 space-y-1">
-                  <span className="font-bold text-slate-800 block">RHK 1: Perangkat Ajar</span>
-                  <p className="text-slate-600 text-[11px] leading-relaxed">
-                    Modul ajar memuat diferensiasi konten, proses, dan produk yang siap diunggah sebagai dokumen supervisi kepala sekolah.
-                  </p>
+            <CardContent className="pt-6 space-y-6">
+              {/* Matriks 3 RHK Interaktif */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* RHK 1 */}
+                <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3 flex flex-col justify-between">
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-mono font-bold text-slate-500 uppercase">RHK 1 (PMM)</span>
+                      <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-white border border-slate-200 text-slate-700">SUPERVISI</span>
+                    </div>
+                    <h3 className="font-bold text-slate-900 text-xs">Perangkat Ajar Berdiferensiasi</h3>
+                    <p className="text-slate-600 text-[11px] leading-relaxed">
+                      Memuat 3 pilar diferensiasi (konten, proses, produk), pemahaman bermakna, dan pertanyaan pemantik untuk observasi kelas.
+                    </p>
+                  </div>
+                  <Link href="/modul-ajar">
+                    <Button variant="outline" size="sm" className="w-full text-xs font-bold text-slate-800 border-slate-300 bg-white hover:bg-slate-100 h-9 justify-between cursor-pointer">
+                      <span>Susun Modul Ajar</span>
+                      <ArrowRight className="w-3 h-3 text-slate-700" />
+                    </Button>
+                  </Link>
                 </div>
 
-                <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 space-y-1">
-                  <span className="font-bold text-slate-800 block">RHK 2: Evaluasi Asesmen</span>
-                  <p className="text-slate-600 text-[11px] leading-relaxed">
-                    Naskah Soal AKM dilengkapi Matriks Kisi-Kisi, Kartu Soal per butir, dan Rubrik interval KKTP standar nasional.
-                  </p>
+                {/* RHK 2 */}
+                <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3 flex flex-col justify-between">
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-mono font-bold text-slate-500 uppercase">RHK 2 (PMM)</span>
+                      <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-white border border-slate-200 text-slate-700">ASESMEN</span>
+                    </div>
+                    <h3 className="font-bold text-slate-900 text-xs">Evaluasi & Asesmen HOTS/AKM</h3>
+                    <p className="text-slate-600 text-[11px] leading-relaxed">
+                      Naskah soal lengkap dengan Matriks Kisi-Kisi Ujian, Kartu Soal per butir, dan Rubrik interval KKTP standar nasional.
+                    </p>
+                  </div>
+                  <Link href="/soal-generator">
+                    <Button variant="outline" size="sm" className="w-full text-xs font-bold text-slate-800 border-slate-300 bg-white hover:bg-slate-100 h-9 justify-between cursor-pointer">
+                      <span>Susun Paket Soal</span>
+                      <ArrowRight className="w-3 h-3 text-slate-700" />
+                    </Button>
+                  </Link>
                 </div>
 
-                <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 space-y-1">
-                  <span className="font-bold text-slate-800 block">RHK 3: Media Ajar Aktif</span>
-                  <p className="text-slate-600 text-[11px] leading-relaxed">
-                    Slide presentasi PowerPoint interaktif (.pptx) beserta LKPD kelompok untuk memfasilitasi keaktifan kelas.
-                  </p>
+                {/* RHK 3 */}
+                <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3 flex flex-col justify-between">
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-mono font-bold text-slate-500 uppercase">RHK 3 (PMM)</span>
+                      <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-white border border-slate-200 text-slate-700">MEDIA AJAR</span>
+                    </div>
+                    <h3 className="font-bold text-slate-900 text-xs">Bahan Tayang (.PPTX) & LKPD</h3>
+                    <p className="text-slate-600 text-[11px] leading-relaxed">
+                      Slide presentasi kelas berbasis alur pedagogis interaktif beserta lembar aktivitas siswa siap cetak untuk pelibatan murid.
+                    </p>
+                  </div>
+                  <Link href="/presentasi">
+                    <Button variant="outline" size="sm" className="w-full text-xs font-bold text-slate-800 border-slate-300 bg-white hover:bg-slate-100 h-9 justify-between cursor-pointer">
+                      <span>Hasilkan Slide & LKPD</span>
+                      <ArrowRight className="w-3 h-3 text-slate-700" />
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+
+              {/* 4 Poin Checklist Verifikasi Kelayakan Berkas Kedinasan */}
+              <div className="p-4 bg-white rounded-xl border border-slate-200 space-y-3">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+                  <span className="text-[10px] font-mono font-bold text-slate-600 uppercase tracking-wider">
+                    CHECKLIST PRA-UNGGAH BUKTI DUKUNG KE E-KINERJA PMM
+                  </span>
+                  <span className="text-[10px] font-mono text-slate-500">
+                    Format: PDF (Maksimal 10 MB)
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs text-slate-700">
+                  <div className="flex items-start gap-2">
+                    <div className="w-4 h-4 rounded-full bg-slate-100 text-slate-800 flex items-center justify-center shrink-0 mt-0.5 border border-slate-200">
+                      <Check className="w-2.5 h-2.5 text-slate-800 stroke-[3]" />
+                    </div>
+                    <span>Kop surat dinas resmi terpasang dengan NPSN sekolah.</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <div className="w-4 h-4 rounded-full bg-slate-100 text-slate-800 flex items-center justify-center shrink-0 mt-0.5 border border-slate-200">
+                      <Check className="w-2.5 h-2.5 text-slate-800 stroke-[3]" />
+                    </div>
+                    <span>Kolom pengesahan tanda tangan kepala sekolah & guru pengampu.</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <div className="w-4 h-4 rounded-full bg-slate-100 text-slate-800 flex items-center justify-center shrink-0 mt-0.5 border border-slate-200">
+                      <Check className="w-2.5 h-2.5 text-slate-800 stroke-[3]" />
+                    </div>
+                    <span>Rubrik asesmen interval KKTP memuat tindak lanjut belajar.</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <div className="w-4 h-4 rounded-full bg-slate-100 text-slate-800 flex items-center justify-center shrink-0 mt-0.5 border border-slate-200">
+                      <Check className="w-2.5 h-2.5 text-slate-800 stroke-[3]" />
+                    </div>
+                    <span>Materi selaras dengan Capaian Pembelajaran (CP) BSKAP 2024.</span>
+                  </div>
                 </div>
               </div>
             </CardContent>
