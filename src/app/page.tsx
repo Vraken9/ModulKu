@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import {
   Sparkles,
@@ -10,6 +10,8 @@ import {
   FileText,
   Cpu,
   Layers,
+  Menu,
+  X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -27,51 +29,162 @@ import { ModernFooter } from "@/components/landing/ModernFooter";
 import { ModulKuLogo } from "@/components/ui/ModulKuLogo";
 
 export default function LandingPage() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-white text-slate-900 flex flex-col font-sans selection:bg-slate-200 selection:text-slate-900">
-      {/* 1. Sticky Frosted Glass Header / Navbar */}
-      <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/80">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 h-18 sm:h-20 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3">
-            <ModulKuLogo size="lg" showSubtitle subtitleText="Standar BKPDM Kemendikdasmen" />
+      {/* 1. Sticky Frosted Glass Header / Navbar - Ramping, Modern & Anti-Stacking */}
+      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/80">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 h-15 sm:h-16 flex items-center justify-between gap-3 sm:gap-4">
+          {/* Logo Ramping */}
+          <Link href="/" className="flex items-center gap-2.5 shrink-0">
+            <ModulKuLogo size="md" />
           </Link>
 
-          {/* Desktop Nav Links */}
-          <nav className="hidden lg:flex items-center space-x-8 text-sm font-semibold text-slate-600">
-            <a href="#fitur" className="hover:text-slate-900 transition-colors">
+          {/* Desktop Nav Links - Single Line, Whitespace-Nowrap, Anti-Bertumpuk */}
+          <nav className="hidden lg:flex items-center gap-1 xl:gap-2 text-xs xl:text-sm font-semibold text-slate-600">
+            <a
+              href="#fitur"
+              className="px-2.5 xl:px-3 py-1.5 rounded-lg hover:text-slate-900 hover:bg-slate-100 transition-colors whitespace-nowrap"
+            >
               Fitur Pedagogis
             </a>
-            <a href="#ticker-interaktif" className="hover:text-slate-900 transition-colors">
+            <a
+              href="#ticker-interaktif"
+              className="px-2.5 xl:px-3 py-1.5 rounded-lg hover:text-slate-900 hover:bg-slate-100 transition-colors whitespace-nowrap"
+            >
               Eksplorasi Modul
             </a>
-            <a href="#cara-kerja" className="hover:text-slate-900 transition-colors">
+            <a
+              href="#cara-kerja"
+              className="px-2.5 xl:px-3 py-1.5 rounded-lg hover:text-slate-900 hover:bg-slate-100 transition-colors whitespace-nowrap"
+            >
               Alur Kerja
             </a>
-            <a href="#efisiensi" className="hover:text-slate-900 transition-colors">
+            <a
+              href="#efisiensi"
+              className="px-2.5 xl:px-3 py-1.5 rounded-lg hover:text-slate-900 hover:bg-slate-100 transition-colors whitespace-nowrap"
+            >
               Efisiensi Guru
             </a>
-            <a href="#kanvas-seni" className="hover:text-slate-900 transition-colors">
+            <a
+              href="#kanvas-seni"
+              className="px-2.5 xl:px-3 py-1.5 rounded-lg hover:text-slate-900 hover:bg-slate-100 transition-colors whitespace-nowrap"
+            >
               Standar Regulasi
             </a>
-            <a href="#faq" className="hover:text-slate-900 transition-colors">
-              Tanya Jawab (FAQ)
+            <a
+              href="#faq"
+              className="px-2.5 xl:px-3 py-1.5 rounded-lg hover:text-slate-900 hover:bg-slate-100 transition-colors whitespace-nowrap"
+            >
+              FAQ
             </a>
           </nav>
 
           {/* Action CTAs */}
-          <div className="flex items-center space-x-3.5">
+          <div className="hidden sm:flex items-center gap-2 sm:gap-2.5 shrink-0">
             <Link href="/login">
-              <Button variant="ghost" size="sm" className="text-sm font-semibold text-slate-700 hover:text-slate-900 px-4 h-10">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-xs sm:text-sm font-semibold text-slate-700 hover:text-slate-900 px-3 sm:px-3.5 h-8 sm:h-9"
+              >
                 Masuk
               </Button>
             </Link>
             <Link href="/login">
-              <Button size="sm" className="bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm h-10 px-5 rounded-xl shadow-xs">
-                Coba Gratis Sekarang
+              <Button
+                size="sm"
+                className="bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm h-8 sm:h-9 px-3.5 sm:px-4 rounded-xl shadow-xs whitespace-nowrap"
+              >
+                Coba Gratis
               </Button>
             </Link>
           </div>
+
+          {/* Mobile Menu Toggle Button (< lg) */}
+          <div className="flex items-center gap-2 lg:hidden">
+            <Link href="/login" className="sm:hidden">
+              <Button
+                size="sm"
+                className="bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs h-8 px-3 rounded-lg shadow-xs"
+              >
+                Masuk
+              </Button>
+            </Link>
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-1.5 sm:p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
         </div>
+
+        {/* Mobile Dropdown Navigation Drawer */}
+        {mobileMenuOpen && (
+          <div className="lg:hidden border-t border-slate-200/80 bg-white/98 backdrop-blur-md px-4 py-3 space-y-2 shadow-lg">
+            <nav className="flex flex-col space-y-1 text-sm font-semibold text-slate-700">
+              <a
+                href="#fitur"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-3 py-2 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors"
+              >
+                Fitur Pedagogis
+              </a>
+              <a
+                href="#ticker-interaktif"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-3 py-2 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors"
+              >
+                Eksplorasi Modul
+              </a>
+              <a
+                href="#cara-kerja"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-3 py-2 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors"
+              >
+                Alur Kerja
+              </a>
+              <a
+                href="#efisiensi"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-3 py-2 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors"
+              >
+                Efisiensi Guru
+              </a>
+              <a
+                href="#kanvas-seni"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-3 py-2 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors"
+              >
+                Standar Regulasi
+              </a>
+              <a
+                href="#faq"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-3 py-2 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors"
+              >
+                Tanya Jawab (FAQ)
+              </a>
+            </nav>
+
+            <div className="pt-2 border-t border-slate-100 flex flex-col gap-2">
+              <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
+                <Button variant="outline" className="w-full text-slate-800 font-bold text-xs h-9">
+                  Masuk ke Akun
+                </Button>
+              </Link>
+              <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
+                <Button className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs h-9">
+                  Coba Gratis Sekarang
+                </Button>
+              </Link>
+            </div>
+          </div>
+        )}
       </header>
 
       {/* 2. Hero Section dengan Parallax Scroll & Elemen 3D Interaktif */}
@@ -80,28 +193,14 @@ export default function LandingPage() {
         layers={[
           { layer: "hero-pattern", yPercent: 18 },
           { layer: "hero-3d", yPercent: -10 },
-          { layer: "hero-accent", yPercent: -25 },
         ]}
       >
-        <section className="relative overflow-hidden pt-12 pb-16 lg:pt-16 lg:pb-24 bg-white">
+        <section className="relative overflow-hidden pt-10 pb-16 lg:pt-14 lg:pb-22 bg-white">
           {/* Parallax Layer 1: Background Architectural Dot Pattern */}
           <ParallaxLayer
             layer="hero-pattern"
             className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(#94a3b8_1px,transparent_1px)] [background-size:24px_24px] opacity-35"
           />
-
-          {/* Parallax Layer 2: Ambient Geometric Crosses */}
-          <ParallaxLayer
-            layer="hero-accent"
-            className="pointer-events-none absolute inset-0 z-0 flex justify-between px-8 sm:px-16 pt-10"
-          >
-            <div className="text-xs text-slate-300 font-medium select-none">
-              Modul Administrasi Terpadu
-            </div>
-            <div className="text-xs text-slate-300 font-medium select-none">
-              Standar Regulasi BKPDM
-            </div>
-          </ParallaxLayer>
 
           {/* Main Hero Container */}
           <div className="relative z-10 max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
