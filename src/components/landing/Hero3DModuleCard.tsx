@@ -82,7 +82,7 @@ export function Hero3DModuleCard() {
 
   return (
     <div
-      className="relative w-full max-w-[660px] xl:max-w-[720px] mx-auto select-none py-2 sm:py-6 px-2 sm:px-0"
+      className="relative w-full max-w-[580px] xl:max-w-[620px] mx-auto select-none py-2 sm:py-4 px-2 sm:px-0"
       style={{ perspective: isMobile ? "none" : "1200px" }}
     >
       {/* Interactive 3D Perspective Container */}

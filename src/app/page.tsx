@@ -31,7 +31,7 @@ export default function LandingPage() {
     <div className="min-h-screen bg-white text-slate-900 flex flex-col font-sans selection:bg-slate-200 selection:text-slate-900">
       {/* 1. Sticky Frosted Glass Header / Navbar */}
       <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/80">
-        <div className="max-w-[1560px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 h-20 flex items-center justify-between">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 h-18 sm:h-20 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
             <ModulKuLogo size="lg" showSubtitle subtitleText="Standar BKPDM Kemendikdasmen" />
           </Link>
@@ -83,7 +83,7 @@ export default function LandingPage() {
           { layer: "hero-accent", yPercent: -25 },
         ]}
       >
-        <section className="relative overflow-hidden pt-16 pb-24 lg:pt-24 lg:pb-32 bg-white">
+        <section className="relative overflow-hidden pt-12 pb-16 lg:pt-16 lg:pb-24 bg-white">
           {/* Parallax Layer 1: Background Architectural Dot Pattern */}
           <ParallaxLayer
             layer="hero-pattern"
@@ -104,17 +104,17 @@ export default function LandingPage() {
           </ParallaxLayer>
 
           {/* Main Hero Container */}
-          <div className="relative z-10 max-w-[1560px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 xl:gap-16 items-center">
+          <div className="relative z-10 max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
               {/* Kolom Kiri: Copywriting & Actions */}
-              <div className="lg:col-span-6 space-y-7 text-center lg:text-left">
+              <div className="lg:col-span-6 space-y-6 text-center lg:text-left">
                 {/* Monochromatic Clean Badge */}
-                <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-slate-100 border border-slate-200 text-xs sm:text-sm font-semibold text-slate-800 shadow-2xs">
+                <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-slate-100 border border-slate-200 text-xs sm:text-sm font-semibold text-slate-800 shadow-2xs">
                   <Sparkles className="w-4 h-4 text-slate-700" />
                   <span>Platform Resmi Standar BKPDM Kemendikdasmen</span>
                 </div>
 
-                <h1 className="text-4xl sm:text-5xl md:text-6xl xl:text-7xl font-black text-slate-900 tracking-tight leading-[1.08]">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[54px] font-black text-slate-900 tracking-tight leading-[1.12]">
                   Rancang perangkat ajar & evaluasi dalam{" "}
                   <span className="underline decoration-slate-400 decoration-wavy decoration-2">
                     hitungan detik
@@ -122,20 +122,20 @@ export default function LandingPage() {
                   secara presisi
                 </h1>
 
-                <p className="text-base sm:text-lg lg:text-xl text-slate-600 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+                <p className="text-sm sm:text-base lg:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto lg:mx-0">
                   ModulKu mengotomasi penyusunan paket asesmen HOTS/AKM, modul ajar Deep Learning (Mindful, Meaningful, Joyful), ATP, serta naskah dinas siap cetak lengkap dengan Matriks Kisi-Kisi dan rubrik penskoran standar nasional.
                 </p>
 
                 {/* Action Buttons */}
-                <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+                <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5 pt-1">
                   <Link href="/login" className="w-full sm:w-auto">
-                    <Button size="lg" className="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-sm sm:text-base h-13 sm:h-14 px-8 rounded-2xl shadow-md gap-3">
+                    <Button size="lg" className="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-sm sm:text-base h-11 sm:h-12 px-6 sm:px-7 rounded-xl shadow-md gap-3">
                       <span>Mulai Susun Modul Sekarang</span>
                       <ArrowRight className="w-4 h-4 text-white" />
                     </Button>
                   </Link>
                   <a href="#cara-kerja" className="w-full sm:w-auto">
-                    <Button variant="outline" size="lg" className="w-full sm:w-auto text-slate-800 border-slate-300 hover:bg-slate-100 font-bold text-sm sm:text-base h-13 sm:h-14 px-7 rounded-2xl">
+                    <Button variant="outline" size="lg" className="w-full sm:w-auto text-slate-800 border-slate-300 hover:bg-slate-100 font-bold text-sm sm:text-base h-11 sm:h-12 px-6 rounded-xl">
                       Lihat Alur Kerja
                     </Button>
                   </a>
@@ -171,36 +171,36 @@ export default function LandingPage() {
       <CurriculumSubjectsTicker />
 
       {/* 3.5. Running Text Interaktif Sleek dengan Compact Studio Drawer */}
-      <section id="ticker-interaktif" className="py-16 sm:py-24 bg-slate-50/50 border-b border-slate-200/80">
-        <div className="max-w-[1560px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16">
+      <section id="ticker-interaktif" className="py-12 sm:py-16 lg:py-20 bg-slate-50/50 border-b border-slate-200/80">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
           <InteractiveTicker />
         </div>
       </section>
 
       {/* 4. Section: Alur Kerja Terpandu BKPDM (3-Step Connected Cards) */}
-      <section id="cara-kerja" className="py-16 sm:py-24 bg-white border-b border-slate-200/80">
-        <div className="max-w-[1560px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16">
+      <section id="cara-kerja" className="py-12 sm:py-16 lg:py-20 bg-white border-b border-slate-200/80">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
           <WorkflowSteps />
         </div>
       </section>
 
       {/* 5. Section: Efisiensi Waktu Guru (Bento Efficiency) */}
-      <section id="efisiensi" className="py-16 sm:py-24 bg-slate-50/50 border-b border-slate-200/80">
-        <div className="max-w-[1560px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16">
+      <section id="efisiensi" className="py-12 sm:py-16 lg:py-20 bg-slate-50/50 border-b border-slate-200/80">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
           <BentoEfficiency />
         </div>
       </section>
 
       {/* 6. Section: Kemampuan Pedagogis Mendalam (Bento Pedagogical) */}
-      <section id="fitur" className="py-16 sm:py-24 bg-white border-b border-slate-200/80">
-        <div className="max-w-[1560px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16">
+      <section id="fitur" className="py-12 sm:py-16 lg:py-20 bg-white border-b border-slate-200/80">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
           <BentoPedagogical />
         </div>
       </section>
 
       {/* 7. Section: Spanduk Kanvas Geometris Presisi (Bauhaus Dynamic Canvas Banner) */}
-      <section id="kanvas-seni" className="py-16 sm:py-24 bg-slate-50/50 border-b border-slate-200/80">
-        <div className="max-w-[1560px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 space-y-8">
+      <section id="kanvas-seni" className="py-12 sm:py-16 lg:py-20 bg-slate-50/50 border-b border-slate-200/80">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
           <div className="text-center max-w-3xl mx-auto space-y-3">
             <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-slate-100 border border-slate-200 text-xs sm:text-sm font-semibold text-slate-700">
               Arsitektur Dokumen Resmi
@@ -217,15 +217,15 @@ export default function LandingPage() {
       </section>
 
       {/* 8. Section FAQ Accordion (Modern 2-Column FAQ) */}
-      <section id="faq" className="py-16 sm:py-24 bg-white border-b border-slate-200/80">
-        <div className="max-w-[1560px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16">
+      <section id="faq" className="py-12 sm:py-16 lg:py-20 bg-white border-b border-slate-200/80">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
           <ModernFaq />
         </div>
       </section>
 
       {/* 9. Bottom CTA Banner (Radial Mesh Glow Banner) */}
-      <section className="py-16 sm:py-28 bg-slate-50/50 border-b border-slate-200/80">
-        <div className="max-w-[1560px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16">
+      <section className="py-12 sm:py-20 bg-slate-50/50 border-b border-slate-200/80">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
           <RadialCtaBanner />
         </div>
       </section>

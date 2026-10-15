@@ -14,7 +14,7 @@ export function ModernFooter() {
     <footer className="bg-slate-50 text-slate-600 text-xs border-t border-slate-200">
       {/* 1. Live System Status Bar ala 21st.dev */}
       <div className="border-b border-slate-200/80 bg-white/60">
-        <div className="max-w-[1560px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px]">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px]">
           <div className="flex items-center gap-2.5">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-slate-400 opacity-75" />
@@ -40,7 +40,7 @@ export function ModernFooter() {
       </div>
 
       {/* 2. Main Footer Grid */}
-      <div className="max-w-[1560px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 py-14 space-y-12">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-14 space-y-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10">
           {/* Kolom 1: Brand & Profil (lg:col-span-4) */}
           <div className="lg:col-span-4 space-y-4">

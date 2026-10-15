@@ -207,54 +207,45 @@ export function InteractiveTicker() {
 
       {/* 2. Container Running Text Marquee dengan Sudut Melengkung Halus & Hiasan Elegan */}
       <div
-        className="relative w-full overflow-hidden border border-slate-200/90 bg-white py-4 sm:py-5 rounded-2xl shadow-xs"
+        className="relative w-full overflow-hidden border border-slate-200/90 bg-white py-3.5 sm:py-4 rounded-2xl shadow-xs"
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
       >
         {/* Fade Mask Kiri */}
-        <div className="pointer-events-none absolute top-0 bottom-0 left-0 w-16 sm:w-32 z-20 bg-gradient-to-r from-white via-white/85 to-transparent rounded-l-2xl" />
+        <div className="pointer-events-none absolute top-0 bottom-0 left-0 w-14 sm:w-28 z-20 bg-gradient-to-r from-white via-white/85 to-transparent rounded-l-2xl" />
 
         {/* Fade Mask Kanan */}
-        <div className="pointer-events-none absolute top-0 right-0 bottom-0 w-16 sm:w-32 z-20 bg-gradient-to-l from-white via-white/85 to-transparent rounded-r-2xl" />
+        <div className="pointer-events-none absolute top-0 right-0 bottom-0 w-14 sm:w-28 z-20 bg-gradient-to-l from-white via-white/85 to-transparent rounded-r-2xl" />
 
         {/* Ticker Track Mengalir Horizontal */}
         <div className="flex overflow-hidden group select-none">
-          <div className="flex shrink-0 items-center gap-3.5 animate-marquee group-hover:[animation-play-state:paused]">
+          <div className="flex shrink-0 items-center gap-3 animate-marquee group-hover:[animation-play-state:paused]">
             {FEATURES.map((item) => {
               const isSelected = item.id === selectedId;
               const ItemIcon = item.icon;
 
               return (
-                <div key={`track-1-${item.id}`} className="flex items-center gap-3.5 shrink-0">
+                <div key={`track-1-${item.id}`} className="flex items-center gap-3 shrink-0">
                   <button
                     type="button"
                     onClick={() => handleSelect(item.id)}
                     onMouseEnter={() => handleSelect(item.id)}
-                    className={`inline-flex items-center gap-3 px-4.5 py-2.5 sm:px-5 sm:py-3 text-xs sm:text-sm md:text-[15px] font-semibold transition-all shrink-0 border cursor-pointer font-sans rounded-xl shadow-[0_2px_8px_-2px_rgba(0,0,0,0.06),0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-md hover:-translate-y-0.5 ${
+                    className={`inline-flex items-center gap-2.5 px-4 py-2 sm:px-4.5 sm:py-2 text-xs sm:text-sm font-semibold transition-all shrink-0 border cursor-pointer font-sans rounded-xl shadow-[0_2px_8px_-2px_rgba(0,0,0,0.05),0_1px_3px_rgba(0,0,0,0.02)] hover:shadow-md hover:-translate-y-0.5 ${
                       isSelected
                         ? "bg-slate-900 text-white border-slate-900 shadow-sm"
                         : "bg-white text-slate-800 border-slate-200 hover:border-slate-400 hover:bg-slate-50"
                     }`}
                   >
                     <ItemIcon
-                      className={`w-4 h-4 sm:w-4.5 sm:h-4.5 ${
+                      className={`w-4 h-4 ${
                         isSelected ? "text-white" : "text-slate-800"
                       }`}
                     />
-                    <span>{item.title}</span>
-                    <span
-                      className={`text-[10px] sm:text-xs uppercase font-mono px-2.5 py-0.5 rounded-full border ${
-                        isSelected
-                          ? "bg-slate-800 text-slate-100 border-slate-700 font-bold"
-                          : "bg-slate-100 text-slate-700 border-slate-200 font-medium"
-                      }`}
-                    >
-                      {item.badge}
-                    </span>
+                    <span className="whitespace-nowrap">{item.title}</span>
                   </button>
 
                   {/* Elemen Hiasan Pemisah Berkilau Halus */}
-                  <span className="text-slate-300 font-mono text-sm select-none">
+                  <span className="text-slate-300 font-mono text-xs select-none">
                     ✦
                   </span>
                 </div>
@@ -263,42 +254,33 @@ export function InteractiveTicker() {
           </div>
 
           {/* Duplikasi track untuk continuous looping tanpa jeda */}
-          <div className="flex shrink-0 items-center gap-3.5 animate-marquee group-hover:[animation-play-state:paused] ml-3.5">
+          <div className="flex shrink-0 items-center gap-3 animate-marquee group-hover:[animation-play-state:paused] ml-3">
             {FEATURES.map((item) => {
               const isSelected = item.id === selectedId;
               const ItemIcon = item.icon;
 
               return (
-                <div key={`track-2-${item.id}`} className="flex items-center gap-3.5 shrink-0">
+                <div key={`track-2-${item.id}`} className="flex items-center gap-3 shrink-0">
                   <button
                     type="button"
                     onClick={() => handleSelect(item.id)}
                     onMouseEnter={() => handleSelect(item.id)}
-                    className={`inline-flex items-center gap-3 px-4.5 py-2.5 sm:px-5 sm:py-3 text-xs sm:text-sm md:text-[15px] font-semibold transition-all shrink-0 border cursor-pointer font-sans rounded-xl shadow-[0_2px_8px_-2px_rgba(0,0,0,0.06),0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-md hover:-translate-y-0.5 ${
+                    className={`inline-flex items-center gap-2.5 px-4 py-2 sm:px-4.5 sm:py-2 text-xs sm:text-sm font-semibold transition-all shrink-0 border cursor-pointer font-sans rounded-xl shadow-[0_2px_8px_-2px_rgba(0,0,0,0.05),0_1px_3px_rgba(0,0,0,0.02)] hover:shadow-md hover:-translate-y-0.5 ${
                       isSelected
                         ? "bg-slate-900 text-white border-slate-900 shadow-sm"
                         : "bg-white text-slate-800 border-slate-200 hover:border-slate-400 hover:bg-slate-50"
                     }`}
                   >
                     <ItemIcon
-                      className={`w-4 h-4 sm:w-4.5 sm:h-4.5 ${
+                      className={`w-4 h-4 ${
                         isSelected ? "text-white" : "text-slate-800"
                       }`}
                     />
-                    <span>{item.title}</span>
-                    <span
-                      className={`text-[10px] sm:text-xs uppercase font-mono px-2.5 py-0.5 rounded-full border ${
-                        isSelected
-                          ? "bg-slate-800 text-slate-100 border-slate-700 font-bold"
-                          : "bg-slate-100 text-slate-700 border-slate-200 font-medium"
-                      }`}
-                    >
-                      {item.badge}
-                    </span>
+                    <span className="whitespace-nowrap">{item.title}</span>
                   </button>
 
                   {/* Elemen Hiasan Pemisah Berkilau Halus */}
-                  <span className="text-slate-300 font-mono text-sm select-none">
+                  <span className="text-slate-300 font-mono text-xs select-none">
                     ✦
                   </span>
                 </div>
@@ -309,7 +291,7 @@ export function InteractiveTicker() {
       </div>
 
       {/* 3. Panel Pratinjau Studio Kompak (Sudut Halus Rounded-2xl & Terformat Bersih) */}
-      <div className="relative border border-slate-200/90 bg-white p-6 sm:p-10 lg:p-12 rounded-3xl shadow-xs overflow-hidden">
+      <div className="relative border border-slate-200/90 bg-white p-6 sm:p-8 lg:p-10 rounded-2xl shadow-xs overflow-hidden">
         <AnimatePresence mode="wait">
           <motion.div
             key={selectedFeature.id}
