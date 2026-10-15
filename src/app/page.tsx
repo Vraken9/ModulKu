@@ -19,10 +19,9 @@ import { ParallaxScroll, ParallaxLayer } from "@/components/ui/parallax-scroll";
 import { Hero3DModuleCard } from "@/components/landing/Hero3DModuleCard";
 import { CurriculumSubjectsTicker } from "@/components/landing/CurriculumSubjectsTicker";
 import { InteractiveTicker } from "@/components/landing/InteractiveTicker";
-import { BauhausCanvasBanner } from "@/components/landing/BauhausCanvasBanner";
 import { WorkflowSteps } from "@/components/landing/WorkflowSteps";
-import { BentoEfficiency } from "@/components/landing/BentoEfficiency";
 import { BentoPedagogical } from "@/components/landing/BentoPedagogical";
+import { PricingSection } from "@/components/landing/PricingSection";
 import { ModernFaq } from "@/components/landing/ModernFaq";
 import { RadialCtaBanner } from "@/components/landing/RadialCtaBanner";
 import { ModernFooter } from "@/components/landing/ModernFooter";
@@ -62,16 +61,10 @@ export default function LandingPage() {
               Alur Kerja
             </a>
             <a
-              href="#efisiensi"
+              href="#harga"
               className="px-2.5 xl:px-3 py-1.5 rounded-lg hover:text-slate-900 hover:bg-slate-100 transition-colors whitespace-nowrap"
             >
-              Efisiensi Guru
-            </a>
-            <a
-              href="#kanvas-seni"
-              className="px-2.5 xl:px-3 py-1.5 rounded-lg hover:text-slate-900 hover:bg-slate-100 transition-colors whitespace-nowrap"
-            >
-              Standar Regulasi
+              Paket & Harga
             </a>
             <a
               href="#faq"
@@ -149,18 +142,11 @@ export default function LandingPage() {
                 Alur Kerja
               </a>
               <a
-                href="#efisiensi"
+                href="#harga"
                 onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-2 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors"
+                className="px-3 py-2 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors font-bold text-slate-900"
               >
-                Efisiensi Guru
-              </a>
-              <a
-                href="#kanvas-seni"
-                onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-2 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors"
-              >
-                Standar Regulasi
+                Paket & Harga
               </a>
               <a
                 href="#faq"
@@ -283,35 +269,17 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 5. Section: Efisiensi Waktu Guru (Bento Efficiency) */}
-      <section id="efisiensi" className="py-12 sm:py-16 lg:py-20 bg-slate-50/50 border-b border-slate-200/80">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-          <BentoEfficiency />
-        </div>
-      </section>
-
-      {/* 6. Section: Kemampuan Pedagogis Mendalam (Bento Pedagogical) */}
-      <section id="fitur" className="py-12 sm:py-16 lg:py-20 bg-white border-b border-slate-200/80">
+      {/* 5. Section: Kemampuan Pedagogis Mendalam (Bento Pedagogical) */}
+      <section id="fitur" className="py-12 sm:py-16 lg:py-20 bg-slate-50/50 border-b border-slate-200/80">
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
           <BentoPedagogical />
         </div>
       </section>
 
-      {/* 7. Section: Spanduk Kanvas Geometris Presisi (Bauhaus Dynamic Canvas Banner) */}
-      <section id="kanvas-seni" className="py-12 sm:py-16 lg:py-20 bg-slate-50/50 border-b border-slate-200/80">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-          <div className="text-center max-w-3xl mx-auto space-y-3">
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-slate-100 border border-slate-200 text-xs sm:text-sm font-semibold text-slate-700">
-              Arsitektur Dokumen Resmi
-            </div>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
-              Standar Regulasi BKPDM Terpetakan Rapi
-            </h2>
-            <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-              Visualisasi kanvas interaktif mencerminkan modularitas dan keselarasan setiap butir instrumen administrasi pendidikan.
-            </p>
-          </div>
-          <BauhausCanvasBanner />
+      {/* 6. Section: Paket Berlangganan Guru & Satuan Pendidikan (3-Tier Pricing) */}
+      <section id="harga" className="py-12 sm:py-16 lg:py-20 bg-white border-b border-slate-200/80">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+          <PricingSection />
         </div>
       </section>
 
