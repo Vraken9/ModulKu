@@ -2,7 +2,7 @@
 
 export type EducationLevel = "SD" | "SMP" | "SMA" | "SMK";
 export type Phase = "A" | "B" | "C" | "D" | "E" | "F";
-export type Semester = "Ganjil" | "Genap";
+export type Semester = "Ganjil" | "Genap" | "Tahunan";
 export type BloomLevel = "C1" | "C2" | "C3" | "C4" | "C5" | "C6";
 export type CognitiveLevel = "LOTS" | "MOTS" | "HOTS";
 export type DifficultyLevel = "Mudah" | "Sedang" | "Sulit";
@@ -346,4 +346,50 @@ export interface StudentWorksheetLKPD {
 export interface MediaAjarBundle {
   presentation: PresentationBundle;
   worksheet: StudentWorksheetLKPD;
+}
+
+// --- Bank Dokumen & Subscription Storage Types ---
+export type SubscriptionTier = "free" | "pro" | "school";
+
+export interface TierStorageConfig {
+  tier: SubscriptionTier;
+  label: string;
+  maxBytes: number;
+  formattedLimit: string;
+}
+
+export type StoredDocType =
+  | "modul-ajar"
+  | "soal"
+  | "perangkat-tahunan"
+  | "presentasi"
+  | "lainnya";
+
+export interface StoredDocument {
+  id: string;
+  title: string;
+  docType: StoredDocType;
+  subject: string;
+  grade: string;
+  academicYear: string;
+  semester: Semester;
+  fileFormat: "DOCX" | "PPTX" | "PDF" | "JSON";
+  fileSizeBytes: number;
+  createdAt: string;
+  updatedAt: string;
+  isPmmEvidence?: boolean;
+  notes?: string;
+  tags?: string[];
+  contentData?: any;
+}
+
+export interface StorageUsageSummary {
+  tier: SubscriptionTier;
+  tierLabel: string;
+  usedBytes: number;
+  maxBytes: number;
+  percentageUsed: number;
+  totalDocuments: number;
+  remainingBytes: number;
+  isExceeded: boolean;
 }

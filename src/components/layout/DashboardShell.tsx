@@ -21,11 +21,14 @@ import {
   ShieldCheck,
   Sparkles,
   BookOpen,
+  FolderArchive,
+  HardDrive,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ModulKuLogo } from "@/components/ui/ModulKuLogo";
 import { SchoolProfile, TeacherProfile } from "@/types";
+import { getStorageUsageSummary, formatBytes, TIER_CONFIGS } from "@/lib/document-vault";
 
 interface MenuItem {
   name: string;
@@ -50,6 +53,7 @@ export function DashboardShell({ children, activeItem }: DashboardShellProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [vaultSummary, setVaultSummary] = useState(getStorageUsageSummary());
 
   // Profil Guru & Sekolah dari localStorage
   const [school, setSchool] = useState<Partial<SchoolProfile>>({
@@ -66,9 +70,16 @@ export function DashboardShell({ children, activeItem }: DashboardShellProps) {
       const savedTeacher = localStorage.getItem("guru_teacher_profile");
       if (savedSchool) setSchool(JSON.parse(savedSchool));
       if (savedTeacher) setTeacher(JSON.parse(savedTeacher));
+      setVaultSummary(getStorageUsageSummary());
     } catch {
       // Abaikan di server
     }
+
+    const handleVaultChange = () => {
+      setVaultSummary(getStorageUsageSummary());
+    };
+    window.addEventListener("modulku-vault-changed", handleVaultChange);
+    return () => window.removeEventListener("modulku-vault-changed", handleVaultChange);
   }, []);
 
   async function handleLogout() {
@@ -93,6 +104,13 @@ export function DashboardShell({ children, activeItem }: DashboardShellProps) {
           href: "/dashboard",
           icon: LayoutDashboard,
           id: "dashboard",
+        },
+        {
+          name: "Bank Dokumen",
+          href: "/bank-dokumen",
+          icon: FolderArchive,
+          id: "bank-dokumen",
+          desc: "Arsip & Kuota Cloud",
         },
       ],
     },
@@ -247,6 +265,33 @@ export function DashboardShell({ children, activeItem }: DashboardShellProps) {
               </div>
             ))}
           </nav>
+        </div>
+
+        {/* Storage Quota Progress Widget */}
+        <div className="px-4 py-3 border-t border-slate-100 bg-white">
+          <div className="flex items-center justify-between text-[11px] font-semibold text-slate-700 pb-1.5">
+            <span className="flex items-center gap-1.5">
+              <HardDrive className="w-3.5 h-3.5 text-slate-600" />
+              <span>Penyimpanan Arsip</span>
+            </span>
+            <span className="text-[10px] uppercase font-bold text-slate-500">
+              {vaultSummary.tier}
+            </span>
+          </div>
+          <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+            <div
+              className={`h-full rounded-full transition-all ${
+                vaultSummary.percentageUsed > 85 ? "bg-amber-500" : "bg-slate-900"
+              }`}
+              style={{ width: `${Math.max(4, vaultSummary.percentageUsed)}%` }}
+            />
+          </div>
+          <div className="flex items-center justify-between text-[10px] text-slate-500 pt-1.5">
+            <span>{formatBytes(vaultSummary.usedBytes)} / {TIER_CONFIGS[vaultSummary.tier].formattedLimit}</span>
+            <Link href="/#harga" className="text-blue-600 hover:underline font-bold">
+              Upgrade
+            </Link>
+          </div>
         </div>
 
         {/* Sidebar Footer: Info Guru & Tombol Logout */}

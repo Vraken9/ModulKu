@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { FolderArchive } from "lucide-react";
 import { PerangkatTahunanBundle, Phase } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,8 +15,10 @@ import { AtpTableView } from "@/components/perangkat-tahunan/AtpTableView";
 import { ProtaTableView } from "@/components/perangkat-tahunan/ProtaTableView";
 import { PromesMatrixView } from "@/components/perangkat-tahunan/PromesMatrixView";
 import { KalkulatorMingguEfektif } from "@/components/perangkat-tahunan/KalkulatorMingguEfektif";
+import { saveDocumentToVault } from "@/lib/document-vault";
 
 export default function PerangkatTahunanPage() {
+  const [isSavedToVault, setIsSavedToVault] = useState(false);
   const [subject, setSubject] = useState("Fisika");
   const [phase, setPhase] = useState<Phase>("E");
   const [grade, setGrade] = useState("X (Sepuluh)");
@@ -63,12 +66,38 @@ export default function PerangkatTahunanPage() {
       }
 
       setBundle(json.data);
+      setIsSavedToVault(false);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Terjadi kesalahan sistem");
     } finally {
       setLoading(false);
     }
   }
+
+  const handleSaveToVault = () => {
+    if (!bundle) return;
+    const res = saveDocumentToVault({
+      title: `Bundel Perangkat Tahunan: ${subject} (${grade})`,
+      docType: "perangkat-tahunan",
+      subject,
+      grade,
+      academicYear,
+      semester: "Tahunan",
+      fileFormat: "DOCX",
+      fileSizeBytes: 620 * 1024,
+      isPmmEvidence: true,
+      tags: ["ATP", "PROTA", "PROMES", "RPE", `Fase ${phase}`],
+      notes: `Total alokasi: ${bundle.calendar.total_annual_jp} JP. Termasuk matriks kalender akademik dan sebaran materi.`,
+      contentData: bundle,
+    });
+
+    if (res.success) {
+      setIsSavedToVault(true);
+      alert("Bundel Perangkat Tahunan (ATP, Prota, Promes, RPE) berhasil disimpan ke Bank Dokumen Anda!");
+    } else {
+      alert(res.error || "Gagal menyimpan perangkat tahunan ke Bank Dokumen.");
+    }
+  };
 
   function handlePrint() {
     window.print();
@@ -331,8 +360,24 @@ export default function PerangkatTahunanPage() {
                   </TabsTrigger>
                 </TabsList>
 
-                <div className="text-xs text-slate-500 font-medium">
-                  Total Beban: <span className="font-bold text-slate-800">{bundle.calendar.total_annual_jp} JP</span> / Tahun
+                <div className="flex items-center gap-3">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={handleSaveToVault}
+                    className={`h-8 text-xs font-semibold px-3 rounded-lg flex items-center gap-2 border transition-all ${
+                      isSavedToVault
+                        ? "bg-emerald-50 text-emerald-700 border-emerald-300 hover:bg-emerald-100"
+                        : "bg-white text-slate-700 border-slate-300 hover:bg-slate-50 hover:text-slate-900"
+                    }`}
+                  >
+                    <FolderArchive className="w-3.5 h-3.5" />
+                    <span>{isSavedToVault ? "Tersimpan di Bank Dokumen" : "Simpan ke Bank Dokumen"}</span>
+                  </Button>
+                  <div className="text-xs text-slate-500 font-medium hidden sm:block">
+                    Total Beban: <span className="font-bold text-slate-800">{bundle.calendar.total_annual_jp} JP</span> / Tahun
+                  </div>
                 </div>
               </div>
 

@@ -12,6 +12,7 @@ import {
   AlertCircle,
   Layers,
   BookOpen,
+  FolderArchive,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -23,9 +24,11 @@ import { ModulAjarView } from "@/components/modul-ajar/ModulAjarView";
 import { DashboardShell } from "@/components/layout/DashboardShell";
 import { exportModulAjarToDocx } from "@/lib/export/docx-exporter";
 import { getOfficialCP } from "@/lib/data/capaian-pembelajaran";
+import { saveDocumentToVault } from "@/lib/document-vault";
 import { TeachingModule, SchoolProfile, TeacherProfile } from "@/types";
 
 export default function ModulAjarPage() {
+  const [isSavedToVault, setIsSavedToVault] = useState(false);
   const [school, setSchool] = useState<Partial<SchoolProfile>>({
     school_name: "SMA NEGERI 1 PURWANTORO",
   });
@@ -157,6 +160,31 @@ export default function ModulAjarPage() {
       setFormError(msg);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleSaveToVault = () => {
+    if (!generatedModule) return;
+    const res = saveDocumentToVault({
+      title: generatedModule.title,
+      docType: "modul-ajar",
+      subject: generatedModule.subject,
+      grade: generatedModule.grade,
+      academicYear: generatedModule.academic_year,
+      semester: generatedModule.semester,
+      fileFormat: "DOCX",
+      fileSizeBytes: 480 * 1024,
+      isPmmEvidence: true,
+      tags: ["BKPDM 2026", "Deep Learning", generatedModule.learning_model],
+      notes: `Model: ${generatedModule.learning_model}. Durasi: ${generatedModule.duration_jp} JP. Format: ${generatedModule.format_mode}.`,
+      contentData: generatedModule,
+    });
+
+    if (res.success) {
+      setIsSavedToVault(true);
+      alert("Modul Ajar berhasil disimpan ke Bank Dokumen Anda!");
+    } else {
+      alert(res.error || "Gagal menyimpan modul ke Bank Dokumen.");
     }
   };
 
@@ -566,6 +594,19 @@ export default function ModulAjarPage() {
                       ? "Beralih ke Mode Lengkap BKPDM"
                       : "Beralih ke Mode Ringkas"}
                   </span>
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleSaveToVault}
+                  className={`text-xs gap-1.5 font-bold cursor-pointer transition-all ${
+                    isSavedToVault
+                      ? "bg-emerald-50 text-emerald-800 border-emerald-300"
+                      : "bg-white text-slate-800 border-slate-300 hover:bg-slate-50 shadow-xs"
+                  }`}
+                >
+                  <FolderArchive className="w-3.5 h-3.5 text-slate-700" />
+                  <span>{isSavedToVault ? "Tersimpan di Bank Dokumen" : "Simpan ke Bank Dokumen"}</span>
                 </Button>
                 <Button
                   variant="outline"

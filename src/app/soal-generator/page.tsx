@@ -16,6 +16,7 @@ import {
   Edit3,
   Sliders,
   BookOpen,
+  FolderArchive,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -29,9 +30,11 @@ import { QuestionItemCard } from "@/components/evaluasi/QuestionItemCard";
 import { ScoringRubricView } from "@/components/evaluasi/ScoringRubricView";
 import { exportQuestionsToDocx } from "@/lib/export/docx-exporter";
 import { DashboardShell } from "@/components/layout/DashboardShell";
+import { saveDocumentToVault } from "@/lib/document-vault";
 import { QuestionPackage, QuestionItem, SchoolProfile, TeacherProfile } from "@/types";
 
 export default function SoalGeneratorPage() {
+  const [isSavedToVault, setIsSavedToVault] = useState(false);
   const [resultTab, setResultTab] = useState<"soal" | "kisi-kisi" | "kartu-soal" | "rubrik">("soal");
   // Master Profile dari localStorage
   const [school, setSchool] = useState<Partial<SchoolProfile>>({
@@ -193,6 +196,31 @@ export default function SoalGeneratorPage() {
     newQuestions[index] = updated;
     setGeneratedPackage({ ...generatedPackage, questions: newQuestions });
     setEditingIndex(null);
+  };
+
+  const handleSaveToVault = () => {
+    if (!generatedPackage) return;
+    const res = saveDocumentToVault({
+      title: generatedPackage.title,
+      docType: "soal",
+      subject: generatedPackage.subject,
+      grade: generatedPackage.grade,
+      academicYear: generatedPackage.academic_year,
+      semester: generatedPackage.semester,
+      fileFormat: "DOCX",
+      fileSizeBytes: 340 * 1024,
+      isPmmEvidence: true,
+      tags: ["Taksonomi Bloom", "Kisi-Kisi Asesmen", "KKTP"],
+      notes: `${generatedPackage.total_questions} butir soal HOTS/AKM lengkap dengan Matriks Kisi-Kisi dan rubrik penskoran.`,
+      contentData: generatedPackage,
+    });
+
+    if (res.success) {
+      setIsSavedToVault(true);
+      alert("Paket Soal & Kisi-Kisi berhasil disimpan ke Bank Dokumen Anda!");
+    } else {
+      alert(res.error || "Gagal menyimpan ke Bank Dokumen.");
+    }
   };
 
   return (
@@ -769,6 +797,19 @@ export default function SoalGeneratorPage() {
                   >
                     {showAnswers ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
                     <span>{showAnswers ? "Sembunyikan Kunci" : "Tampilkan Kunci"}</span>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleSaveToVault}
+                    className={`text-xs font-bold gap-1.5 cursor-pointer transition-all ${
+                      isSavedToVault
+                        ? "bg-emerald-50 text-emerald-800 border-emerald-300"
+                        : "bg-white text-slate-800 border-slate-300 hover:bg-slate-50 shadow-xs"
+                    }`}
+                  >
+                    <FolderArchive className="w-3.5 h-3.5 text-slate-700" />
+                    <span>{isSavedToVault ? "Tersimpan di Bank Dokumen" : "Simpan ke Bank Dokumen"}</span>
                   </Button>
                   <Button
                     variant="outline"

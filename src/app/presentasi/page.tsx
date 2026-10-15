@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { FolderArchive } from "lucide-react";
 import { MediaAjarBundle } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,8 +12,10 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { DashboardShell } from "@/components/layout/DashboardShell";
 import { SlidePreviewViewer } from "@/components/presentasi/SlidePreviewViewer";
 import { LkpdDocumentViewer } from "@/components/presentasi/LkpdDocumentViewer";
+import { saveDocumentToVault } from "@/lib/document-vault";
 
 export default function PresentasiPage() {
+  const [isSavedToVault, setIsSavedToVault] = useState(false);
   const [topic, setTopic] = useState("Hukum Gerak Newton & Penerapannya");
   const [subject, setSubject] = useState("Fisika");
   const [grade, setGrade] = useState("X (Sepuluh)");
@@ -56,12 +59,38 @@ export default function PresentasiPage() {
       }
 
       setBundle(json.data);
+      setIsSavedToVault(false);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Terjadi kesalahan sistem");
     } finally {
       setLoading(false);
     }
   }
+
+  const handleSaveToVault = () => {
+    if (!bundle) return;
+    const res = saveDocumentToVault({
+      title: `Bahan Tayang & LKPD: ${topic}`,
+      docType: "presentasi",
+      subject,
+      grade,
+      academicYear: "2025/2026",
+      semester: "Ganjil",
+      fileFormat: "PPTX",
+      fileSizeBytes: 1250 * 1024,
+      isPmmEvidence: true,
+      tags: ["Bahan Tayang", "LKPD Interaktif", "PPTX", subject],
+      notes: `${slideCount} slide visual materi dan berkas LKPD terstruktur. Tema: ${themePalette}.`,
+      contentData: bundle,
+    });
+
+    if (res.success) {
+      setIsSavedToVault(true);
+      alert("Paket Presentasi PPTX & LKPD berhasil disimpan ke Bank Dokumen Anda!");
+    } else {
+      alert(res.error || "Gagal menyimpan bahan presentasi ke Bank Dokumen.");
+    }
+  };
 
   return (
     <DashboardShell activeItem="presentasi">
@@ -260,7 +289,7 @@ export default function PresentasiPage() {
         {bundle && (
           <section className="space-y-4">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <div className="flex justify-between items-center border-b border-slate-200 pb-2 print:hidden">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-3 print:hidden">
                 <TabsList className="bg-slate-100 p-1">
                   <TabsTrigger value="slide" className="text-xs font-semibold">
                     1. Bahan Tayang Presentasi ({bundle.presentation.slides.length} Slide)
@@ -270,8 +299,24 @@ export default function PresentasiPage() {
                   </TabsTrigger>
                 </TabsList>
 
-                <div className="text-xs text-slate-500 font-medium">
-                  Format Siap Ekspor: <span className="font-bold text-slate-800">.PPTX Asli & A4 Print</span>
+                <div className="flex items-center gap-3">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={handleSaveToVault}
+                    className={`h-8 text-xs font-semibold px-3 rounded-lg flex items-center gap-2 border transition-all ${
+                      isSavedToVault
+                        ? "bg-emerald-50 text-emerald-700 border-emerald-300 hover:bg-emerald-100"
+                        : "bg-white text-slate-700 border-slate-300 hover:bg-slate-50 hover:text-slate-900"
+                    }`}
+                  >
+                    <FolderArchive className="w-3.5 h-3.5" />
+                    <span>{isSavedToVault ? "Tersimpan di Bank Dokumen" : "Simpan ke Bank Dokumen"}</span>
+                  </Button>
+                  <div className="text-xs text-slate-500 font-medium hidden sm:block">
+                    Format: <span className="font-bold text-slate-800">.PPTX & Print</span>
+                  </div>
                 </div>
               </div>
 
