@@ -11,9 +11,9 @@ export function BentoEfficiency() {
     <div className="space-y-12">
       {/* Header Pengantar */}
       <div className="text-center max-w-3xl mx-auto space-y-3">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200/80 text-[11px] font-mono font-bold text-blue-700 tracking-wide uppercase">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200/80 text-xs font-semibold text-blue-700">
           <Zap className="w-3.5 h-3.5" />
-          <span>// EFISIENSI KINERJA GURU</span>
+          <span>Efisiensi Kinerja Guru</span>
         </div>
         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
           Kembalikan Waktu Berharga Anda untuk Siswa
@@ -84,8 +84,8 @@ export function BentoEfficiency() {
               <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-bold">
                 <ShieldCheck className="w-5 h-5 text-white" />
               </div>
-              <span className="text-[10px] font-mono text-slate-700 font-bold">
-                [KEDINASAN_READY]
+              <span className="text-[11px] font-semibold text-slate-500">
+                Standar Kedinasan Resmi
               </span>
             </div>
 
@@ -122,8 +122,8 @@ export function BentoEfficiency() {
               <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-bold">
                 <Sliders className="w-5 h-5 text-white" />
               </div>
-              <span className="text-[10px] font-mono text-slate-700 font-bold">
-                [KENDALI_GURU]
+              <span className="text-[11px] font-semibold text-slate-500">
+                Kendali Penuh Guru
               </span>
             </div>
 

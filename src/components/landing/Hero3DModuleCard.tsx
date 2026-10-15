@@ -94,9 +94,9 @@ export function Hero3DModuleCard() {
             transform: `translateZ(${isHovered ? "20px" : "12px"}) rotateZ(3deg)`,
           }}
         >
-          <div className="flex justify-between items-center text-[10px] text-slate-500 font-mono border-b border-slate-200 pb-2">
-            <span>DOKUMEN_LAMPIRAN // MATRIKS_KISI_KISI</span>
-            <span>STANDAR BSKAP 032</span>
+          <div className="flex justify-between items-center text-[10px] text-slate-500 font-medium border-b border-slate-200 pb-2">
+            <span>Lampiran Matriks Kisi-Kisi</span>
+            <span>Standar BSKAP 032</span>
           </div>
           <div className="mt-3 space-y-2 opacity-50">
             <div className="h-2.5 bg-slate-300 rounded w-3/4" />

@@ -12,9 +12,9 @@ export function BentoPedagogical() {
     <div className="space-y-12">
       {/* Header Pengantar */}
       <div className="text-center max-w-3xl mx-auto space-y-3">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-slate-100 border border-slate-200 text-[11px] font-mono font-bold text-slate-800 uppercase tracking-wider">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-800">
           <BookOpen className="w-3.5 h-3.5 text-slate-700" />
-          <span>[PEDAGOGICAL_CORE // KEPUTUSAN_BSKAP_032]</span>
+          <span>Standar Pedagogis Resmi BSKAP 032</span>
         </div>
         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
           Bukan Sekadar Generator Teks AI Biasa
@@ -115,8 +115,8 @@ export function BentoPedagogical() {
               <div className="w-9 h-9 rounded-xl bg-slate-900 text-white flex items-center justify-center font-bold">
                 <FunctionSquare className="w-4.5 h-4.5 text-white" />
               </div>
-              <span className="text-[10px] font-mono text-slate-600 font-bold">
-                [KATEX_ENGINE]
+              <span className="text-[11px] font-semibold text-slate-500">
+                Formula KaTeX Presisi
               </span>
             </div>
 

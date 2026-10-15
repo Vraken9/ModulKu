@@ -69,11 +69,11 @@ export function CurriculumSubjectsTicker() {
     <section className="relative w-full border-b border-slate-200/80 bg-slate-50/60 py-8 sm:py-11 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-5">
         
-        {/* 1. Header & Jenjang Bar dengan Bentuk Melengkung Halus & Ukuran Kecil */}
+        {/* 1. Header & Jenjang Bar yang Bersih, Alami, dan Mudah Dibaca */}
         <div className="space-y-3 text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-slate-200/80 text-[10px] sm:text-[11px] font-mono font-bold text-slate-700 uppercase tracking-widest shadow-2xs">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-slate-200/80 text-xs font-semibold text-slate-700 shadow-2xs">
             <span className="w-1.5 h-1.5 rounded-full bg-slate-900 inline-block animate-pulse" />
-            <span>DISEDIAKAN_UNTUK_SELURUH_SATUAN_PENDIDIKAN_NASIONAL</span>
+            <span>Disediakan untuk Seluruh Satuan Pendidikan Nasional</span>
           </div>
 
           <h3 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-slate-900 tracking-tight font-sans">
@@ -84,7 +84,7 @@ export function CurriculumSubjectsTicker() {
             Daftar capaian pembelajaran komprehensif mulai dari fondasi SD/MI hingga peminatan lanjut SMA dan vokasi SMK sesuai regulasi resmi BSKAP 032/2024.
           </p>
 
-          {/* Tombol Jenjang Lembut Berlekuk Halus (Rounded Full) & Ukuran Teks Lebih Kecil */}
+          {/* Tombol Jenjang Lembut Berlekuk Halus (Rounded Full) */}
           <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 pt-1">
             {JENJANG_LIST.map((lvl) => {
               const isActive = activeJenjang === lvl.name;
@@ -106,7 +106,7 @@ export function CurriculumSubjectsTicker() {
                         : "bg-slate-100 text-slate-500 border-slate-200 group-hover:bg-slate-200"
                     }`}
                   >
-                    // {lvl.code}
+                    {lvl.code}
                   </span>
                   <span className="font-semibold tracking-tight">
                     {lvl.name}
@@ -124,17 +124,17 @@ export function CurriculumSubjectsTicker() {
           </div>
         </div>
 
-        {/* 2. Container 3 Tumpuk Running Text dengan Sudut Halus (Rounded-2xl), Jarak Antar Line Rapat, dan Elemen Hiasan */}
-        <div className="relative w-full border border-slate-200/80 bg-white py-2.5 sm:py-3.5 rounded-2xl shadow-xs overflow-hidden space-y-1.5 sm:space-y-2">
+        {/* 2. Container 3 Tumpuk Running Text dengan Garis Rapat, Line Tengah Menonjol & Berbayang */}
+        <div className="relative w-full border border-slate-200/80 bg-white py-3 sm:py-4 rounded-2xl shadow-xs overflow-hidden space-y-0.5 sm:space-y-1">
           {/* Gradient Fade Masks (Kiri & Kanan) untuk Transisi Mulus */}
-          <div className="pointer-events-none absolute top-0 bottom-0 left-0 w-14 sm:w-28 z-20 bg-gradient-to-r from-white via-white/85 to-transparent rounded-l-2xl" />
-          <div className="pointer-events-none absolute top-0 right-0 bottom-0 w-14 sm:w-28 z-20 bg-gradient-to-l from-white via-white/85 to-transparent rounded-r-2xl" />
+          <div className="pointer-events-none absolute top-0 bottom-0 left-0 w-14 sm:w-28 z-30 bg-gradient-to-r from-white via-white/85 to-transparent rounded-l-2xl" />
+          <div className="pointer-events-none absolute top-0 right-0 bottom-0 w-14 sm:w-28 z-30 bg-gradient-to-l from-white via-white/85 to-transparent rounded-r-2xl" />
 
           {/* Tumpukan 1: SD / MI (Arah Kiri, Durasi 40s) */}
-          <div className="relative flex items-center">
+          <div className="relative flex items-center py-0.5">
             <div className="flex overflow-hidden group select-none w-full">
               <div
-                className="flex shrink-0 items-center gap-2.5 animate-marquee group-hover:[animation-play-state:paused]"
+                className="flex shrink-0 items-center gap-3 animate-marquee group-hover:[animation-play-state:paused]"
                 style={{ "--marquee-duration": "40s" } as React.CSSProperties}
               >
                 {SD_SUBJECTS.map((sub) => (
@@ -142,7 +142,7 @@ export function CurriculumSubjectsTicker() {
                 ))}
               </div>
               <div
-                className="flex shrink-0 items-center gap-2.5 animate-marquee group-hover:[animation-play-state:paused] ml-2.5"
+                className="flex shrink-0 items-center gap-3 animate-marquee group-hover:[animation-play-state:paused] ml-3"
                 style={{ "--marquee-duration": "40s" } as React.CSSProperties}
               >
                 {SD_SUBJECTS.map((sub) => (
@@ -152,33 +152,33 @@ export function CurriculumSubjectsTicker() {
             </div>
           </div>
 
-          {/* Tumpukan 2: SMP / MTs (Arah Kanan / Reverse, Durasi 36s) dengan Spasi Sangat Rapat */}
-          <div className="relative flex items-center border-t border-b border-slate-100/80 py-1 sm:py-1.5">
+          {/* Tumpukan 2: SMP / MTs (Arah Kanan / Reverse, Durasi 36s) - Line Tengah Lebih Menonjol dengan Bayangan */}
+          <div className="relative z-10 flex items-center bg-slate-50/70 border-y border-slate-200/60 py-1.5 sm:py-2 shadow-[0_4px_14px_-3px_rgba(0,0,0,0.06)]">
             <div className="flex overflow-hidden group select-none w-full">
               <div
-                className="flex shrink-0 items-center gap-2.5 animate-marquee-reverse group-hover:[animation-play-state:paused]"
+                className="flex shrink-0 items-center gap-3 animate-marquee-reverse group-hover:[animation-play-state:paused]"
                 style={{ "--marquee-duration": "36s" } as React.CSSProperties}
               >
                 {SMP_SUBJECTS.map((sub) => (
-                  <FloatingSubjectChip key={`smp-track-1-${sub.id}`} item={sub} />
+                  <FloatingSubjectChip key={`smp-track-1-${sub.id}`} item={sub} isFeatured />
                 ))}
               </div>
               <div
-                className="flex shrink-0 items-center gap-2.5 animate-marquee-reverse group-hover:[animation-play-state:paused] ml-2.5"
+                className="flex shrink-0 items-center gap-3 animate-marquee-reverse group-hover:[animation-play-state:paused] ml-3"
                 style={{ "--marquee-duration": "36s" } as React.CSSProperties}
               >
                 {SMP_SUBJECTS.map((sub) => (
-                  <FloatingSubjectChip key={`smp-track-2-${sub.id}`} item={sub} />
+                  <FloatingSubjectChip key={`smp-track-2-${sub.id}`} item={sub} isFeatured />
                 ))}
               </div>
             </div>
           </div>
 
           {/* Tumpukan 3: SMA / MA / SMK (Arah Kiri, Durasi 44s) */}
-          <div className="relative flex items-center">
+          <div className="relative flex items-center py-0.5">
             <div className="flex overflow-hidden group select-none w-full">
               <div
-                className="flex shrink-0 items-center gap-2.5 animate-marquee group-hover:[animation-play-state:paused]"
+                className="flex shrink-0 items-center gap-3 animate-marquee group-hover:[animation-play-state:paused]"
                 style={{ "--marquee-duration": "44s" } as React.CSSProperties}
               >
                 {SMA_SUBJECTS.map((sub) => (
@@ -186,7 +186,7 @@ export function CurriculumSubjectsTicker() {
                 ))}
               </div>
               <div
-                className="flex shrink-0 items-center gap-2.5 animate-marquee group-hover:[animation-play-state:paused] ml-2.5"
+                className="flex shrink-0 items-center gap-3 animate-marquee group-hover:[animation-play-state:paused] ml-3"
                 style={{ "--marquee-duration": "44s" } as React.CSSProperties}
               >
                 {SMA_SUBJECTS.map((sub) => (
@@ -203,22 +203,38 @@ export function CurriculumSubjectsTicker() {
 }
 
 // Subkomponen Chip Mata Pelajaran Melayang Berlekuk Halus (Rounded-xl) & Hiasan Elegan
-function FloatingSubjectChip({ item }: { item: SubjectItem }) {
+function FloatingSubjectChip({
+  item,
+  isFeatured = false,
+}: {
+  item: SubjectItem;
+  isFeatured?: boolean;
+}) {
   return (
-    <div className="flex items-center gap-2.5 shrink-0">
+    <div className="flex items-center gap-3 shrink-0">
       <div
-        className="group inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-xl bg-white border border-slate-200/80 shadow-[0_2px_8px_-2px_rgba(0,0,0,0.06),0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_12px_-2px_rgba(0,0,0,0.1)] hover:-translate-y-0.5 transition-all duration-200 shrink-0 cursor-default"
+        className={`group inline-flex items-center gap-2.5 px-4 py-2 sm:px-4.5 sm:py-2.5 rounded-xl border transition-all duration-200 shrink-0 cursor-default ${
+          isFeatured
+            ? "bg-white border-slate-300/80 shadow-[0_3px_10px_-2px_rgba(0,0,0,0.08),0_1px_3px_rgba(0,0,0,0.04)] hover:shadow-md hover:-translate-y-0.5"
+            : "bg-white border-slate-200/80 shadow-[0_2px_8px_-2px_rgba(0,0,0,0.05),0_1px_3px_rgba(0,0,0,0.02)] hover:shadow-md hover:-translate-y-0.5"
+        }`}
       >
-        <span className="text-[9px] sm:text-[10px] font-mono font-medium px-1.5 py-0.5 rounded-md bg-slate-100 text-slate-600 border border-slate-200/70">
+        <span
+          className={`text-[10px] sm:text-[11px] font-mono font-medium px-2 py-0.5 rounded-md border ${
+            isFeatured
+              ? "bg-slate-100 text-slate-800 border-slate-300/80"
+              : "bg-slate-50 text-slate-600 border-slate-200/70"
+          }`}
+        >
           {item.phase}
         </span>
-        <span className="text-xs sm:text-[13px] font-semibold text-slate-800 tracking-tight font-sans whitespace-nowrap">
+        <span className="text-xs sm:text-sm font-semibold text-slate-800 tracking-tight font-sans whitespace-nowrap">
           {item.name}
         </span>
       </div>
 
       {/* Elemen Hiasan Pemisah Berkilau Lembut */}
-      <span className="text-slate-300 font-mono text-[10px] select-none">
+      <span className="text-slate-300 font-mono text-xs select-none">
         ✦
       </span>
     </div>

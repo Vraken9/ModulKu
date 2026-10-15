@@ -240,8 +240,8 @@ export default function SoalGeneratorPage() {
             {/* Banner Pengantar Slate Bersih */}
             <div className="rounded-2xl bg-white border border-slate-200 text-slate-900 p-6 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div className="space-y-1.5">
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-slate-100 border border-slate-200 text-[10px] font-mono font-bold text-slate-700 uppercase">
-                  <span>MODULKU_EVALUASI // BSKAP_032</span>
+                <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-700">
+                  <span>Evaluasi & Asesmen BSKAP 032</span>
                 </div>
                 <h2 className="text-lg sm:text-xl font-black tracking-tight text-slate-900">
                   Susun Paket Asesmen dengan Kontrol Kognitif Terstandarisasi

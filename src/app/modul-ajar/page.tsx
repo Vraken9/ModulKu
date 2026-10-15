@@ -206,9 +206,9 @@ export default function ModulAjarPage() {
             {/* Banner Pengantar Edukatif Bersih */}
             <div className="rounded-2xl border border-slate-200 bg-white text-slate-900 p-6 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div className="space-y-2">
-                <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-slate-100 text-[10px] font-mono font-bold text-slate-700 border border-slate-200 uppercase">
+                <div className="inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-slate-100 text-xs font-semibold text-slate-700 border border-slate-200">
                   <Sparkles className="w-3 h-3 text-slate-700" />
-                  <span>STANDAR_BSKAP_NO_032 // SUPERVISI_RESMI</span>
+                  <span>Standar BSKAP No. 032 Supervisi Resmi</span>
                 </div>
                 <h2 className="text-xl font-black tracking-tight text-slate-900">
                   Susun Modul Ajar Resmi dengan Diferensiasi Terpeta

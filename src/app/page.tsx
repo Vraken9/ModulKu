@@ -95,11 +95,11 @@ export default function LandingPage() {
             layer="hero-accent"
             className="pointer-events-none absolute inset-0 z-0 flex justify-between px-8 pt-10"
           >
-            <div className="font-mono text-xs text-slate-300 font-bold select-none">
-              + [GRID_SYS_01]
+            <div className="text-xs text-slate-300 font-medium select-none">
+              Modul Administrasi Terpadu
             </div>
-            <div className="font-mono text-xs text-slate-300 font-bold select-none">
-              [BSKAP_032_STD] +
+            <div className="text-xs text-slate-300 font-medium select-none">
+              Standar Regulasi BSKAP 032
             </div>
           </ParallaxLayer>
 
@@ -108,10 +108,10 @@ export default function LandingPage() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
               {/* Kolom Kiri: Copywriting & Actions */}
               <div className="lg:col-span-6 space-y-6 text-center lg:text-left">
-                {/* Monochromatic Tech Badge */}
-                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-100 border border-slate-300 text-xs font-mono font-bold text-slate-800 shadow-2xs">
+                {/* Monochromatic Clean Badge */}
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-800 shadow-2xs">
                   <Sparkles className="w-3.5 h-3.5 text-slate-700" />
-                  <span>MODULKU OS // REGULASI BSKAP 2024 RESMI</span>
+                  <span>Platform Resmi Kurikulum Merdeka 2024</span>
                 </div>
 
                 <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-[1.15]">

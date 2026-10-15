@@ -187,9 +187,9 @@ export function InteractiveTicker() {
       {/* 1. Header Pengantar Proporsional */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 px-1">
         <div className="space-y-1.5">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-[11px] font-mono font-bold text-slate-700 uppercase tracking-wider">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-700">
             <Cpu className="w-3.5 h-3.5 text-slate-800" />
-            <span>[MODULKU_NAVIGATOR // FITUR_ADMINISTRASI]</span>
+            <span>Fitur Administrasi Modul</span>
           </div>
           <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
             Eksplorasi Modul Perangkat & Instrumen Resmi

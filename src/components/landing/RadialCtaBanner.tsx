@@ -14,9 +14,9 @@ export function RadialCtaBanner() {
 
       {/* Content */}
       <div className="relative z-10 max-w-3xl mx-auto text-center space-y-6">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900 border border-slate-700 text-[11px] font-mono text-slate-300 font-bold tracking-wide uppercase">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-slate-900 border border-slate-700 text-xs text-slate-300 font-semibold tracking-normal">
           <Sparkles className="w-3.5 h-3.5 text-slate-300" />
-          <span>// AKSES RESMI PENDIDIK INDONESIA</span>
+          <span>Akses Resmi Pendidik Indonesia</span>
         </div>
 
         <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight">

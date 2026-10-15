@@ -93,9 +93,9 @@ export default function DashboardPage() {
         <section className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-xs relative overflow-hidden">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
             <div className="space-y-2 max-w-2xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-[11px] font-mono font-bold text-slate-700 uppercase tracking-wider">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-700">
                 <Sparkles className="w-3.5 h-3.5 text-slate-800" />
-                <span>[RUANG_KERJA_ADMINISTRASI // RESMI_BSKAP]</span>
+                <span>Ruang Kerja Administrasi Resmi BSKAP</span>
               </div>
 
               <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight leading-snug">

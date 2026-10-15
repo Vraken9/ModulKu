@@ -74,8 +74,8 @@ export default function LoginPage() {
           <div className="lg:col-span-7">
             <Card className="border-slate-200 shadow-sm bg-white">
               <CardHeader className="space-y-1.5 pb-5 border-b border-slate-100">
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-slate-100 border border-slate-200 text-[10px] font-mono font-bold text-slate-700 uppercase w-fit">
-                  <span>AUTENTIKASI_PENDIDIK</span>
+                <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-700 w-fit">
+                  <span>Autentikasi Pendidik</span>
                 </div>
                 <CardTitle className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
                   Masuk ke Ruang Kerja Guru

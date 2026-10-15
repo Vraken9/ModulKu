@@ -32,8 +32,8 @@ export function ModernFooter() {
             <span className="hidden md:inline">
               Standar Regulasi: Permendikbudristek No. 12/2024
             </span>
-            <span className="font-mono text-slate-800 font-bold">
-              [MODULKU_BSKAP_ACTIVE]
+            <span className="text-slate-800 font-semibold text-xs px-2.5 py-1 rounded-full bg-slate-100 border border-slate-200">
+              Sistem Aktif BSKAP
             </span>
           </div>
         </div>
