@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { BookOpen, GraduationCap, School, Sparkles, Layers, ChevronRight } from "lucide-react";
 
 interface SubjectItem {
   id: string;
@@ -65,29 +64,28 @@ const JENJANG_LIST = [
 
 export function CurriculumSubjectsTicker() {
   const [activeJenjang, setActiveJenjang] = useState<string>("SD / MI");
-  const [activeSubject, setActiveSubject] = useState<SubjectItem | null>(null);
 
   return (
-    <section className="relative w-full border-b border-slate-300/80 bg-slate-50/70 py-10 sm:py-14 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+    <section className="relative w-full border-b border-slate-200/80 bg-slate-50/60 py-8 sm:py-12 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         
-        {/* 1. Header & Jenjang Bar dengan Sudut Lancip dan Teks Lebih Besar */}
-        <div className="space-y-4 text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-white border border-slate-300 text-[11px] sm:text-xs font-mono font-bold text-slate-800 uppercase tracking-widest">
-            <span className="w-2 h-2 bg-slate-900 inline-block animate-pulse" />
-            <span>[DISEDIAKAN_UNTUK_SELURUH_SATUAN_PENDIDIKAN_NASIONAL]</span>
+        {/* 1. Header & Jenjang Bar yang Lebih Ringkas, Lembut, dan Proporsional */}
+        <div className="space-y-3.5 text-center">
+          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 bg-white border border-slate-200/80 text-[10px] sm:text-[11px] font-mono font-bold text-slate-700 uppercase tracking-widest shadow-2xs">
+            <span className="w-1.5 h-1.5 bg-slate-900 inline-block animate-pulse" />
+            <span>DISEDIAKAN_UNTUK_SELURUH_SATUAN_PENDIDIKAN_NASIONAL</span>
           </div>
 
-          <h3 className="text-xl sm:text-3xl font-black text-slate-900 tracking-tight font-sans">
+          <h3 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-slate-900 tracking-tight font-sans">
             Cakupan Kurikulum Merdeka Lintas Jenjang & Mata Pelajaran
           </h3>
 
-          <p className="text-xs sm:text-sm text-slate-600 max-w-2xl mx-auto font-sans">
-            Pilih jenjang satuan pendidikan atau sorot salah satu mata pelajaran di bawah untuk melihat rincian capaian pembelajaran resmi BSKAP 032/2024.
+          <p className="text-xs sm:text-sm text-slate-500 max-w-2xl mx-auto font-sans leading-relaxed">
+            Daftar capaian pembelajaran komprehensif mulai dari fondasi SD/MI hingga peminatan lanjut SMA dan vokasi SMK sesuai regulasi resmi BSKAP 032/2024.
           </p>
 
-          {/* Kotak Jenjang Sudut Lancip (Sharp Corners) & Tulisan Lebih Besar */}
-          <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3.5 pt-2">
+          {/* Kotak Jenjang Lebih Kecil, Border Soft, dan Teks Lebih Ramping */}
+          <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 pt-1">
             {JENJANG_LIST.map((lvl) => {
               const isActive = activeJenjang === lvl.name;
               return (
@@ -95,28 +93,28 @@ export function CurriculumSubjectsTicker() {
                   key={lvl.code}
                   type="button"
                   onClick={() => setActiveJenjang(lvl.name)}
-                  className={`group relative flex items-center gap-2.5 px-5 py-2.5 sm:px-6 sm:py-3 border-2 transition-all cursor-pointer font-mono ${
+                  className={`group relative flex items-center gap-2 px-3 py-1.5 sm:px-3.5 sm:py-2 border transition-all cursor-pointer font-sans text-xs sm:text-sm ${
                     isActive
-                      ? "bg-slate-900 text-white border-slate-900 shadow-sm"
-                      : "bg-white text-slate-800 border-slate-300 hover:border-slate-900 hover:bg-slate-100"
+                      ? "bg-slate-900 text-white border-slate-900 shadow-xs"
+                      : "bg-white text-slate-700 border-slate-200/90 hover:border-slate-300 hover:bg-slate-50"
                   }`}
                   style={{ borderRadius: "0px" }}
                 >
                   <span
-                    className={`text-[10px] font-bold px-1.5 py-0.5 border ${
+                    className={`text-[9px] font-mono font-semibold px-1 py-0.2 border ${
                       isActive
                         ? "bg-slate-800 text-slate-200 border-slate-700"
-                        : "bg-slate-100 text-slate-600 border-slate-300 group-hover:bg-slate-200"
+                        : "bg-slate-100 text-slate-500 border-slate-200 group-hover:bg-slate-200"
                     }`}
                   >
                     // {lvl.code}
                   </span>
-                  <span className="text-sm sm:text-base font-extrabold tracking-wide font-sans">
+                  <span className="font-semibold tracking-tight">
                     {lvl.name}
                   </span>
                   <span
-                    className={`text-[10px] uppercase font-bold tracking-wider hidden sm:inline ${
-                      isActive ? "text-slate-300" : "text-slate-500"
+                    className={`text-[10px] hidden sm:inline ${
+                      isActive ? "text-slate-300" : "text-slate-400"
                     }`}
                   >
                     ({lvl.fase})
@@ -127,211 +125,99 @@ export function CurriculumSubjectsTicker() {
           </div>
         </div>
 
-        {/* 2. Container 3 Tumpuk Running Text Marquee ala Hexaa.sh */}
+        {/* 2. Container 3 Tumpuk Running Text Padat, Rapat, Soft Border & Floating Shadow */}
         <div
-          className="relative w-full border-2 border-slate-300 bg-white py-4 sm:py-6 shadow-xs overflow-hidden space-y-3.5"
+          className="relative w-full border border-slate-200/80 bg-white py-3 sm:py-4 shadow-xs overflow-hidden space-y-2 sm:space-y-2.5"
           style={{ borderRadius: "0px" }}
         >
-          {/* Gradient Fade Masks (Kiri & Kanan) untuk Transisi Mulus Hexaa */}
-          <div className="pointer-events-none absolute top-0 bottom-0 left-0 w-16 sm:w-32 z-20 bg-gradient-to-r from-white via-white/80 to-transparent" />
-          <div className="pointer-events-none absolute top-0 right-0 bottom-0 w-16 sm:w-32 z-20 bg-gradient-to-l from-white via-white/80 to-transparent" />
+          {/* Gradient Fade Masks (Kiri & Kanan) untuk Transisi Mulus */}
+          <div className="pointer-events-none absolute top-0 bottom-0 left-0 w-14 sm:w-28 z-20 bg-gradient-to-r from-white via-white/85 to-transparent" />
+          <div className="pointer-events-none absolute top-0 right-0 bottom-0 w-14 sm:w-28 z-20 bg-gradient-to-l from-white via-white/85 to-transparent" />
 
-          {/* Tumpukan 1: SD / MI (Arah Kiri, Durasi 38s) */}
+          {/* Tumpukan 1: SD / MI (Arah Kiri, Durasi 40s) */}
           <div className="relative flex items-center">
-            {/* Tag Level Statis di Pojok Kiri (Desktop) */}
-            <div className="hidden lg:flex items-center gap-1.5 absolute left-3 z-30 px-2.5 py-1 bg-slate-900 text-white text-[10px] font-mono font-bold tracking-wider shadow-sm">
-              <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full" />
-              <span>SD/MI [FASE A-C]</span>
-            </div>
-
             <div className="flex overflow-hidden group select-none w-full">
               <div
-                className="flex shrink-0 items-center gap-3 animate-marquee group-hover:[animation-play-state:paused]"
-                style={{ "--marquee-duration": "38s" } as React.CSSProperties}
+                className="flex shrink-0 items-center gap-2 sm:gap-2.5 animate-marquee group-hover:[animation-play-state:paused]"
+                style={{ "--marquee-duration": "40s" } as React.CSSProperties}
               >
                 {SD_SUBJECTS.map((sub) => (
-                  <MarqueeSubjectButton
-                    key={`sd-track-1-${sub.id}`}
-                    item={sub}
-                    isSelected={activeSubject?.id === sub.id}
-                    onSelect={() => setActiveSubject(sub)}
-                  />
+                  <FloatingSubjectChip key={`sd-track-1-${sub.id}`} item={sub} />
                 ))}
               </div>
               <div
-                className="flex shrink-0 items-center gap-3 animate-marquee group-hover:[animation-play-state:paused] ml-3"
-                style={{ "--marquee-duration": "38s" } as React.CSSProperties}
+                className="flex shrink-0 items-center gap-2 sm:gap-2.5 animate-marquee group-hover:[animation-play-state:paused] ml-2 sm:ml-2.5"
+                style={{ "--marquee-duration": "40s" } as React.CSSProperties}
               >
                 {SD_SUBJECTS.map((sub) => (
-                  <MarqueeSubjectButton
-                    key={`sd-track-2-${sub.id}`}
-                    item={sub}
-                    isSelected={activeSubject?.id === sub.id}
-                    onSelect={() => setActiveSubject(sub)}
-                  />
+                  <FloatingSubjectChip key={`sd-track-2-${sub.id}`} item={sub} />
                 ))}
               </div>
             </div>
           </div>
 
-          {/* Tumpukan 2: SMP / MTs (Arah Kanan / Reverse, Durasi 34s) */}
-          <div className="relative flex items-center border-t border-b border-slate-200/80 py-2">
-            {/* Tag Level Statis di Pojok Kiri (Desktop) */}
-            <div className="hidden lg:flex items-center gap-1.5 absolute left-3 z-30 px-2.5 py-1 bg-slate-800 text-white text-[10px] font-mono font-bold tracking-wider shadow-sm">
-              <span className="w-1.5 h-1.5 bg-sky-400 rounded-full" />
-              <span>SMP/MTs [FASE D]</span>
-            </div>
-
+          {/* Tumpukan 2: SMP / MTs (Arah Kanan / Reverse, Durasi 36s) dengan Divider Soft */}
+          <div className="relative flex items-center border-t border-b border-slate-100 py-1.5 sm:py-2">
             <div className="flex overflow-hidden group select-none w-full">
               <div
-                className="flex shrink-0 items-center gap-3 animate-marquee-reverse group-hover:[animation-play-state:paused]"
-                style={{ "--marquee-duration": "34s" } as React.CSSProperties}
+                className="flex shrink-0 items-center gap-2 sm:gap-2.5 animate-marquee-reverse group-hover:[animation-play-state:paused]"
+                style={{ "--marquee-duration": "36s" } as React.CSSProperties}
               >
                 {SMP_SUBJECTS.map((sub) => (
-                  <MarqueeSubjectButton
-                    key={`smp-track-1-${sub.id}`}
-                    item={sub}
-                    isSelected={activeSubject?.id === sub.id}
-                    onSelect={() => setActiveSubject(sub)}
-                  />
+                  <FloatingSubjectChip key={`smp-track-1-${sub.id}`} item={sub} />
                 ))}
               </div>
               <div
-                className="flex shrink-0 items-center gap-3 animate-marquee-reverse group-hover:[animation-play-state:paused] ml-3"
-                style={{ "--marquee-duration": "34s" } as React.CSSProperties}
+                className="flex shrink-0 items-center gap-2 sm:gap-2.5 animate-marquee-reverse group-hover:[animation-play-state:paused] ml-2 sm:ml-2.5"
+                style={{ "--marquee-duration": "36s" } as React.CSSProperties}
               >
                 {SMP_SUBJECTS.map((sub) => (
-                  <MarqueeSubjectButton
-                    key={`smp-track-2-${sub.id}`}
-                    item={sub}
-                    isSelected={activeSubject?.id === sub.id}
-                    onSelect={() => setActiveSubject(sub)}
-                  />
+                  <FloatingSubjectChip key={`smp-track-2-${sub.id}`} item={sub} />
                 ))}
               </div>
             </div>
           </div>
 
-          {/* Tumpukan 3: SMA / MA / SMK (Arah Kiri, Durasi 42s) */}
+          {/* Tumpukan 3: SMA / MA / SMK (Arah Kiri, Durasi 44s) */}
           <div className="relative flex items-center">
-            {/* Tag Level Statis di Pojok Kiri (Desktop) */}
-            <div className="hidden lg:flex items-center gap-1.5 absolute left-3 z-30 px-2.5 py-1 bg-slate-900 text-white text-[10px] font-mono font-bold tracking-wider shadow-sm">
-              <span className="w-1.5 h-1.5 bg-indigo-400 rounded-full" />
-              <span>SMA/MA/SMK [FASE E-F]</span>
-            </div>
-
             <div className="flex overflow-hidden group select-none w-full">
               <div
-                className="flex shrink-0 items-center gap-3 animate-marquee group-hover:[animation-play-state:paused]"
-                style={{ "--marquee-duration": "42s" } as React.CSSProperties}
+                className="flex shrink-0 items-center gap-2 sm:gap-2.5 animate-marquee group-hover:[animation-play-state:paused]"
+                style={{ "--marquee-duration": "44s" } as React.CSSProperties}
               >
                 {SMA_SUBJECTS.map((sub) => (
-                  <MarqueeSubjectButton
-                    key={`sma-track-1-${sub.id}`}
-                    item={sub}
-                    isSelected={activeSubject?.id === sub.id}
-                    onSelect={() => setActiveSubject(sub)}
-                  />
+                  <FloatingSubjectChip key={`sma-track-1-${sub.id}`} item={sub} />
                 ))}
               </div>
               <div
-                className="flex shrink-0 items-center gap-3 animate-marquee group-hover:[animation-play-state:paused] ml-3"
-                style={{ "--marquee-duration": "42s" } as React.CSSProperties}
+                className="flex shrink-0 items-center gap-2 sm:gap-2.5 animate-marquee group-hover:[animation-play-state:paused] ml-2 sm:ml-2.5"
+                style={{ "--marquee-duration": "44s" } as React.CSSProperties}
               >
                 {SMA_SUBJECTS.map((sub) => (
-                  <MarqueeSubjectButton
-                    key={`sma-track-2-${sub.id}`}
-                    item={sub}
-                    isSelected={activeSubject?.id === sub.id}
-                    onSelect={() => setActiveSubject(sub)}
-                  />
+                  <FloatingSubjectChip key={`sma-track-2-${sub.id}`} item={sub} />
                 ))}
               </div>
             </div>
           </div>
         </div>
 
-        {/* 3. Panel Mini Info Pelajaran Terpilih (Responsive Drawer ala Hexaa Studio) */}
-        {activeSubject && (
-          <div
-            className="border-2 border-slate-900 bg-slate-900 text-white p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 animate-in fade-in slide-in-from-top-2 duration-200"
-            style={{ borderRadius: "0px" }}
-          >
-            <div className="space-y-1">
-              <div className="flex items-center gap-2 font-mono text-xs text-slate-300">
-                <span className="px-2 py-0.5 bg-slate-800 text-emerald-400 font-bold border border-slate-700">
-                  {activeSubject.level}
-                </span>
-                <span>//</span>
-                <span className="font-semibold text-slate-300">{activeSubject.phase}</span>
-                <span>//</span>
-                <span className="text-slate-400">REGULASI RESMI BSKAP 2024</span>
-              </div>
-              <h4 className="text-base sm:text-lg font-black text-white tracking-tight font-sans">
-                {activeSubject.name}
-              </h4>
-              <p className="text-xs sm:text-sm text-slate-300 font-sans">
-                {activeSubject.detail} — Siap digenerasikan instan ke dalam format Modul Ajar, Kisi-Kisi HOTS, dan Perangkat Tahunan.
-              </p>
-            </div>
-
-            <div className="flex items-center gap-2.5 shrink-0">
-              <button
-                type="button"
-                onClick={() => setActiveSubject(null)}
-                className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-mono text-slate-300 hover:text-white transition-colors cursor-pointer"
-                style={{ borderRadius: "0px" }}
-              >
-                [Tutup Info]
-              </button>
-            </div>
-          </div>
-        )}
       </div>
     </section>
   );
 }
 
-// Subkomponen Tombol Item Marquee ala Hexaa.sh
-function MarqueeSubjectButton({
-  item,
-  isSelected,
-  onSelect,
-}: {
-  item: SubjectItem;
-  isSelected: boolean;
-  onSelect: () => void;
-}) {
+// Subkomponen Chip Mata Pelajaran Melayang (Floating Shadow, Soft Border, Padat & Rapat)
+function FloatingSubjectChip({ item }: { item: SubjectItem }) {
   return (
-    <div className="flex items-center gap-3 shrink-0">
-      <button
-        type="button"
-        onClick={onSelect}
-        onMouseEnter={onSelect}
-        className={`group inline-flex items-center gap-2.5 px-4 py-2 sm:px-5 sm:py-2.5 border-2 transition-all cursor-pointer font-mono shrink-0 ${
-          isSelected
-            ? "bg-slate-900 text-white border-slate-900 shadow-sm"
-            : "bg-white text-slate-800 border-slate-300 hover:border-slate-900 hover:bg-slate-900 hover:text-white"
-        }`}
-        style={{ borderRadius: "0px" }}
-      >
-        <span
-          className={`text-[9px] sm:text-[10px] font-bold px-1.5 py-0.5 border ${
-            isSelected
-              ? "bg-slate-800 text-slate-100 border-slate-700"
-              : "bg-slate-100 text-slate-700 border-slate-200 group-hover:bg-slate-800 group-hover:text-white group-hover:border-slate-700"
-          }`}
-        >
-          {item.phase}
-        </span>
-        <span className="text-xs sm:text-sm font-bold tracking-tight font-sans">
-          {item.name}
-        </span>
-      </button>
-
-      {/* Pembatas Geometris Bintang / Asterisk Khas Hexaa.sh */}
-      <span className="text-slate-400 font-mono text-xs select-none">
-        ✦
+    <div
+      className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-3.5 sm:py-2 bg-white border border-slate-200/80 shadow-[0_2px_8px_-2px_rgba(0,0,0,0.06),0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_12px_-2px_rgba(0,0,0,0.1)] hover:-translate-y-0.5 transition-all duration-200 shrink-0 cursor-default"
+      style={{ borderRadius: "0px" }}
+    >
+      <span className="text-[9px] sm:text-[10px] font-mono font-medium px-1.5 py-0.5 bg-slate-100 text-slate-600 border border-slate-200/70">
+        {item.phase}
+      </span>
+      <span className="text-xs sm:text-[13px] font-semibold text-slate-800 tracking-tight font-sans whitespace-nowrap">
+        {item.name}
       </span>
     </div>
   );
