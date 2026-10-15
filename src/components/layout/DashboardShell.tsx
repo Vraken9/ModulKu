@@ -28,7 +28,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ModulKuLogo } from "@/components/ui/ModulKuLogo";
 import { SchoolProfile, TeacherProfile } from "@/types";
-import { getStorageUsageSummary, formatBytes, TIER_CONFIGS } from "@/lib/document-vault";
+import {
+  getStorageUsageSummary,
+  formatBytes,
+  TIER_CONFIGS,
+  DEFAULT_STORAGE_SUMMARY,
+} from "@/lib/document-vault";
 
 interface MenuItem {
   name: string;
@@ -53,7 +58,7 @@ export function DashboardShell({ children, activeItem }: DashboardShellProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [vaultSummary, setVaultSummary] = useState(getStorageUsageSummary());
+  const [vaultSummary, setVaultSummary] = useState(DEFAULT_STORAGE_SUMMARY);
 
   // Profil Guru & Sekolah dari localStorage
   const [school, setSchool] = useState<Partial<SchoolProfile>>({
@@ -223,9 +228,12 @@ export function DashboardShell({ children, activeItem }: DashboardShellProps) {
                 <div className="space-y-1">
                   {sec.items.map((item) => {
                     const isActive =
-                      activeItem === item.id ||
-                      pathname === item.href ||
-                      (item.href !== "/dashboard" && pathname.startsWith(item.href));
+                      Boolean(activeItem && activeItem === item.id) ||
+                      Boolean(
+                        pathname &&
+                          (pathname === item.href ||
+                            (item.href !== "/dashboard" && pathname.startsWith(item.href)))
+                      );
                     const Icon = item.icon;
 
                     return (

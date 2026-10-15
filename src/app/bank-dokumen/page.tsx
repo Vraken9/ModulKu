@@ -35,12 +35,19 @@ import {
   setUserTier,
   formatBytes,
   TIER_CONFIGS,
+  SEED_DOCUMENTS,
+  DEFAULT_STORAGE_SUMMARY,
 } from "@/lib/document-vault";
-import { StoredDocument, StoredDocType, SubscriptionTier } from "@/types";
+import {
+  StoredDocument,
+  StoredDocType,
+  SubscriptionTier,
+  StorageUsageSummary,
+} from "@/types";
 
 export default function BankDokumenPage() {
-  const [documents, setDocuments] = useState<StoredDocument[]>([]);
-  const [usage, setUsage] = useState(getStorageUsageSummary());
+  const [documents, setDocuments] = useState<StoredDocument[]>(SEED_DOCUMENTS);
+  const [usage, setUsage] = useState<StorageUsageSummary>(DEFAULT_STORAGE_SUMMARY);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedType, setSelectedType] = useState<string>("all");
   const [onlyPmm, setOnlyPmm] = useState(false);
@@ -272,7 +279,7 @@ export default function BankDokumenPage() {
                     {formatBytes(usage.usedBytes)}
                   </span>
                   <span className="text-slate-500 font-medium">
-                    dari {TIER_CONFIGS[usage.tier].formattedLimit} ({usage.percentageUsed}% terpakai)
+                    dari {TIER_CONFIGS[(usage.tier as SubscriptionTier) || "free"]?.formattedLimit || "50 MB"} ({usage.percentageUsed}% terpakai)
                   </span>
                 </div>
                 <span className="text-slate-600 font-medium">
@@ -503,7 +510,7 @@ export default function BankDokumenPage() {
 
                 {/* Bottom Actions Bar */}
                 <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
-                  <span className="text-[10px] text-slate-600 font-mono">
+                  <span className="text-[10px] text-slate-600 font-mono" suppressHydrationWarning>
                     Diperbarui: {new Date(doc.updatedAt).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" })}
                   </span>
 

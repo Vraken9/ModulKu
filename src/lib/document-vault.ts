@@ -29,8 +29,8 @@ export const TIER_CONFIGS: Record<SubscriptionTier, TierStorageConfig> = {
 const VAULT_STORAGE_KEY = "modulku_document_vault_items";
 const TIER_STORAGE_KEY = "modulku_user_subscription_tier";
 
-// Dokumen Contoh Awal (Seed) Terstruktur Standar BKPDM
-const SEED_DOCUMENTS: StoredDocument[] = [
+// Dokumen Contoh Awal (Seed) Terstruktur Standar BKPDM dengan Tanggal Statis
+export const SEED_DOCUMENTS: StoredDocument[] = [
   {
     id: "doc-seed-1",
     title: "Modul Ajar Fisika: Energi Terbarukan & Efisiensi Termal",
@@ -41,8 +41,8 @@ const SEED_DOCUMENTS: StoredDocument[] = [
     semester: "Ganjil",
     fileFormat: "DOCX",
     fileSizeBytes: 485 * 1024, // ~485 KB
-    createdAt: new Date(Date.now() - 2 * 24 * 3600 * 1000).toISOString(),
-    updatedAt: new Date(Date.now() - 2 * 24 * 3600 * 1000).toISOString(),
+    createdAt: "2026-10-12T08:00:00.000Z",
+    updatedAt: "2026-10-12T08:00:00.000Z",
     isPmmEvidence: true,
     tags: ["BKPDM 2026", "Deep Learning", "Supervisi KS"],
     notes: "Lengkap dengan instrumen diferensiasi proses dan rubrik penilaian LKPD.",
@@ -57,8 +57,8 @@ const SEED_DOCUMENTS: StoredDocument[] = [
     semester: "Ganjil",
     fileFormat: "DOCX",
     fileSizeBytes: 320 * 1024, // ~320 KB
-    createdAt: new Date(Date.now() - 5 * 24 * 3600 * 1000).toISOString(),
-    updatedAt: new Date(Date.now() - 5 * 24 * 3600 * 1000).toISOString(),
+    createdAt: "2026-10-09T09:15:00.000Z",
+    updatedAt: "2026-10-09T09:15:00.000Z",
     isPmmEvidence: true,
     tags: ["Taksonomi Bloom C4-C6", "Matriks Kisi-Kisi", "KKTP"],
     notes: "25 Butir soal AKM numerasi dan pemecahan masalah kontekstual.",
@@ -70,11 +70,11 @@ const SEED_DOCUMENTS: StoredDocument[] = [
     subject: "Fisika",
     grade: "Kelas X (Fase E)",
     academicYear: "2025/2026",
-    semester: "Ganjil",
+    semester: "Tahunan",
     fileFormat: "DOCX",
     fileSizeBytes: 560 * 1024, // ~560 KB
-    createdAt: new Date(Date.now() - 10 * 24 * 3600 * 1000).toISOString(),
-    updatedAt: new Date(Date.now() - 10 * 24 * 3600 * 1000).toISOString(),
+    createdAt: "2026-10-04T07:30:00.000Z",
+    updatedAt: "2026-10-04T07:30:00.000Z",
     isPmmEvidence: false,
     tags: ["Pekan Efektif", "Promes Mingguan", "Capaian Pembelajaran"],
     notes: "Distribusi 108 Jam Pelajaran (JP) dengan penanda libur resmi daerah.",
@@ -89,13 +89,24 @@ const SEED_DOCUMENTS: StoredDocument[] = [
     semester: "Ganjil",
     fileFormat: "PPTX",
     fileSizeBytes: 1850 * 1024, // ~1.85 MB
-    createdAt: new Date(Date.now() - 1 * 24 * 3600 * 1000).toISOString(),
-    updatedAt: new Date(Date.now() - 1 * 24 * 3600 * 1000).toISOString(),
+    createdAt: "2026-10-14T10:00:00.000Z",
+    updatedAt: "2026-10-14T10:00:00.000Z",
     isPmmEvidence: true,
     tags: ["PowerPoint 16:9", "LKPD Siswa", "Apersepsi Interaktif"],
     notes: "Bahan tayang ruang kelas interaktif 12 slide widescreen.",
   },
 ];
+
+export const DEFAULT_STORAGE_SUMMARY: StorageUsageSummary = {
+  tier: "free",
+  tierLabel: "Guru Mandiri (Gratis)",
+  usedBytes: 3292160,
+  maxBytes: 50 * 1024 * 1024,
+  percentageUsed: 6,
+  totalDocuments: 4,
+  remainingBytes: 50 * 1024 * 1024 - 3292160,
+  isExceeded: false,
+};
 
 export function formatBytes(bytes: number, decimals = 1): string {
   if (bytes === 0) return "0 Bytes";
