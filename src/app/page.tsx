@@ -13,7 +13,6 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { SmoothCursor } from "@/components/ui/smooth-cursor";
 import { ParallaxScroll, ParallaxLayer } from "@/components/ui/parallax-scroll";
 import { Hero3DModuleCard } from "@/components/landing/Hero3DModuleCard";
 import { InteractiveTicker } from "@/components/landing/InteractiveTicker";
@@ -29,9 +28,6 @@ import { ModulKuLogo } from "@/components/ui/ModulKuLogo";
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-white text-slate-900 flex flex-col font-sans selection:bg-slate-200 selection:text-slate-900">
-      {/* 0. Custom Smooth Cursor Interaktif */}
-      <SmoothCursor />
-
       {/* 1. Sticky Frosted Glass Header / Navbar */}
       <header className="sticky top-0 z-50 bg-white/85 backdrop-blur-md border-b border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">

@@ -1,61 +1,136 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
-import { motion, useSpring } from "motion/react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
+import { motion, useSpring, useReducedMotion } from "motion/react";
 
-export function SmoothCursor() {
+interface Position {
+  x: number;
+  y: number;
+}
+
+export interface SmoothCursorProps {
+  disableRotation?: boolean;
+  disableSmooth?: boolean;
+}
+
+export function SmoothCursor({
+  disableRotation = true,
+  disableSmooth = false,
+}: SmoothCursorProps) {
   const [mounted, setMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const [hasMoved, setHasMoved] = useState(false);
-  const [isOverPointer, setIsOverPointer] = useState(false);
+  const [isMoving, setIsMoving] = useState(false);
   const [isClicking, setIsClicking] = useState(false);
-  const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const [isOverPointer, setIsOverPointer] = useState(false);
+  const [isOverText, setIsOverText] = useState(false);
+  const [isOverPrevent, setIsOverPrevent] = useState(false);
 
-  const lastMousePos = useRef({ x: 0, y: 0 });
-  const velocity = useRef({ x: 0, y: 0 });
+  const prefersReducedMotion = useReducedMotion();
+
+  const lastMousePos = useRef<Position>({ x: 0, y: 0 });
+  const velocity = useRef<Position>({ x: 0, y: 0 });
   const lastUpdateTime = useRef(Date.now());
   const previousAngle = useRef(0);
   const accumulatedRotation = useRef(0);
+  const movingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Spring physics untuk gerakan luwes dan responsif
-  const cursorX = useSpring(0, { stiffness: 1200, damping: 80, mass: 0.2 });
-  const cursorY = useSpring(0, { stiffness: 1200, damping: 80, mass: 0.2 });
-  const rotation = useSpring(0, { stiffness: 800, damping: 60, mass: 0.3 });
-  const scale = useSpring(1, { stiffness: 1000, damping: 65, mass: 0.25 });
+  // Fisika pegas responsif minimal lag ala hexaa.sh
+  const cursorX = useSpring(0, {
+    stiffness: disableSmooth ? 10000 : 1200,
+    damping: disableSmooth ? 100 : 80,
+    mass: disableSmooth ? 0.1 : 0.28,
+  });
 
+  const cursorY = useSpring(0, {
+    stiffness: disableSmooth ? 10000 : 1200,
+    damping: disableSmooth ? 100 : 80,
+    mass: disableSmooth ? 0.1 : 0.28,
+  });
+
+  const rotation = useSpring(0, {
+    stiffness: 800,
+    damping: 60,
+    mass: 0.35,
+  });
+
+  const scale = useSpring(1, {
+    stiffness: 1000,
+    damping: 60,
+    mass: 0.2,
+  });
+
+  // Deteksi ukuran layar perangkat mobile (< 768px) seperti hexaa.sh useIsMobile
   useEffect(() => {
     setMounted(true);
-    if (typeof window !== "undefined") {
-      const isTouch = window.matchMedia("(pointer: coarse)").matches;
-      setIsTouchDevice(isTouch);
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  const updateVelocity = useCallback((currentPos: Position) => {
+    const currentTime = Date.now();
+    const deltaTime = currentTime - lastUpdateTime.current;
+
+    if (deltaTime > 0) {
+      velocity.current = {
+        x: (currentPos.x - lastMousePos.current.x) / deltaTime,
+        y: (currentPos.y - lastMousePos.current.y) / deltaTime,
+      };
     }
+
+    lastUpdateTime.current = currentTime;
+    lastMousePos.current = currentPos;
+  }, []);
+
+  const checkIfOverElement = useCallback((clientX: number, clientY: number) => {
+    const element = document.elementFromPoint(clientX, clientY);
+    if (!element) return;
+
+    // 1. Elemen Pointer (Tombol, Tautan, Input Interaktif)
+    const isPointerElement =
+      element.closest(
+        "a, button, [role='button'], input[type='button'], input[type='submit'], select, label, [data-cursor-pointer]"
+      ) !== null || window.getComputedStyle(element).cursor === "pointer";
+    setIsOverPointer(isPointerElement);
+
+    // 2. Elemen Teks (Heading, Paragraph, Blockquote, Code)
+    const isTextElement =
+      !isPointerElement &&
+      (element.closest("h1, h2, h3, h4, h5, h6, p, blockquote, code, [data-cursor-text]") !== null ||
+        window.getComputedStyle(element).cursor === "text");
+    setIsOverText(isTextElement);
+
+    // 3. Elemen Pencegah Kursor Kustom
+    const isPreventElement =
+      element.closest("[data-smoothcursor-prevent]") !== null;
+    setIsOverPrevent(isPreventElement);
   }, []);
 
   useEffect(() => {
-    if (!mounted || isTouchDevice) return;
+    if (!mounted || isMobile) return;
 
-    const handleMouseMove = (e: MouseEvent) => {
-      const currentTime = Date.now();
-      const deltaTime = currentTime - lastUpdateTime.current;
+    let rafId: number = 0;
 
-      if (deltaTime > 0) {
-        velocity.current = {
-          x: (e.clientX - lastMousePos.current.x) / deltaTime,
-          y: (e.clientY - lastMousePos.current.y) / deltaTime,
-        };
-      }
+    const smoothMouseMove = (e: MouseEvent) => {
+      const currentPos = { x: e.clientX, y: e.clientY };
+      updateVelocity(currentPos);
+      checkIfOverElement(e.clientX, e.clientY);
 
-      lastUpdateTime.current = currentTime;
-      lastMousePos.current = { x: e.clientX, y: e.clientY };
-
-      cursorX.set(e.clientX);
-      cursorY.set(e.clientY);
+      cursorX.set(currentPos.x);
+      cursorY.set(currentPos.y);
 
       if (!hasMoved) setHasMoved(true);
+      setIsMoving(true);
 
-      // Hitung kecepatan gerak kursor
-      const speed = Math.sqrt(velocity.current.x ** 2 + velocity.current.y ** 2);
+      const speed = Math.sqrt(
+        velocity.current.x ** 2 + velocity.current.y ** 2
+      );
 
-      if (speed > 0.15) {
+      if (speed > 0.1 && !disableRotation && !prefersReducedMotion) {
         const currentAngle =
           Math.atan2(velocity.current.y, velocity.current.x) * (180 / Math.PI);
         let angleDiff = currentAngle - previousAngle.current;
@@ -66,19 +141,32 @@ export function SmoothCursor() {
         previousAngle.current = currentAngle;
       }
 
-      // Deteksi elemen interaktif di bawah kursor
-      const element = document.elementFromPoint(e.clientX, e.clientY);
-      if (element) {
-        const isClickable =
-          element.closest("a, button, input, textarea, select, [role='button'], label") !== null ||
-          window.getComputedStyle(element).cursor === "pointer";
-        setIsOverPointer(isClickable);
+      if (movingTimeoutRef.current) {
+        clearTimeout(movingTimeoutRef.current);
       }
+
+      // Fadeout dan perbesar saat kursor idle ala hexaa.sh
+      movingTimeoutRef.current = setTimeout(
+        () => {
+          setIsMoving(false);
+          movingTimeoutRef.current = null;
+        },
+        prefersReducedMotion ? 0 : 650
+      );
+    };
+
+    const throttledMouseMove = (e: MouseEvent) => {
+      if (rafId) return;
+
+      rafId = requestAnimationFrame(() => {
+        smoothMouseMove(e);
+        rafId = 0;
+      });
     };
 
     const handleMouseDown = () => {
       setIsClicking(true);
-      scale.set(0.85);
+      scale.set(0.78);
     };
 
     const handleMouseUp = () => {
@@ -86,62 +174,96 @@ export function SmoothCursor() {
       scale.set(1);
     };
 
-    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    const handleMouseLeave = () => {
+      setIsMoving(false);
+    };
+
+    const handleMouseEnter = () => {
+      setIsMoving(true);
+    };
+
+    window.addEventListener("mousemove", throttledMouseMove, { passive: true });
     window.addEventListener("mousedown", handleMouseDown);
     window.addEventListener("mouseup", handleMouseUp);
+    document.addEventListener("mouseleave", handleMouseLeave);
+    document.addEventListener("mouseenter", handleMouseEnter);
 
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mousemove", throttledMouseMove);
       window.removeEventListener("mousedown", handleMouseDown);
       window.removeEventListener("mouseup", handleMouseUp);
+      document.removeEventListener("mouseleave", handleMouseLeave);
+      document.removeEventListener("mouseenter", handleMouseEnter);
+      if (rafId) cancelAnimationFrame(rafId);
+      if (movingTimeoutRef.current) clearTimeout(movingTimeoutRef.current);
     };
-  }, [mounted, isTouchDevice, hasMoved, cursorX, cursorY, rotation, scale]);
+  }, [
+    mounted,
+    isMobile,
+    hasMoved,
+    cursorX,
+    cursorY,
+    rotation,
+    scale,
+    disableRotation,
+    prefersReducedMotion,
+    updateVelocity,
+    checkIfOverElement,
+  ]);
 
-  if (!mounted || isTouchDevice || !hasMoved) {
+  if (!mounted || isMobile || !hasMoved || isOverPrevent) {
     return null;
   }
 
-  return (
-    <>
-      {/* 1. Titik Kursor Utama (Dot) */}
-      <motion.div
-        className="pointer-events-none fixed top-0 left-0 z-[9999] -translate-x-1/2 -translate-y-1/2 rounded-full"
-        style={{
-          x: cursorX,
-          y: cursorY,
-        }}
-      >
-        <div
-          className={`rounded-full transition-all duration-150 ${
-            isClicking
-              ? "h-2 w-2 bg-blue-700"
-              : isOverPointer
-              ? "h-2.5 w-2.5 bg-blue-600 shadow-sm"
-              : "h-2 w-2 bg-slate-900"
-          }`}
-        />
-      </motion.div>
+  const isExpanded = isOverPointer || isClicking;
+  const isVisible = isMoving || isExpanded || isOverText;
 
-      {/* 2. Cincin Kursor Luar (Interactive Halo Ring) dengan Spring Lag & Rotasi */}
+  return (
+    <motion.div
+      className={`pointer-events-none fixed top-0 left-0 z-[99999] mix-blend-exclusion transition-[scale,opacity] ${
+        isVisible ? "scale-100 opacity-100 duration-200" : "scale-150 opacity-0 duration-500"
+      }`}
+      style={{
+        left: cursorX,
+        top: cursorY,
+        transform: "translate(-50%, -50%) translateZ(0)",
+        backfaceVisibility: "hidden",
+        willChange: "transform",
+      }}
+    >
       <motion.div
-        className="pointer-events-none fixed top-0 left-0 z-[9998] -translate-x-1/2 -translate-y-1/2"
         style={{
-          x: cursorX,
-          y: cursorY,
-          rotate: rotation,
           scale,
+          rotate: disableRotation || isOverPointer ? 0 : rotation,
         }}
       >
-        <div
-          className={`rounded-full border transition-all duration-200 ease-out ${
-            isOverPointer
-              ? "h-11 w-11 border-blue-600/70 bg-blue-500/10 backdrop-blur-[1px]"
-              : isClicking
-              ? "h-7 w-7 border-blue-700/80 bg-blue-600/15"
-              : "h-8 w-8 border-slate-400/50 bg-slate-400/5"
-          }`}
-        />
+        {/* 1. Kursor Mode Pointer (Hover Tombol/Link) ala hexaa.sh: Piringan Putih Solid Eksklusi */}
+        {isOverPointer ? (
+          <div className="relative flex items-center justify-center">
+            <div className="h-10 w-10 rounded-full bg-white shadow-sm transition-all duration-150 ease-out" />
+            <div className="absolute h-13 w-13 rounded-full border border-white/30 animate-ping opacity-25" />
+          </div>
+        ) : isOverText ? (
+          /* 2. Kursor Mode Teks (Hover Heading/Paragraph): Kapsul Vertikal Magnetik */
+          <div className="relative flex items-center justify-center">
+            <div className="h-8 w-2 rounded-full bg-white shadow-xs transition-all duration-150 ease-out" />
+          </div>
+        ) : (
+          /* 3. Kursor Mode Normal (Roaming/Default): Cincin Lingkaran 34px Berkontur + Titik Inti */
+          <div className="relative flex items-center justify-center">
+            {/* Cincin Lingkaran Luar 34px */}
+            <div className="h-[34px] w-[34px] rounded-full border-2 border-white shadow-sm transition-all duration-200 ease-out" />
+            {/* Titik Tengah Inti (Center Core Dot) */}
+            <div
+              className={`absolute rounded-full bg-white transition-all duration-150 ${
+                isClicking ? "h-2.5 w-2.5" : "h-1.5 w-1.5"
+              }`}
+            />
+          </div>
+        )}
       </motion.div>
-    </>
+    </motion.div>
   );
 }
+
+
