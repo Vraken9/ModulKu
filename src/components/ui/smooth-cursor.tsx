@@ -23,6 +23,8 @@ export function SmoothCursor({
   const [isMoving, setIsMoving] = useState(false);
   const [isClicking, setIsClicking] = useState(false);
   const [isOverPointer, setIsOverPointer] = useState(false);
+  const [isOverH1, setIsOverH1] = useState(false);
+  const [isOverHeading, setIsOverHeading] = useState(false);
   const [isOverText, setIsOverText] = useState(false);
   const [isOverPrevent, setIsOverPrevent] = useState(false);
 
@@ -54,11 +56,34 @@ export function SmoothCursor({
     mass: 0.35,
   });
 
+  // Spring scale elastis halus untuk perbesaran text & h1
   const scale = useSpring(1, {
-    stiffness: 1000,
-    damping: 60,
-    mass: 0.2,
+    stiffness: 550,
+    damping: 38,
+    mass: 0.25,
   });
+
+  // Dynamic scale physics: Membesar halus saat mengenai text, apalagi h1
+  useEffect(() => {
+    let target = 1;
+    if (isOverH1) {
+      target = 1.6; // Efek scale perbesar halus saat bersentuhan dengan h1
+    } else if (isOverHeading) {
+      target = 1.35; // Perbesar saat bersentuhan dengan heading h2/h3
+    } else if (isOverText) {
+      target = 1.2; // Perbesar sedikit saat menyentuh teks biasa (p, dsb)
+    } else if (isOverPointer) {
+      target = 1.15; // Hover tombol/link
+    } else {
+      target = 1; // Default roaming
+    }
+
+    if (isClicking) {
+      target *= 0.78; // Tactile squeeze bounce saat klik
+    }
+
+    scale.set(target);
+  }, [isOverH1, isOverHeading, isOverText, isOverPointer, isClicking, scale]);
 
   // Deteksi ukuran layar perangkat mobile (< 768px) seperti hexaa.sh useIsMobile
   useEffect(() => {
@@ -97,14 +122,22 @@ export function SmoothCursor({
       ) !== null || window.getComputedStyle(element).cursor === "pointer";
     setIsOverPointer(isPointerElement);
 
-    // 2. Elemen Teks (Heading, Paragraph, Blockquote, Code)
+    // 2. Deteksi H1 (Judul Utama) dan Heading (H2, H3)
+    const isH1Element = !isPointerElement && element.closest("h1") !== null;
+    setIsOverH1(isH1Element);
+
+    const isHeadingElement =
+      !isPointerElement && !isH1Element && element.closest("h2, h3") !== null;
+    setIsOverHeading(isHeadingElement);
+
+    // 3. Elemen Teks Umum (Heading, Paragraph, Blockquote, Code)
     const isTextElement =
       !isPointerElement &&
       (element.closest("h1, h2, h3, h4, h5, h6, p, blockquote, code, [data-cursor-text]") !== null ||
         window.getComputedStyle(element).cursor === "text");
     setIsOverText(isTextElement);
 
-    // 3. Elemen Pencegah Kursor Kustom
+    // 4. Elemen Pencegah Kursor Kustom
     const isPreventElement =
       element.closest("[data-smoothcursor-prevent]") !== null;
     setIsOverPrevent(isPreventElement);
@@ -166,12 +199,10 @@ export function SmoothCursor({
 
     const handleMouseDown = () => {
       setIsClicking(true);
-      scale.set(0.78);
     };
 
     const handleMouseUp = () => {
       setIsClicking(false);
-      scale.set(1);
     };
 
     const handleMouseLeave = () => {
@@ -204,7 +235,6 @@ export function SmoothCursor({
     cursorX,
     cursorY,
     rotation,
-    scale,
     disableRotation,
     prefersReducedMotion,
     updateVelocity,
@@ -244,9 +274,9 @@ export function SmoothCursor({
             <div className="absolute h-13 w-13 rounded-full border border-white/30 animate-ping opacity-25" />
           </div>
         ) : isOverText ? (
-          /* 2. Kursor Mode Teks (Hover Heading/Paragraph): Tetap Bundar Eksklusi (Tidak Pipih) */
+          /* 2. Kursor Mode Teks (Hover Heading/Paragraph): Tetap Bundar Eksklusi & Membesar Halus */
           <div className="relative flex items-center justify-center">
-            <div className="h-7 w-7 rounded-full bg-white shadow-sm transition-all duration-150 ease-out" />
+            <div className="h-8 w-8 rounded-full bg-white shadow-sm transition-all duration-200 ease-out" />
           </div>
         ) : (
           /* 3. Kursor Mode Normal (Roaming/Default): Cincin Lingkaran 34px Berkontur Bersih Tanpa Titik Tengah */
