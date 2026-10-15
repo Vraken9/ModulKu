@@ -32,8 +32,8 @@ export function BentoEfficiency() {
               <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-bold">
                 <Clock className="w-5 h-5 text-white" />
               </div>
-              <Badge variant="outline" className="text-[10px] font-mono bg-white text-slate-800 border-slate-300 font-bold">
-                EFISIENSI WAKTU 85%
+              <Badge variant="outline" className="text-xs font-semibold bg-white text-slate-800 border-slate-300">
+                Efisiensi Waktu 85%
               </Badge>
             </div>
 
@@ -50,8 +50,8 @@ export function BentoEfficiency() {
           {/* Komparasi Visual */}
           <div className="mt-6 pt-6 border-t border-slate-200/80 grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="p-4 rounded-xl bg-white border border-slate-200 space-y-1.5">
-              <span className="text-[10px] font-mono font-bold text-slate-500 uppercase tracking-wider block">
-                CARA KONVENSIONAL (MANUAL)
+              <span className="text-xs font-semibold text-slate-500 block">
+                Cara Konvensional (Manual)
               </span>
               <div className="flex items-baseline gap-2">
                 <span className="text-2xl font-black text-slate-700">~4 Jam</span>
@@ -63,8 +63,8 @@ export function BentoEfficiency() {
             </div>
 
             <div className="p-4 rounded-xl bg-slate-900 text-white space-y-1.5 border border-slate-800">
-              <span className="text-[10px] font-mono font-bold text-slate-300 uppercase tracking-wider block">
-                BERSAMA MODULKU
+              <span className="text-xs font-semibold text-slate-300 block">
+                Bersama ModulKu Engine
               </span>
               <div className="flex items-baseline gap-2">
                 <span className="text-2xl font-black text-white">45 Detik</span>

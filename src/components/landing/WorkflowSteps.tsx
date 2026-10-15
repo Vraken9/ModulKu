@@ -87,9 +87,9 @@ export function WorkflowSteps() {
   return (
     <div className="space-y-12">
       {/* Header Pengantar */}
-      <div className="text-center max-w-3xl mx-auto space-y-3">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-800">
-          <Cpu className="w-3.5 h-3.5 text-slate-700" />
+      <div className="text-center max-w-3xl mx-auto space-y-3.5">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-100 border border-slate-200 text-xs sm:text-sm font-semibold text-slate-800">
+          <Cpu className="w-4 h-4 text-slate-700" />
           <span>Alur Kerja Terpandu 3 Tahap</span>
         </div>
         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
@@ -101,7 +101,7 @@ export function WorkflowSteps() {
       </div>
 
       {/* 3 Horizontal Connected Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 relative">
         {WORKFLOW_STEPS.map((item, idx) => {
           const isHovered = hoveredStep === idx;
           return (
@@ -109,26 +109,26 @@ export function WorkflowSteps() {
               key={item.step}
               onMouseEnter={() => setHoveredStep(idx)}
               onMouseLeave={() => setHoveredStep(null)}
-              className={`rounded-2xl border bg-white p-6 sm:p-7 flex flex-col justify-between transition-all duration-200 shadow-xs relative ${
+              className={`rounded-3xl border bg-white p-7 sm:p-8 lg:p-9 flex flex-col justify-between transition-all duration-200 shadow-xs relative ${
                 isHovered
                   ? "border-slate-400 shadow-md -translate-y-1"
                   : "border-slate-200"
               }`}
             >
-              <div className="space-y-4">
+              <div className="space-y-5">
                 {/* Step Top Bar */}
-                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                  <div className="w-9 h-9 rounded-xl bg-slate-900 text-white flex items-center justify-center font-mono font-black text-sm">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-3.5">
+                  <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-mono font-black text-base shadow-xs">
                     {item.step}
                   </div>
-                  <span className="text-xs font-semibold text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full border border-slate-200/70">
+                  <span className="text-xs sm:text-sm font-semibold text-slate-600 bg-slate-100 px-3 py-1 rounded-full border border-slate-200/70">
                     {item.code}
                   </span>
                 </div>
 
                 {/* Title & Summary */}
-                <div className="space-y-1.5">
-                  <h3 className="font-bold text-base sm:text-lg text-slate-900 tracking-tight leading-snug">
+                <div className="space-y-2">
+                  <h3 className="font-bold text-lg sm:text-xl text-slate-900 tracking-tight leading-snug">
                     {item.title}
                   </h3>
                   <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
@@ -137,34 +137,34 @@ export function WorkflowSteps() {
                 </div>
 
                 {/* Interactive Mini UI Snippet */}
-                <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2 text-xs">
+                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5 text-xs sm:text-sm">
                   <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-semibold text-slate-600">
+                    <span className="text-xs font-semibold text-slate-600">
                       {item.mockupSnippet.label}
                     </span>
-                    <Badge variant="outline" className="text-[10px] font-medium bg-white text-slate-700 border-slate-200">
+                    <Badge variant="outline" className="text-xs font-medium bg-white text-slate-700 border-slate-200">
                       {item.mockupSnippet.badge}
                     </Badge>
                   </div>
-                  <div className="space-y-1 pt-0.5 text-[11px] text-slate-700 font-medium">
+                  <div className="space-y-1.5 pt-0.5 text-xs text-slate-700 font-medium">
                     {item.mockupSnippet.data.map((d, dIdx) => (
-                      <div key={dIdx} className="flex items-center gap-1.5">
+                      <div key={dIdx} className="flex items-center gap-2">
                         <span className="text-slate-400">•</span>
                         <span>{d}</span>
                       </div>
                     ))}
                   </div>
-                  <div className="pt-1.5 border-t border-slate-200/80 flex items-center justify-between text-[10px] text-slate-500">
+                  <div className="pt-2 border-t border-slate-200/80 flex items-center justify-between text-xs text-slate-500">
                     <span>{item.mockupSnippet.footer}</span>
                     <span className="text-emerald-700 font-bold">OK</span>
                   </div>
                 </div>
 
                 {/* Bullet Points */}
-                <div className="space-y-2 pt-1 text-xs text-slate-600">
+                <div className="space-y-2.5 pt-1 text-xs sm:text-sm text-slate-600">
                   {item.points.map((pt, pIdx) => (
-                    <div key={pIdx} className="flex items-start gap-2">
-                      <Check className="w-3.5 h-3.5 text-slate-800 shrink-0 mt-0.5" />
+                    <div key={pIdx} className="flex items-start gap-2.5">
+                      <Check className="w-4 h-4 text-slate-800 shrink-0 mt-0.5" />
                       <span>{pt}</span>
                     </div>
                   ))}
@@ -172,16 +172,16 @@ export function WorkflowSteps() {
               </div>
 
               {/* Bottom Card Action Footer */}
-              <div className="pt-5 mt-5 border-t border-slate-100 flex items-center justify-between text-xs">
-                <span className="text-slate-400 font-medium text-[11px]">
+              <div className="pt-6 mt-6 border-t border-slate-100 flex items-center justify-between text-xs sm:text-sm">
+                <span className="text-slate-400 font-medium text-xs">
                   Tahapan {item.step} dari 03
                 </span>
                 <Link
                   href="/login"
-                  className="font-bold text-slate-900 hover:text-slate-700 flex items-center gap-1 group/btn"
+                  className="font-bold text-slate-900 hover:text-slate-700 flex items-center gap-1.5 group/btn"
                 >
                   <span>Coba Langkah Ini</span>
-                  <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform" />
+                  <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" />
                 </Link>
               </div>
             </div>
