@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
 import {
   LayoutDashboard,
   FileCheck2,
@@ -70,13 +71,17 @@ export function DashboardShell({ children, activeItem }: DashboardShellProps) {
     }
   }, []);
 
-  function handleLogout() {
+  async function handleLogout() {
     try {
       localStorage.removeItem("guru_auth_token");
     } catch {
       // ignore
     }
-    router.push("/");
+    try {
+      await signOut({ callbackUrl: "/" });
+    } catch {
+      router.push("/");
+    }
   }
 
   const menuSections: MenuSection[] = [

@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 import {
   ArrowLeft,
   ShieldCheck,
@@ -10,10 +11,7 @@ import {
   Lock,
   Mail,
   Sparkles,
-  School,
-  FileCheck2,
-  FileText,
-  FileSpreadsheet,
+  AlertCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,6 +24,24 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const err = params.get("error");
+      if (err) {
+        if (err === "OAuthSignin" || err === "OAuthCallback" || err === "Configuration") {
+          setAuthError(
+            "Konfigurasi Google Client ID atau Secret di berkas .env.local belum terisi atau belum valid. Pastikan kredensial dari Google Cloud Console telah disimpan, lalu restart server."
+          );
+        } else {
+          setAuthError("Gagal menghubungkan ke akun Google. Silakan coba kembali.");
+        }
+      }
+    }
+  }, []);
 
   function handleLogin(e: React.FormEvent) {
     e.preventDefault();
@@ -38,6 +54,17 @@ export default function LoginPage() {
     setTimeout(() => {
       router.push("/dashboard");
     }, 300);
+  }
+
+  function handleGoogleLogin() {
+    setGoogleLoading(true);
+    setAuthError(null);
+    try {
+      localStorage.setItem("guru_auth_token", "google_session_active");
+    } catch {
+      // ignore
+    }
+    signIn("google", { callbackUrl: "/dashboard" });
   }
 
   function handleDemoLogin() {
@@ -86,6 +113,59 @@ export default function LoginPage() {
               </CardHeader>
 
               <CardContent className="pt-6 space-y-5">
+                {/* Notifikasi jika ada kendala OAuth konfigurasi */}
+                {authError && (
+                  <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200/80 text-amber-900 text-xs flex items-start gap-2.5">
+                    <AlertCircle className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
+                    <div className="space-y-1">
+                      <p className="font-semibold">Informasi Konfigurasi OAuth</p>
+                      <p className="text-[11px] text-amber-800 leading-relaxed">{authError}</p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Tombol Utama: Masuk dengan Akun Google / Belajar.id */}
+                <Button
+                  type="button"
+                  onClick={handleGoogleLogin}
+                  disabled={googleLoading}
+                  variant="outline"
+                  className="w-full border-slate-300 hover:bg-slate-50 text-slate-800 font-bold text-xs h-11 rounded-xl gap-2.5 shadow-2xs transition-all cursor-pointer bg-white"
+                >
+                  <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24">
+                    <path
+                      fill="#4285F4"
+                      d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"
+                    />
+                    <path
+                      fill="#34A853"
+                      d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.34 24 12 24z"
+                    />
+                    <path
+                      fill="#FBBC05"
+                      d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 10.03 0 12s.45 3.82 1.25 5.42l4.03-3.15z"
+                    />
+                    <path
+                      fill="#EA4335"
+                      d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.34 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"
+                    />
+                  </svg>
+                  <span>
+                    {googleLoading ? "Menghubungkan ke Google..." : "Masuk dengan Akun Google / Belajar.id"}
+                  </span>
+                </Button>
+
+                <div className="relative py-1">
+                  <div className="absolute inset-0 flex items-center">
+                    <span className="w-full border-t border-slate-200" />
+                  </div>
+                  <div className="relative flex justify-center text-xs uppercase">
+                    <span className="bg-white px-2.5 text-slate-500 text-[10px] font-bold font-mono">
+                      Atau Masuk dengan Email & Kata Sandi
+                    </span>
+                  </div>
+                </div>
+
                 <form onSubmit={handleLogin} className="space-y-4">
                   <div className="space-y-1.5">
                     <Label htmlFor="email" className="text-xs font-bold text-slate-700">
@@ -143,7 +223,7 @@ export default function LoginPage() {
                   </div>
                   <div className="relative flex justify-center text-xs uppercase">
                     <span className="bg-white px-2.5 text-slate-500 text-[10px] font-bold font-mono">
-                      Atau Akses Cepat Langsung
+                      Pratinjau Tanpa Akun
                     </span>
                   </div>
                 </div>
