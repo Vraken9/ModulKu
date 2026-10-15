@@ -66,13 +66,13 @@ export function CurriculumSubjectsTicker() {
   const [activeJenjang, setActiveJenjang] = useState<string>("SD / MI");
 
   return (
-    <section className="relative w-full border-b border-slate-200/80 bg-slate-50/60 py-8 sm:py-12 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+    <section className="relative w-full border-b border-slate-200/80 bg-slate-50/60 py-8 sm:py-11 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-5">
         
-        {/* 1. Header & Jenjang Bar yang Lebih Ringkas, Lembut, dan Proporsional */}
-        <div className="space-y-3.5 text-center">
-          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 bg-white border border-slate-200/80 text-[10px] sm:text-[11px] font-mono font-bold text-slate-700 uppercase tracking-widest shadow-2xs">
-            <span className="w-1.5 h-1.5 bg-slate-900 inline-block animate-pulse" />
+        {/* 1. Header & Jenjang Bar dengan Bentuk Melengkung Halus & Ukuran Kecil */}
+        <div className="space-y-3 text-center">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-slate-200/80 text-[10px] sm:text-[11px] font-mono font-bold text-slate-700 uppercase tracking-widest shadow-2xs">
+            <span className="w-1.5 h-1.5 rounded-full bg-slate-900 inline-block animate-pulse" />
             <span>DISEDIAKAN_UNTUK_SELURUH_SATUAN_PENDIDIKAN_NASIONAL</span>
           </div>
 
@@ -84,7 +84,7 @@ export function CurriculumSubjectsTicker() {
             Daftar capaian pembelajaran komprehensif mulai dari fondasi SD/MI hingga peminatan lanjut SMA dan vokasi SMK sesuai regulasi resmi BSKAP 032/2024.
           </p>
 
-          {/* Kotak Jenjang Lebih Kecil, Border Soft, dan Teks Lebih Ramping */}
+          {/* Tombol Jenjang Lembut Berlekuk Halus (Rounded Full) & Ukuran Teks Lebih Kecil */}
           <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 pt-1">
             {JENJANG_LIST.map((lvl) => {
               const isActive = activeJenjang === lvl.name;
@@ -93,15 +93,14 @@ export function CurriculumSubjectsTicker() {
                   key={lvl.code}
                   type="button"
                   onClick={() => setActiveJenjang(lvl.name)}
-                  className={`group relative flex items-center gap-2 px-3 py-1.5 sm:px-3.5 sm:py-2 border transition-all cursor-pointer font-sans text-xs sm:text-sm ${
+                  className={`group relative flex items-center gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full border transition-all cursor-pointer font-sans text-[11px] sm:text-xs ${
                     isActive
                       ? "bg-slate-900 text-white border-slate-900 shadow-xs"
                       : "bg-white text-slate-700 border-slate-200/90 hover:border-slate-300 hover:bg-slate-50"
                   }`}
-                  style={{ borderRadius: "0px" }}
                 >
                   <span
-                    className={`text-[9px] font-mono font-semibold px-1 py-0.2 border ${
+                    className={`text-[9px] font-mono font-semibold px-1.5 py-0.2 rounded-full border ${
                       isActive
                         ? "bg-slate-800 text-slate-200 border-slate-700"
                         : "bg-slate-100 text-slate-500 border-slate-200 group-hover:bg-slate-200"
@@ -125,20 +124,17 @@ export function CurriculumSubjectsTicker() {
           </div>
         </div>
 
-        {/* 2. Container 3 Tumpuk Running Text Padat, Rapat, Soft Border & Floating Shadow */}
-        <div
-          className="relative w-full border border-slate-200/80 bg-white py-3 sm:py-4 shadow-xs overflow-hidden space-y-2 sm:space-y-2.5"
-          style={{ borderRadius: "0px" }}
-        >
+        {/* 2. Container 3 Tumpuk Running Text dengan Sudut Halus (Rounded-2xl), Jarak Antar Line Rapat, dan Elemen Hiasan */}
+        <div className="relative w-full border border-slate-200/80 bg-white py-2.5 sm:py-3.5 rounded-2xl shadow-xs overflow-hidden space-y-1.5 sm:space-y-2">
           {/* Gradient Fade Masks (Kiri & Kanan) untuk Transisi Mulus */}
-          <div className="pointer-events-none absolute top-0 bottom-0 left-0 w-14 sm:w-28 z-20 bg-gradient-to-r from-white via-white/85 to-transparent" />
-          <div className="pointer-events-none absolute top-0 right-0 bottom-0 w-14 sm:w-28 z-20 bg-gradient-to-l from-white via-white/85 to-transparent" />
+          <div className="pointer-events-none absolute top-0 bottom-0 left-0 w-14 sm:w-28 z-20 bg-gradient-to-r from-white via-white/85 to-transparent rounded-l-2xl" />
+          <div className="pointer-events-none absolute top-0 right-0 bottom-0 w-14 sm:w-28 z-20 bg-gradient-to-l from-white via-white/85 to-transparent rounded-r-2xl" />
 
           {/* Tumpukan 1: SD / MI (Arah Kiri, Durasi 40s) */}
           <div className="relative flex items-center">
             <div className="flex overflow-hidden group select-none w-full">
               <div
-                className="flex shrink-0 items-center gap-2 sm:gap-2.5 animate-marquee group-hover:[animation-play-state:paused]"
+                className="flex shrink-0 items-center gap-2.5 animate-marquee group-hover:[animation-play-state:paused]"
                 style={{ "--marquee-duration": "40s" } as React.CSSProperties}
               >
                 {SD_SUBJECTS.map((sub) => (
@@ -146,7 +142,7 @@ export function CurriculumSubjectsTicker() {
                 ))}
               </div>
               <div
-                className="flex shrink-0 items-center gap-2 sm:gap-2.5 animate-marquee group-hover:[animation-play-state:paused] ml-2 sm:ml-2.5"
+                className="flex shrink-0 items-center gap-2.5 animate-marquee group-hover:[animation-play-state:paused] ml-2.5"
                 style={{ "--marquee-duration": "40s" } as React.CSSProperties}
               >
                 {SD_SUBJECTS.map((sub) => (
@@ -156,11 +152,11 @@ export function CurriculumSubjectsTicker() {
             </div>
           </div>
 
-          {/* Tumpukan 2: SMP / MTs (Arah Kanan / Reverse, Durasi 36s) dengan Divider Soft */}
-          <div className="relative flex items-center border-t border-b border-slate-100 py-1.5 sm:py-2">
+          {/* Tumpukan 2: SMP / MTs (Arah Kanan / Reverse, Durasi 36s) dengan Spasi Sangat Rapat */}
+          <div className="relative flex items-center border-t border-b border-slate-100/80 py-1 sm:py-1.5">
             <div className="flex overflow-hidden group select-none w-full">
               <div
-                className="flex shrink-0 items-center gap-2 sm:gap-2.5 animate-marquee-reverse group-hover:[animation-play-state:paused]"
+                className="flex shrink-0 items-center gap-2.5 animate-marquee-reverse group-hover:[animation-play-state:paused]"
                 style={{ "--marquee-duration": "36s" } as React.CSSProperties}
               >
                 {SMP_SUBJECTS.map((sub) => (
@@ -168,7 +164,7 @@ export function CurriculumSubjectsTicker() {
                 ))}
               </div>
               <div
-                className="flex shrink-0 items-center gap-2 sm:gap-2.5 animate-marquee-reverse group-hover:[animation-play-state:paused] ml-2 sm:ml-2.5"
+                className="flex shrink-0 items-center gap-2.5 animate-marquee-reverse group-hover:[animation-play-state:paused] ml-2.5"
                 style={{ "--marquee-duration": "36s" } as React.CSSProperties}
               >
                 {SMP_SUBJECTS.map((sub) => (
@@ -182,7 +178,7 @@ export function CurriculumSubjectsTicker() {
           <div className="relative flex items-center">
             <div className="flex overflow-hidden group select-none w-full">
               <div
-                className="flex shrink-0 items-center gap-2 sm:gap-2.5 animate-marquee group-hover:[animation-play-state:paused]"
+                className="flex shrink-0 items-center gap-2.5 animate-marquee group-hover:[animation-play-state:paused]"
                 style={{ "--marquee-duration": "44s" } as React.CSSProperties}
               >
                 {SMA_SUBJECTS.map((sub) => (
@@ -190,7 +186,7 @@ export function CurriculumSubjectsTicker() {
                 ))}
               </div>
               <div
-                className="flex shrink-0 items-center gap-2 sm:gap-2.5 animate-marquee group-hover:[animation-play-state:paused] ml-2 sm:ml-2.5"
+                className="flex shrink-0 items-center gap-2.5 animate-marquee group-hover:[animation-play-state:paused] ml-2.5"
                 style={{ "--marquee-duration": "44s" } as React.CSSProperties}
               >
                 {SMA_SUBJECTS.map((sub) => (
@@ -206,18 +202,24 @@ export function CurriculumSubjectsTicker() {
   );
 }
 
-// Subkomponen Chip Mata Pelajaran Melayang (Floating Shadow, Soft Border, Padat & Rapat)
+// Subkomponen Chip Mata Pelajaran Melayang Berlekuk Halus (Rounded-xl) & Hiasan Elegan
 function FloatingSubjectChip({ item }: { item: SubjectItem }) {
   return (
-    <div
-      className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-3.5 sm:py-2 bg-white border border-slate-200/80 shadow-[0_2px_8px_-2px_rgba(0,0,0,0.06),0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_12px_-2px_rgba(0,0,0,0.1)] hover:-translate-y-0.5 transition-all duration-200 shrink-0 cursor-default"
-      style={{ borderRadius: "0px" }}
-    >
-      <span className="text-[9px] sm:text-[10px] font-mono font-medium px-1.5 py-0.5 bg-slate-100 text-slate-600 border border-slate-200/70">
-        {item.phase}
-      </span>
-      <span className="text-xs sm:text-[13px] font-semibold text-slate-800 tracking-tight font-sans whitespace-nowrap">
-        {item.name}
+    <div className="flex items-center gap-2.5 shrink-0">
+      <div
+        className="group inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-xl bg-white border border-slate-200/80 shadow-[0_2px_8px_-2px_rgba(0,0,0,0.06),0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_12px_-2px_rgba(0,0,0,0.1)] hover:-translate-y-0.5 transition-all duration-200 shrink-0 cursor-default"
+      >
+        <span className="text-[9px] sm:text-[10px] font-mono font-medium px-1.5 py-0.5 rounded-md bg-slate-100 text-slate-600 border border-slate-200/70">
+          {item.phase}
+        </span>
+        <span className="text-xs sm:text-[13px] font-semibold text-slate-800 tracking-tight font-sans whitespace-nowrap">
+          {item.name}
+        </span>
+      </div>
+
+      {/* Elemen Hiasan Pemisah Berkilau Lembut */}
+      <span className="text-slate-300 font-mono text-[10px] select-none">
+        ✦
       </span>
     </div>
   );
