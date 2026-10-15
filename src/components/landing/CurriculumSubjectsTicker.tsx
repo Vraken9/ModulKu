@@ -59,78 +59,85 @@ const SMA_SUBJECTS: SubjectItem[] = [
 ];
 
 const JENJANG_LIST = [
-  { code: "01", name: "SD / MI", fase: "Fase A - C", desc: "Kelas 1 - 6" },
-  { code: "02", name: "SMP / MTs", fase: "Fase D", desc: "Kelas 7 - 9" },
-  { code: "03", name: "SMA / MA", fase: "Fase E - F", desc: "Kelas 10 - 12" },
-  { code: "04", name: "SMK / MAK", fase: "Fase E - F", desc: "Vokasi Industri" },
-  { code: "05", name: "SLB / Inklusi", fase: "Fase Khusus", desc: "Semua Jenjang" },
+  { name: "Semua Jenjang" },
+  { name: "SD / MI" },
+  { name: "SMP / MTs" },
+  { name: "SMA / MA" },
+  { name: "SMK / MAK" },
+  { name: "SLB / Inklusi" },
 ];
 
 export function CurriculumSubjectsTicker() {
-  const [activeJenjang, setActiveJenjang] = useState<string>("SD / MI");
+  const [activeJenjang, setActiveJenjang] = useState<string>("Semua Jenjang");
 
   return (
-    <section className="relative w-full border-b border-slate-200/80 bg-slate-50/60 py-8 sm:py-12 overflow-hidden">
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 space-y-5 sm:space-y-6">
-        
-        {/* 1. Header & Jenjang Bar yang Bersih, Alami, dan Mudah Dibaca */}
-        <div className="space-y-3 text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-slate-200/80 text-xs font-semibold text-slate-700 shadow-2xs">
-            <span className="w-1.5 h-1.5 rounded-full bg-slate-900 inline-block animate-pulse" />
-            <span>Disediakan untuk Seluruh Satuan Pendidikan Nasional</span>
-          </div>
-
-          <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-slate-900 tracking-tight">
-            Cakupan Kurikulum Merdeka Lintas Jenjang & Mata Pelajaran
-          </h2>
-
-          <p className="text-xs sm:text-sm text-slate-600 max-w-2xl mx-auto leading-relaxed">
-            Daftar capaian pembelajaran komprehensif mulai dari fondasi SD/MI hingga peminatan lanjut SMA dan vokasi SMK sesuai regulasi resmi BKPDM Kemendikdasmen No. 020/2026.
-          </p>
-
-          {/* Tombol Jenjang Bersih Tanpa Angka & Fase */}
-          <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 pt-1">
-            {JENJANG_LIST.map((lvl) => {
-              const isActive = activeJenjang === lvl.name;
-              return (
-                <button
-                  key={lvl.name}
-                  type="button"
-                  data-cursor-pointer
-                  onClick={() => setActiveJenjang(lvl.name)}
-                  className={`group relative flex items-center px-3.5 py-1.5 sm:px-4.5 sm:py-2 rounded-xl border transition-all cursor-pointer text-xs sm:text-sm font-semibold tracking-tight ${
-                    isActive
-                      ? "bg-slate-900 text-white border-slate-900 shadow-xs"
-                      : "bg-white text-slate-700 border-slate-200/90 hover:border-slate-300 hover:bg-slate-50"
-                  }`}
-                >
-                  <span>{lvl.name}</span>
-                </button>
-              );
-            })}
-          </div>
+    <section className="relative w-full border-b border-slate-200/80 bg-slate-50 py-14 sm:py-20 lg:py-24 overflow-hidden">
+      {/* 1. Header & Jenjang Bar Terpusat dengan Ukuran Proporsional */}
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 space-y-5 sm:space-y-6 text-center">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-slate-200 text-xs sm:text-sm font-semibold text-slate-800 shadow-2xs">
+          <span className="w-2 h-2 rounded-full bg-slate-900 inline-block animate-pulse" />
+          <span>Disediakan untuk Seluruh Satuan Pendidikan Nasional</span>
         </div>
 
-        {/* 2. Container 3 Tumpuk Running Text Padat, Hampir Berdempetan, dan Interaktif Kursor */}
-        <div className="relative w-full border border-slate-200/80 bg-white py-3 sm:py-4 rounded-2xl shadow-xs overflow-hidden space-y-1 sm:space-y-1.5">
-          {/* Gradient Fade Masks (Kiri & Kanan) untuk Transisi Mulus */}
-          <div className="pointer-events-none absolute top-0 bottom-0 left-0 w-14 sm:w-28 z-20 bg-gradient-to-r from-white via-white/85 to-transparent rounded-l-2xl" />
-          <div className="pointer-events-none absolute top-0 right-0 bottom-0 w-14 sm:w-28 z-20 bg-gradient-to-l from-white via-white/85 to-transparent rounded-r-2xl" />
+        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
+          Cakupan Kurikulum Merdeka Lintas Jenjang & Mata Pelajaran
+        </h2>
 
-          {/* Tumpukan 1: SD / MI (Arah Kiri, Durasi 40s) */}
-          <div className="relative flex items-center py-0.5">
+        <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed">
+          Daftar capaian pembelajaran komprehensif mulai dari fondasi SD/MI hingga peminatan lanjut SMA dan vokasi SMK sesuai regulasi resmi BKPDM Kemendikdasmen No. 020/2026.
+        </p>
+
+        {/* Tombol Jenjang Bersih Tanpa Angka & Fase */}
+        <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
+          {JENJANG_LIST.map((lvl) => {
+            const isActive = activeJenjang === lvl.name;
+            return (
+              <button
+                key={lvl.name}
+                type="button"
+                data-cursor-pointer
+                onClick={() => setActiveJenjang(lvl.name)}
+                className={`group relative flex items-center px-4.5 py-2 sm:px-5 sm:py-2.5 rounded-xl border transition-all cursor-pointer text-xs sm:text-sm font-bold tracking-tight ${
+                  isActive
+                    ? "bg-slate-900 text-white border-slate-900 shadow-sm"
+                    : "bg-white text-slate-700 border-slate-200 hover:border-slate-300 hover:bg-slate-50"
+                }`}
+              >
+                <span>{lvl.name}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* 2. Running Text Muncul dari Kanan & Kiri Layar (Full Width Edge-to-Edge) dengan Opasitas di Setiap Sisi */}
+      <div className="relative w-full mt-10 sm:mt-12 overflow-hidden">
+        {/* Opacity Fade Mask Kiri */}
+        <div className="pointer-events-none absolute top-0 bottom-0 left-0 w-24 sm:w-44 lg:w-64 z-20 bg-gradient-to-r from-slate-50 via-slate-50/85 to-transparent" />
+        
+        {/* Opacity Fade Mask Kanan */}
+        <div className="pointer-events-none absolute top-0 bottom-0 right-0 w-24 sm:w-44 lg:w-64 z-20 bg-gradient-to-l from-slate-50 via-slate-50/85 to-transparent" />
+
+        {/* 3 Tumpukan Running Text Padat, Hampir Berdempetan Tanpa Batas Garis */}
+        <div className="space-y-1.5 sm:space-y-2">
+          {/* Tumpukan 1: SD / MI (Arah Kiri, Durasi 42s) */}
+          <div className={`relative flex items-center transition-opacity duration-300 ${
+            activeJenjang === "Semua Jenjang" || activeJenjang === "SD / MI" || activeJenjang === "SLB / Inklusi"
+              ? "opacity-100"
+              : "opacity-40"
+          }`}>
             <div className="flex overflow-hidden group select-none w-full">
               <div
-                className="flex shrink-0 items-center gap-1.5 sm:gap-2 animate-marquee group-hover:[animation-play-state:paused]"
-                style={{ "--marquee-duration": "40s" } as React.CSSProperties}
+                className="flex shrink-0 items-center gap-2 sm:gap-2.5 animate-marquee group-hover:[animation-play-state:paused]"
+                style={{ "--marquee-duration": "42s" } as React.CSSProperties}
               >
                 {SD_SUBJECTS.map((sub) => (
                   <FloatingSubjectChip key={`sd-track-1-${sub.id}`} item={sub} />
                 ))}
               </div>
               <div
-                className="flex shrink-0 items-center gap-1.5 sm:gap-2 animate-marquee group-hover:[animation-play-state:paused] ml-1.5 sm:ml-2"
-                style={{ "--marquee-duration": "40s" } as React.CSSProperties}
+                className="flex shrink-0 items-center gap-2 sm:gap-2.5 animate-marquee group-hover:[animation-play-state:paused] ml-2 sm:ml-2.5"
+                style={{ "--marquee-duration": "42s" } as React.CSSProperties}
               >
                 {SD_SUBJECTS.map((sub) => (
                   <FloatingSubjectChip key={`sd-track-2-${sub.id}`} item={sub} />
@@ -139,20 +146,24 @@ export function CurriculumSubjectsTicker() {
             </div>
           </div>
 
-          {/* Tumpukan 2: SMP / MTs (Arah Kanan / Reverse, Durasi 36s) - Line Tengah Lebih Menonjol dengan Bayangan */}
-          <div className="relative z-10 flex items-center bg-slate-50/70 border-y border-slate-200/60 py-1.5 sm:py-2 shadow-[0_4px_14px_-3px_rgba(0,0,0,0.06)]">
+          {/* Tumpukan 2: SMP / MTs (Arah Kanan / Reverse, Durasi 38s) - Tanpa Garis Pembatas, Halus & Menonjol */}
+          <div className={`relative z-10 flex items-center transition-opacity duration-300 ${
+            activeJenjang === "Semua Jenjang" || activeJenjang === "SMP / MTs" || activeJenjang === "SLB / Inklusi"
+              ? "opacity-100"
+              : "opacity-40"
+          }`}>
             <div className="flex overflow-hidden group select-none w-full">
               <div
-                className="flex shrink-0 items-center gap-1.5 sm:gap-2 animate-marquee-reverse group-hover:[animation-play-state:paused]"
-                style={{ "--marquee-duration": "36s" } as React.CSSProperties}
+                className="flex shrink-0 items-center gap-2 sm:gap-2.5 animate-marquee-reverse group-hover:[animation-play-state:paused]"
+                style={{ "--marquee-duration": "38s" } as React.CSSProperties}
               >
                 {SMP_SUBJECTS.map((sub) => (
                   <FloatingSubjectChip key={`smp-track-1-${sub.id}`} item={sub} isFeatured />
                 ))}
               </div>
               <div
-                className="flex shrink-0 items-center gap-1.5 sm:gap-2 animate-marquee-reverse group-hover:[animation-play-state:paused] ml-1.5 sm:ml-2"
-                style={{ "--marquee-duration": "36s" } as React.CSSProperties}
+                className="flex shrink-0 items-center gap-2 sm:gap-2.5 animate-marquee-reverse group-hover:[animation-play-state:paused] ml-2 sm:ml-2.5"
+                style={{ "--marquee-duration": "38s" } as React.CSSProperties}
               >
                 {SMP_SUBJECTS.map((sub) => (
                   <FloatingSubjectChip key={`smp-track-2-${sub.id}`} item={sub} isFeatured />
@@ -161,20 +172,24 @@ export function CurriculumSubjectsTicker() {
             </div>
           </div>
 
-          {/* Tumpukan 3: SMA / MA / SMK (Arah Kiri, Durasi 44s) */}
-          <div className="relative flex items-center py-0.5">
+          {/* Tumpukan 3: SMA / MA / SMK (Arah Kiri, Durasi 46s) */}
+          <div className={`relative flex items-center transition-opacity duration-300 ${
+            activeJenjang === "Semua Jenjang" || activeJenjang === "SMA / MA" || activeJenjang === "SMK / MAK" || activeJenjang === "SLB / Inklusi"
+              ? "opacity-100"
+              : "opacity-40"
+          }`}>
             <div className="flex overflow-hidden group select-none w-full">
               <div
-                className="flex shrink-0 items-center gap-1.5 sm:gap-2 animate-marquee group-hover:[animation-play-state:paused]"
-                style={{ "--marquee-duration": "44s" } as React.CSSProperties}
+                className="flex shrink-0 items-center gap-2 sm:gap-2.5 animate-marquee group-hover:[animation-play-state:paused]"
+                style={{ "--marquee-duration": "46s" } as React.CSSProperties}
               >
                 {SMA_SUBJECTS.map((sub) => (
                   <FloatingSubjectChip key={`sma-track-1-${sub.id}`} item={sub} />
                 ))}
               </div>
               <div
-                className="flex shrink-0 items-center gap-1.5 sm:gap-2 animate-marquee group-hover:[animation-play-state:paused] ml-1.5 sm:ml-2"
-                style={{ "--marquee-duration": "44s" } as React.CSSProperties}
+                className="flex shrink-0 items-center gap-2 sm:gap-2.5 animate-marquee group-hover:[animation-play-state:paused] ml-2 sm:ml-2.5"
+                style={{ "--marquee-duration": "46s" } as React.CSSProperties}
               >
                 {SMA_SUBJECTS.map((sub) => (
                   <FloatingSubjectChip key={`sma-track-2-${sub.id}`} item={sub} />
@@ -183,13 +198,12 @@ export function CurriculumSubjectsTicker() {
             </div>
           </div>
         </div>
-
       </div>
     </section>
   );
 }
 
-// Subkomponen Chip Mata Pelajaran Bersih Tanpa Label Fase
+// Subkomponen Chip Mata Pelajaran Lebih Besar, Bersih Tanpa Label Fase
 function FloatingSubjectChip({
   item,
   isFeatured = false,
@@ -201,13 +215,13 @@ function FloatingSubjectChip({
     <button
       type="button"
       data-cursor-pointer
-      className={`group inline-flex items-center px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl border transition-all duration-200 shrink-0 cursor-pointer text-left select-none ${
+      className={`group inline-flex items-center px-5 py-2.5 sm:px-6 sm:py-3 rounded-2xl border transition-all duration-200 shrink-0 cursor-pointer text-left select-none ${
         isFeatured
-          ? "bg-white border-slate-300/80 shadow-[0_3px_8px_-2px_rgba(0,0,0,0.06),0_1px_2px_rgba(0,0,0,0.03)] hover:shadow-md hover:border-slate-500 hover:-translate-y-0.5"
-          : "bg-white border-slate-200/80 shadow-[0_2px_6px_-2px_rgba(0,0,0,0.04),0_1px_2px_rgba(0,0,0,0.02)] hover:shadow-md hover:border-slate-400 hover:-translate-y-0.5"
+          ? "bg-white border-slate-300 shadow-[0_4px_12px_-2px_rgba(0,0,0,0.06),0_2px_4px_rgba(0,0,0,0.02)] hover:shadow-lg hover:border-slate-500 hover:-translate-y-0.5"
+          : "bg-white border-slate-200/90 shadow-[0_2px_8px_-2px_rgba(0,0,0,0.04),0_1px_3px_rgba(0,0,0,0.02)] hover:shadow-lg hover:border-slate-400 hover:-translate-y-0.5"
       }`}
     >
-      <span className="text-xs sm:text-[13px] font-semibold text-slate-800 tracking-tight whitespace-nowrap">
+      <span className="text-sm sm:text-[15px] font-bold text-slate-800 tracking-tight whitespace-nowrap">
         {item.name}
       </span>
     </button>
