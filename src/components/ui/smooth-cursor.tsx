@@ -244,21 +244,14 @@ export function SmoothCursor({
             <div className="absolute h-13 w-13 rounded-full border border-white/30 animate-ping opacity-25" />
           </div>
         ) : isOverText ? (
-          /* 2. Kursor Mode Teks (Hover Heading/Paragraph): Kapsul Vertikal Magnetik */
+          /* 2. Kursor Mode Teks (Hover Heading/Paragraph): Tetap Bundar Eksklusi (Tidak Pipih) */
           <div className="relative flex items-center justify-center">
-            <div className="h-8 w-2 rounded-full bg-white shadow-xs transition-all duration-150 ease-out" />
+            <div className="h-7 w-7 rounded-full bg-white shadow-sm transition-all duration-150 ease-out" />
           </div>
         ) : (
-          /* 3. Kursor Mode Normal (Roaming/Default): Cincin Lingkaran 34px Berkontur + Titik Inti */
+          /* 3. Kursor Mode Normal (Roaming/Default): Cincin Lingkaran 34px Berkontur Bersih Tanpa Titik Tengah */
           <div className="relative flex items-center justify-center">
-            {/* Cincin Lingkaran Luar 34px */}
             <div className="h-[34px] w-[34px] rounded-full border-2 border-white shadow-sm transition-all duration-200 ease-out" />
-            {/* Titik Tengah Inti (Center Core Dot) */}
-            <div
-              className={`absolute rounded-full bg-white transition-all duration-150 ${
-                isClicking ? "h-2.5 w-2.5" : "h-1.5 w-1.5"
-              }`}
-            />
           </div>
         )}
       </motion.div>
