@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ParallaxScroll, ParallaxLayer } from "@/components/ui/parallax-scroll";
 import { Hero3DModuleCard } from "@/components/landing/Hero3DModuleCard";
+import { CurriculumSubjectsTicker } from "@/components/landing/CurriculumSubjectsTicker";
 import { InteractiveTicker } from "@/components/landing/InteractiveTicker";
 import { BauhausCanvasBanner } from "@/components/landing/BauhausCanvasBanner";
 import { WorkflowSteps } from "@/components/landing/WorkflowSteps";
@@ -166,24 +167,8 @@ export default function LandingPage() {
         </section>
       </ParallaxScroll>
 
-      {/* 3. Jenjang Bar */}
-      <section className="py-6 bg-slate-50 border-b border-slate-200/80">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-2.5">
-          <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500 font-mono">
-            // DISEDIAKAN UNTUK SELURUH SATUAN PENDIDIKAN NASIONAL
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3.5">
-            {["SD / MI", "SMP / MTs", "SMA / MA", "SMK / MAK", "SLB / Inklusi"].map((lvl) => (
-              <span
-                key={lvl}
-                className="px-4 py-1.5 rounded-full bg-white border border-slate-200 text-xs font-bold text-slate-700 shadow-2xs"
-              >
-                {lvl}
-              </span>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* 3. Jenjang Satuan Pendidikan & 3 Tumpuk Running Text Pelajaran SD hingga SMA/SMK */}
+      <CurriculumSubjectsTicker />
 
       {/* 3.5. Running Text Interaktif Sleek dengan Compact Studio Drawer */}
       <section id="ticker-interaktif" className="py-16 sm:py-20 bg-slate-50/50 border-b border-slate-200/80">

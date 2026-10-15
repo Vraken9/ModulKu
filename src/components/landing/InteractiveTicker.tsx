@@ -205,21 +205,22 @@ export function InteractiveTicker() {
         </div>
       </div>
 
-      {/* 2. Container Running Text Marquee Sleek dengan Fade Mask Netral */}
+      {/* 2. Container Running Text Marquee dengan Box Lebih Besar & Sudut Lancip */}
       <div
-        className="relative w-full overflow-hidden rounded-2xl border border-slate-200 bg-white py-2.5 shadow-2xs"
+        className="relative w-full overflow-hidden border-2 border-slate-300 bg-white py-4 sm:py-5 shadow-xs"
+        style={{ borderRadius: "0px" }}
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
       >
         {/* Fade Mask Kiri */}
-        <div className="pointer-events-none absolute top-0 bottom-0 left-0 w-16 sm:w-28 z-20 bg-gradient-to-r from-white via-white/80 to-transparent" />
+        <div className="pointer-events-none absolute top-0 bottom-0 left-0 w-16 sm:w-32 z-20 bg-gradient-to-r from-white via-white/80 to-transparent" />
 
         {/* Fade Mask Kanan */}
-        <div className="pointer-events-none absolute top-0 right-0 bottom-0 w-16 sm:w-28 z-20 bg-gradient-to-l from-white via-white/80 to-transparent" />
+        <div className="pointer-events-none absolute top-0 right-0 bottom-0 w-16 sm:w-32 z-20 bg-gradient-to-l from-white via-white/80 to-transparent" />
 
         {/* Ticker Track Mengalir Horizontal */}
         <div className="flex overflow-hidden group select-none">
-          <div className="flex shrink-0 items-center gap-2.5 animate-marquee group-hover:[animation-play-state:paused]">
+          <div className="flex shrink-0 items-center gap-3.5 animate-marquee group-hover:[animation-play-state:paused]">
             {FEATURES.map((item) => {
               const isSelected = item.id === selectedId;
               const ItemIcon = item.icon;
@@ -230,24 +231,26 @@ export function InteractiveTicker() {
                   type="button"
                   onClick={() => handleSelect(item.id)}
                   onMouseEnter={() => handleSelect(item.id)}
-                  className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all shrink-0 border cursor-pointer ${
+                  className={`inline-flex items-center gap-3 px-5 py-3 sm:px-6 sm:py-3.5 text-xs sm:text-sm font-bold transition-all shrink-0 border-2 cursor-pointer font-sans ${
                     isSelected
-                      ? "bg-slate-900 text-white border-slate-900 shadow-xs"
-                      : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100 hover:text-slate-900"
+                      ? "bg-slate-900 text-white border-slate-900 shadow-sm"
+                      : "bg-slate-50 text-slate-800 border-slate-300 hover:border-slate-900 hover:bg-slate-100 hover:text-slate-950"
                   }`}
+                  style={{ borderRadius: "0px" }}
                 >
                   <ItemIcon
-                    className={`w-3.5 h-3.5 ${
-                      isSelected ? "text-white" : "text-slate-700"
+                    className={`w-4 h-4 sm:w-4.5 sm:h-4.5 ${
+                      isSelected ? "text-white" : "text-slate-800"
                     }`}
                   />
                   <span>{item.title}</span>
                   <span
-                    className={`text-[9px] uppercase font-mono px-1.5 py-0.5 rounded ${
+                    className={`text-[10px] uppercase font-mono px-2 py-0.5 border ${
                       isSelected
-                        ? "bg-slate-800 text-slate-200"
-                        : "bg-slate-200 text-slate-700"
+                        ? "bg-slate-800 text-slate-100 border-slate-700 font-bold"
+                        : "bg-slate-200 text-slate-800 border-slate-300 font-medium"
                     }`}
+                    style={{ borderRadius: "0px" }}
                   >
                     {item.badge}
                   </span>
@@ -257,7 +260,7 @@ export function InteractiveTicker() {
           </div>
 
           {/* Duplikasi track untuk continuous looping tanpa jeda */}
-          <div className="flex shrink-0 items-center gap-2.5 animate-marquee group-hover:[animation-play-state:paused] ml-2.5">
+          <div className="flex shrink-0 items-center gap-3.5 animate-marquee group-hover:[animation-play-state:paused] ml-3.5">
             {FEATURES.map((item) => {
               const isSelected = item.id === selectedId;
               const ItemIcon = item.icon;
@@ -268,24 +271,26 @@ export function InteractiveTicker() {
                   type="button"
                   onClick={() => handleSelect(item.id)}
                   onMouseEnter={() => handleSelect(item.id)}
-                  className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all shrink-0 border cursor-pointer ${
+                  className={`inline-flex items-center gap-3 px-5 py-3 sm:px-6 sm:py-3.5 text-xs sm:text-sm font-bold transition-all shrink-0 border-2 cursor-pointer font-sans ${
                     isSelected
-                      ? "bg-slate-900 text-white border-slate-900 shadow-xs"
-                      : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100 hover:text-slate-900"
+                      ? "bg-slate-900 text-white border-slate-900 shadow-sm"
+                      : "bg-slate-50 text-slate-800 border-slate-300 hover:border-slate-900 hover:bg-slate-100 hover:text-slate-950"
                   }`}
+                  style={{ borderRadius: "0px" }}
                 >
                   <ItemIcon
-                    className={`w-3.5 h-3.5 ${
-                      isSelected ? "text-white" : "text-slate-700"
+                    className={`w-4 h-4 sm:w-4.5 sm:h-4.5 ${
+                      isSelected ? "text-white" : "text-slate-800"
                     }`}
                   />
                   <span>{item.title}</span>
                   <span
-                    className={`text-[9px] uppercase font-mono px-1.5 py-0.5 rounded ${
+                    className={`text-[10px] uppercase font-mono px-2 py-0.5 border ${
                       isSelected
-                        ? "bg-slate-800 text-slate-200"
-                        : "bg-slate-200 text-slate-700"
+                        ? "bg-slate-800 text-slate-100 border-slate-700 font-bold"
+                        : "bg-slate-200 text-slate-800 border-slate-300 font-medium"
                     }`}
+                    style={{ borderRadius: "0px" }}
                   >
                     {item.badge}
                   </span>
@@ -296,8 +301,11 @@ export function InteractiveTicker() {
         </div>
       </div>
 
-      {/* 3. Panel Pratinjau Studio Kompak (Proporsional & Tidak Masif) */}
-      <div className="relative rounded-2xl border border-slate-200 bg-white p-6 sm:p-7 shadow-xs overflow-hidden">
+      {/* 3. Panel Pratinjau Studio Kompak (Sudut Lancip & Terformat Bersih) */}
+      <div
+        className="relative border-2 border-slate-300 bg-white p-6 sm:p-8 shadow-xs overflow-hidden"
+        style={{ borderRadius: "0px" }}
+      >
         <AnimatePresence mode="wait">
           <motion.div
             key={selectedFeature.id}

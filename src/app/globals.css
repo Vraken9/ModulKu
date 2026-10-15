@@ -84,9 +84,23 @@ body {
   }
 }
 
+@keyframes marquee-reverse {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
 .animate-marquee {
   display: flex;
-  animation: marquee 30s linear infinite;
+  animation: marquee var(--marquee-duration, 30s) linear infinite;
+}
+
+.animate-marquee-reverse {
+  display: flex;
+  animation: marquee-reverse var(--marquee-duration, 30s) linear infinite;
 }
 
 /* Custom Print Styles for Official Indonesian Documents (A4 Standard) */
