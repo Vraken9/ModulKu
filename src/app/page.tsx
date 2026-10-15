@@ -31,8 +31,8 @@ export default function LandingPage() {
       {/* 0. Custom Smooth Cursor Interaktif */}
       <SmoothCursor />
 
-      {/* 1. Header / Navbar */}
-      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200">
+      {/* 1. Sticky Frosted Glass Header / Navbar */}
+      <header className="sticky top-0 z-50 bg-white/85 backdrop-blur-md border-b border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-xl bg-slate-900 text-white flex items-center justify-center font-black text-base shadow-xs">
@@ -57,7 +57,7 @@ export default function LandingPage() {
               Eksplorasi Modul
             </a>
             <a href="#cara-kerja" className="hover:text-slate-900 transition-colors">
-              Cara Kerja
+              Alur Kerja
             </a>
             <a href="#efisiensi" className="hover:text-slate-900 transition-colors">
               Efisiensi Guru
@@ -73,12 +73,12 @@ export default function LandingPage() {
           {/* Action CTAs */}
           <div className="flex items-center space-x-3">
             <Link href="/login">
-              <Button variant="ghost" size="sm" className="text-xs font-bold text-slate-700 hover:text-slate-900">
+              <Button variant="ghost" size="sm" className="text-xs font-semibold text-slate-700 hover:text-slate-900">
                 Masuk
               </Button>
             </Link>
             <Link href="/login">
-              <Button size="sm" className="bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs h-9 px-4 shadow-xs">
+              <Button size="sm" className="bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs h-9 px-4 rounded-xl shadow-2xs">
                 Coba Gratis Sekarang
               </Button>
             </Link>
@@ -88,14 +88,14 @@ export default function LandingPage() {
 
       {/* 2. Hero Section dengan Parallax Scroll & Elemen 3D Interaktif */}
       <ParallaxScroll
-        className="border-b border-slate-200"
+        className="border-b border-slate-200/80"
         layers={[
-          { layer: "hero-pattern", yPercent: 20 },
-          { layer: "hero-3d", yPercent: -12 },
-          { layer: "hero-accent", yPercent: -30 },
+          { layer: "hero-pattern", yPercent: 18 },
+          { layer: "hero-3d", yPercent: -10 },
+          { layer: "hero-accent", yPercent: -25 },
         ]}
       >
-        <section className="relative overflow-hidden pt-12 pb-20 lg:pt-20 lg:pb-28 bg-white">
+        <section className="relative overflow-hidden pt-14 pb-20 lg:pt-20 lg:pb-28 bg-white">
           {/* Parallax Layer 1: Background Architectural Dot Pattern */}
           <ParallaxLayer
             layer="hero-pattern"
@@ -121,7 +121,7 @@ export default function LandingPage() {
               {/* Kolom Kiri: Copywriting & Actions */}
               <div className="lg:col-span-6 space-y-6 text-center lg:text-left">
                 {/* Monochromatic Tech Badge */}
-                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-100 border border-slate-300 text-xs font-mono font-bold text-slate-800 shadow-xs">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-100 border border-slate-300 text-xs font-mono font-bold text-slate-800 shadow-2xs">
                   <Sparkles className="w-3.5 h-3.5 text-slate-700" />
                   <span>MODULKU OS // REGULASI BSKAP 2024 RESMI</span>
                 </div>
@@ -141,13 +141,13 @@ export default function LandingPage() {
                 {/* Action Buttons */}
                 <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5 pt-2">
                   <Link href="/login" className="w-full sm:w-auto">
-                    <Button size="lg" className="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-sm h-11 px-7 shadow-md gap-2">
+                    <Button size="lg" className="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-sm h-11 px-7 rounded-xl shadow-sm gap-2">
                       <span>Mulai Susun Modul Sekarang</span>
                       <ArrowRight className="w-4 h-4 text-white" />
                     </Button>
                   </Link>
                   <a href="#cara-kerja" className="w-full sm:w-auto">
-                    <Button variant="outline" size="lg" className="w-full sm:w-auto text-slate-800 border-slate-300 hover:bg-slate-100 font-bold text-sm h-11 px-6">
+                    <Button variant="outline" size="lg" className="w-full sm:w-auto text-slate-800 border-slate-300 hover:bg-slate-100 font-bold text-sm h-11 px-6 rounded-xl">
                       Lihat Alur Kerja
                     </Button>
                   </a>
@@ -180,16 +180,16 @@ export default function LandingPage() {
       </ParallaxScroll>
 
       {/* 3. Jenjang Bar */}
-      <section className="py-7 bg-slate-50 border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-3">
+      <section className="py-6 bg-slate-50 border-b border-slate-200/80">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-2.5">
           <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500 font-mono">
             // DISEDIAKAN UNTUK SELURUH SATUAN PENDIDIKAN NASIONAL
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-4">
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3.5">
             {["SD / MI", "SMP / MTs", "SMA / MA", "SMK / MAK", "SLB / Inklusi"].map((lvl) => (
               <span
                 key={lvl}
-                className="px-4 py-1.5 rounded-full bg-white border border-slate-200 text-xs font-bold text-slate-700 shadow-xs"
+                className="px-4 py-1.5 rounded-full bg-white border border-slate-200 text-xs font-bold text-slate-700 shadow-2xs"
               >
                 {lvl}
               </span>
@@ -198,36 +198,36 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 3.5. Running Text Interaktif dengan Blind Gradient & Dynamic Detail Switcher */}
-      <section id="ticker-interaktif" className="py-16 bg-white border-b border-slate-200">
+      {/* 3.5. Running Text Interaktif Sleek dengan Compact Studio Drawer */}
+      <section id="ticker-interaktif" className="py-16 sm:py-20 bg-slate-50/50 border-b border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <InteractiveTicker />
         </div>
       </section>
 
-      {/* 4. Section: Alur Kerja Terpandu BSKAP (Workflow Steps ala 21st.dev) */}
-      <section id="cara-kerja" className="py-20 bg-white border-b border-slate-200">
+      {/* 4. Section: Alur Kerja Terpandu BSKAP (3-Step Connected Cards) */}
+      <section id="cara-kerja" className="py-16 sm:py-20 bg-white border-b border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <WorkflowSteps />
         </div>
       </section>
 
-      {/* 5. Section: Efisiensi Waktu Guru (Bento Efficiency ala 21st.dev) */}
-      <section id="efisiensi" className="py-20 bg-slate-50 border-b border-slate-200">
+      {/* 5. Section: Efisiensi Waktu Guru (Bento Efficiency) */}
+      <section id="efisiensi" className="py-16 sm:py-20 bg-slate-50/50 border-b border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <BentoEfficiency />
         </div>
       </section>
 
-      {/* 6. Section: Kemampuan Pedagogis Mendalam (Bento Pedagogical ala 21st.dev) */}
-      <section id="fitur" className="py-20 bg-white border-b border-slate-200">
+      {/* 6. Section: Kemampuan Pedagogis Mendalam (Bento Pedagogical) */}
+      <section id="fitur" className="py-16 sm:py-20 bg-white border-b border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <BentoPedagogical />
         </div>
       </section>
 
       {/* 7. Section: Spanduk Kanvas Geometris Presisi (Bauhaus Dynamic Canvas Banner) */}
-      <section id="kanvas-seni" className="py-16 bg-slate-50 border-b border-slate-200">
+      <section id="kanvas-seni" className="py-16 sm:py-20 bg-slate-50/50 border-b border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
           <div className="text-center max-w-3xl mx-auto space-y-2">
             <span className="text-xs font-mono text-slate-800 font-bold uppercase tracking-wider">
@@ -244,21 +244,21 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 8. Section FAQ Accordion (Modern FAQ ala 21st.dev) */}
-      <section id="faq" className="py-20 bg-white border-b border-slate-200">
+      {/* 8. Section FAQ Accordion (Modern 2-Column FAQ) */}
+      <section id="faq" className="py-16 sm:py-20 bg-white border-b border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ModernFaq />
         </div>
       </section>
 
-      {/* 9. Bottom CTA Banner (Radial Mesh Glow Banner ala 21st.dev) */}
-      <section className="py-20 bg-slate-50 border-b border-slate-200">
+      {/* 9. Bottom CTA Banner (Radial Mesh Glow Banner) */}
+      <section className="py-16 sm:py-24 bg-slate-50/50 border-b border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <RadialCtaBanner />
         </div>
       </section>
 
-      {/* 10. Modern Bento Footer ala 21st.dev */}
+      {/* 10. Modern Bento Footer */}
       <ModernFooter />
     </div>
   );

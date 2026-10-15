@@ -73,7 +73,7 @@ export function BauhausCanvasBanner() {
       {/* Top Banner Control Bar */}
       <div className="flex flex-wrap items-center justify-between gap-3 px-6 py-3 border-b border-slate-100 bg-slate-50/70 text-xs">
         <div className="flex items-center gap-2 text-slate-700 font-mono">
-          <span className="w-2 h-2 rounded-full bg-blue-600" />
+          <span className="w-2 h-2 rounded-full bg-slate-900" />
           <span>[kanvas_geometris_kurikulum_merdeka]</span>
         </div>
 
@@ -164,8 +164,8 @@ export function BauhausCanvasBanner() {
       {/* Spanduk Narasi di Bawah Kanvas */}
       <div className="p-6 sm:p-8 bg-white border-t border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="space-y-1.5 max-w-2xl">
-          <div className="inline-flex items-center gap-2 text-[11px] font-mono text-blue-700 bg-blue-50 px-2.5 py-1 rounded border border-blue-200 font-bold">
-            <Sparkles className="w-3 h-3 text-blue-700" />
+          <div className="inline-flex items-center gap-2 text-[11px] font-mono text-slate-800 bg-slate-100 px-2.5 py-1 rounded border border-slate-300 font-bold">
+            <Sparkles className="w-3 h-3 text-slate-700" />
             <span>STANDAR BSKAP KEMENDIKBUDRISTEK NO. 032/H/KR/2024</span>
           </div>
           <h3 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
@@ -179,7 +179,7 @@ export function BauhausCanvasBanner() {
         <div className="shrink-0 flex items-center gap-3">
           <div className="text-right text-xs font-mono text-slate-500">
             <p className="font-bold text-slate-900">100% Sesuai Regulasi</p>
-            <p className="text-[11px] text-emerald-700 font-semibold">Format Kedinasan A4</p>
+            <p className="text-[11px] text-slate-700 font-semibold">Format Kedinasan A4</p>
           </div>
         </div>
       </div>
