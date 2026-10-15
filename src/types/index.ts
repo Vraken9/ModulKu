@@ -162,6 +162,11 @@ export interface TeachingModule {
         differentiation_content?: string;
         differentiation_process?: string;
         differentiation_product?: string;
+        deep_learning_principles?: {
+          mindful_awareness?: string;
+          meaningful_inquiry?: string;
+          joyful_reflection?: string;
+        };
       };
       closing: string[];
     }>;
@@ -178,7 +183,7 @@ export interface TeachingModule {
     glossary?: Array<{ term: string; definition: string }>;
     references?: string[];
   };
-  format_mode: "ringkas" | "lengkap_bskap";
+  format_mode: "ringkas" | "lengkap_bskap" | "lengkap_bkpdm";
   created_at: string;
   updated_at: string;
 }

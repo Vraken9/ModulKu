@@ -15,7 +15,7 @@ export function ModulKuLogo({
   size = "md",
   className = "",
   showSubtitle = false,
-  subtitleText = "Kurikulum Merdeka BSKAP",
+  subtitleText = "Standar BKPDM Kemendikdasmen",
   inverted = false,
 }: ModulKuLogoProps) {
   const heightClasses = {

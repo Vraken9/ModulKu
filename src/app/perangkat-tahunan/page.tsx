@@ -93,7 +93,7 @@ export default function PerangkatTahunanPage() {
               <span>Perangkat Administrasi Tahunan (ATP, Prota, Promes, RPE)</span>
             </h1>
             <p className="text-xs text-slate-600 mt-1">
-              Otomasi dekonstruksi Capaian Pembelajaran (CP) BSKAP 2024 menjadi Alur Tujuan Pembelajaran & Matriks Semester.
+              Otomasi dekonstruksi Capaian Pembelajaran (CP) Standar BKPDM No. 020/2026 menjadi Alur Tujuan Pembelajaran & Matriks Semester.
             </p>
           </div>
 
@@ -118,7 +118,7 @@ export default function PerangkatTahunanPage() {
                 Penyusunan Perangkat Administrasi Tahunan Otomatis
               </CardTitle>
               <CardDescription className="text-xs text-slate-500">
-                Otomasi dekonstruksi Capaian Pembelajaran (CP) BSKAP 2024 menjadi Alur Tujuan Pembelajaran
+                Otomasi dekonstruksi Capaian Pembelajaran (CP) Standar BKPDM No. 020/2026 menjadi Alur Tujuan Pembelajaran
                 (ATP), distribusi jam Program Tahunan (PROTA), dan matriks mingguan Program Semester (PROMES).
               </CardDescription>
             </CardHeader>

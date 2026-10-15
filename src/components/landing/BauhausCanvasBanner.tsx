@@ -166,7 +166,7 @@ export function BauhausCanvasBanner() {
         <div className="space-y-1.5 max-w-2xl">
           <div className="inline-flex items-center gap-2 text-xs text-slate-700 bg-slate-100 px-3 py-1 rounded-full border border-slate-200 font-semibold">
             <Sparkles className="w-3.5 h-3.5 text-slate-700" />
-            <span>Standar BSKAP Kemendikbudristek No. 032/H/KR/2024</span>
+            <span>Standar BKPDM Kemendikdasmen No. 020/2026</span>
           </div>
           <h3 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
             Presisi Struktur Dokumen Tanpa Kompromi

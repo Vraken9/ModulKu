@@ -1,5 +1,5 @@
-// Basis Data Rujukan Capaian Pembelajaran (CP) Resmi BSKAP Kemendikbudristek No. 032/H/KR/2024
-// Digunakan untuk rekomendasi otomatis TP dan ATP lintas Fase A sampai Fase F
+// Basis Data Rujukan Capaian Pembelajaran (CP) Resmi BKPDM Kemendikdasmen No. 020 Tahun 2026 dan Permendikdasmen No. 13 Tahun 2025
+// Digunakan untuk rekomendasi otomatis TP, ATP, Modul Ajar Deep Learning, dan Soal Evaluasi lintas Fase A sampai Fase F
 
 export interface StandardCP {
   phase: "A" | "B" | "C" | "D" | "E" | "F";
@@ -27,6 +27,15 @@ export const OFFICIAL_CP_DATABASE: StandardCP[] = [
     description:
       "Peserta didik menunjukkan pemahaman dan intuisi bilangan (number sense) pada bilangan cacah sampai 100, dapat membaca, menulis, menentukan nilai tempat, serta melakukan operasi penjumlahan dan pengurangan.",
   },
+  {
+    phase: "A",
+    level: "SD",
+    subject: "Pendidikan Agama dan Budi Pekerti",
+    element: "Akhlak Mulia & Akidah Karakter",
+    description:
+      "Peserta didik mengenal rukun iman/nilai keagamaan dasar, mempraktikkan tata cara ibadah harian dengan tertib, serta membiasakan sikap santun, kasih sayang, dan toleransi antarsesama di lingkungan keluarga dan sekolah.",
+  },
+
   // Fase B (Kelas 3-4 SD)
   {
     phase: "B",
@@ -44,6 +53,7 @@ export const OFFICIAL_CP_DATABASE: StandardCP[] = [
     description:
       "Peserta didik dapat mendeskripsikan ciri berbagai bentuk bangun datar (segiempat, segitiga, segibanyak) dan menyusun serta mengurai komposisi bangun datar.",
   },
+
   // Fase C (Kelas 5-6 SD)
   {
     phase: "C",
@@ -53,6 +63,15 @@ export const OFFICIAL_CP_DATABASE: StandardCP[] = [
     description:
       "Peserta didik memahami sistem organ tubuh manusia yang dikaitkan dengan cara menjaga kesehatan tubuhnya; hubungan antar komponen biotik dan abiotik dalam ekosistem; gelombang bunyi dan cahaya; serta pemanfaatan energi terbarukan.",
   },
+  {
+    phase: "C",
+    level: "SD",
+    subject: "Koding dan Kecerdasan Artifisial",
+    element: "Berpikir Komputasional & Logika Pemula",
+    description:
+      "Peserta didik mampu mengenali pola urutan instruksi logis (sekuensial), mendekomposisi tugas sederhana, merancang animasi blok/visual programming pemula, serta mengenal konsep etika pemanfaatan asisten digital cerdas secara bertanggung jawab.",
+  },
+
   // Fase D (Kelas 7-9 SMP)
   {
     phase: "D",
@@ -73,11 +92,28 @@ export const OFFICIAL_CP_DATABASE: StandardCP[] = [
   {
     phase: "D",
     level: "SMP",
+    subject: "Koding dan Kecerdasan Artifisial",
+    element: "Algoritma Pemrograman & Agen Cerdas",
+    description:
+      "Peserta didik mampu merancang algoritma terstruktur dengan percabangan dan perulangan, membangun proyek aplikasi interaktif berbasis teks atau blok lanjut, serta menganalisis cara kerja model kecerdasan artifisial dalam mengenali pola data teks dan gambar.",
+  },
+  {
+    phase: "D",
+    level: "SMP",
     subject: "Bahasa Inggris",
     element: "Menyimak - Berbicara",
     description:
       "Peserta didik menggunakan bahasa Inggris untuk berinteraksi dan saling bertukar ide, pengalaman, minat, dan pendapat dalam diskusi kelompok serta menyajikan informasi terkait topik akrab dalam kehidupan sehari-hari.",
   },
+  {
+    phase: "D",
+    level: "SMP",
+    subject: "Pendidikan Agama dan Budi Pekerti",
+    element: "Fikih/Praktik Ibadah & Moderasi Beragama",
+    description:
+      "Peserta didik memahami kaidah ibadah dan hukum moral keagamaan, mengkaji sejarah peradaban spiritual, serta mempraktikkan dialog moderasi beragama dalam menjaga kerukunan dan persaudaraan kebangsaan.",
+  },
+
   // Fase E (Kelas 10 SMA)
   {
     phase: "E",
@@ -111,6 +147,15 @@ export const OFFICIAL_CP_DATABASE: StandardCP[] = [
     description:
       "Peserta didik mampu menerapkan strategi algoritmik standar untuk menghasilkan beberapa solusi persoalan dengan data diskrit bervolume besar serta mengintegrasikan aplikasi perkantoran untuk visualisasi data.",
   },
+  {
+    phase: "E",
+    level: "SMA",
+    subject: "Koding dan Kecerdasan Artifisial",
+    element: "Arsitektur Algoritmik & Pembelajaran Mesin",
+    description:
+      "Peserta didik mampu merancang solusi perangkat lunak menggunakan paradigma pemrograman terstruktur, memodelkan pipeline data sederhana, memahami prinsip machine learning (klasifikasi dan prediksi), serta mengevaluasi dampak etis AI bagi masa depan masyarakat.",
+  },
+
   // Fase F (Kelas 11-12 SMA)
   {
     phase: "F",
@@ -128,12 +173,22 @@ export const OFFICIAL_CP_DATABASE: StandardCP[] = [
     description:
       "Peserta didik mampu menjelaskan keterkaitan struktur atom, ikatan kimia, stoikiometri reaksi, termokimia, laju reaksi, kesetimbangan kimia, serta sifat koligatif larutan dan elektrokimia.",
   },
+  {
+    phase: "F",
+    level: "SMA",
+    subject: "Koding dan Kecerdasan Artifisial",
+    element: "Rekayasa Sistem Cerdas & Penerapan Solutif",
+    description:
+      "Peserta didik mampu membangun aplikasi cerdas integratif yang memanfaatkan API model bahasa besar (LLM) atau computer vision, mengoptimasi algoritma pemecahan masalah kompleks, serta merumuskan tata kelola data yang aman dan berintegritas.",
+  },
 ];
 
 export function getOfficialCP(phase: string, subject: string): StandardCP | undefined {
+  const normalizedSubject = subject.toLowerCase().trim();
   return OFFICIAL_CP_DATABASE.find(
     (item) =>
       item.phase === phase &&
-      item.subject.toLowerCase().includes(subject.toLowerCase().trim())
+      (item.subject.toLowerCase().includes(normalizedSubject) ||
+        normalizedSubject.includes(item.subject.toLowerCase()))
   );
 }

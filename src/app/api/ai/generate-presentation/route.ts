@@ -25,10 +25,10 @@ function generateFallbackMediaAjar(input: {
     slide_number: 1,
     category: "judul",
     title: input.topic,
-    subtitle: `Bahan Tayang Pembelajaran Aktif Berbasis Masalah - ${input.subject}`,
+    subtitle: `Bahan Tayang Deep Learning (Mindful, Meaningful, Joyful) - ${input.subject}`,
     bullet_points: [],
     speaker_notes:
-      "Guru menyapa peserta didik dengan hangat, mengecek kesiapan fisik dan mental kelas, serta mengaitkan suasana kelas dengan topik yang akan dipelajari.",
+      "Guru membuka sesi secara mindful, menyapa peserta didik dengan hangat, mengecek kesiapan fisik dan mental kelas, serta mengaitkan suasana kelas dengan topik yang akan dipelajari.",
   });
 
   // Slide 2: Apersepsi
@@ -147,15 +147,15 @@ function generateFallbackMediaAjar(input: {
   slides.push({
     slide_number: 9,
     category: "refleksi",
-    title: "Refleksi Akhir & Sintesis Pembelajaran",
+    title: "Refleksi Joyful & Sintesis Pembelajaran Mendalam",
     bullet_points: [
       "Apa satu wawasan terpenting yang baru Anda pahami pada pembelajaran hari ini?",
-      "Bagian mana dari konsep ini yang masih membutuhkan pendalaman mandiri?",
-      "Tindak Lanjut: Tugas terstruktur dan pengantar materi pertemuan berikutnya.",
+      "Bagian mana dari konsep ini yang paling bermakna bagi kehidupan sehari-hari Anda?",
+      "Tindak Lanjut: Tugas terstruktur eksploratif dan pengantar materi pertemuan berikutnya.",
     ],
-    key_takeaway: "Belajar adalah proses berkelanjutan untuk mengasah ketajaman bernalar.",
+    key_takeaway: "Belajar adalah proses bermakna yang menggembirakan untuk mengasah ketajaman bernalar.",
     speaker_notes:
-      "Tutup sesi dengan mengapresiasi keaktifan seluruh siswa dan memimpin doa penutup.",
+      "Tutup sesi dengan suasana gembira, mengapresiasi keaktifan seluruh siswa dan memimpin doa penutup.",
   });
 
   // Presentation Bundle
@@ -172,7 +172,7 @@ function generateFallbackMediaAjar(input: {
   // Student Worksheet LKPD
   const worksheet: StudentWorksheetLKPD = {
     id: `lkpd-${Date.now()}`,
-    title: `LEMBAR KERJA PESERTA DIDIK (LKPD) TERSTRUKTUR: ${input.topic.toUpperCase()}`,
+    title: `LEMBAR KERJA PESERTA DIDIK (LKPD) STANDAR BKPDM: ${input.topic.toUpperCase()}`,
     subject: input.subject,
     grade: input.grade,
     semester: 1,

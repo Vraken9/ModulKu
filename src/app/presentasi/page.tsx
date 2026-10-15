@@ -82,7 +82,7 @@ export default function PresentasiPage() {
               <span>Penyusunan Slide Tayang (.PPTX) & LKPD Interaktif</span>
             </h1>
             <p className="text-xs text-slate-600 mt-1">
-              Otomasi presentasi kelas berpedagogi Kurikulum Merdeka (Apersepsi, Konsep Inti, Diskusi, Refleksi).
+              Otomasi presentasi kelas berpedagogi Deep Learning Standar BKPDM Kemendikdasmen (Mindful Hook, Meaningful Inquiry, Joyful Reflection).
             </p>
           </div>
         </div>
@@ -94,8 +94,8 @@ export default function PresentasiPage() {
                 Penyusunan Slide Tayang & Lembar Kerja Siswa
               </CardTitle>
               <CardDescription className="text-xs text-slate-500">
-                Otomasi penyusunan bahan tayang presentasi kelas berbasis alur pedagogis Kurikulum Merdeka
-                (Apersepsi, Konsep Inti, Studi Kasus, Kuis Interaktif, Refleksi) yang dapat diedit langsung
+                Otomasi penyusunan bahan tayang presentasi kelas berbasis alur pedagogis Deep Learning Standar BKPDM
+                (Apersepsi Mindful, Konsep Inti, Studi Kasus Kontekstual, Kuis Interaktif, Refleksi Joyful) yang dapat diedit langsung
                 dalam format Microsoft PowerPoint (.pptx).
               </CardDescription>
             </CardHeader>

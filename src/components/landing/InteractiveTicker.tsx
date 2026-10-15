@@ -37,9 +37,9 @@ interface TickerFeature {
 const FEATURES: TickerFeature[] = [
   {
     id: "modul-ajar",
-    badge: "BSKAP 032/H/KR/2024",
-    title: "Modul Ajar 3 Pilar Diferensiasi",
-    shortDesc: "Diferensiasi Konten, Proses, & Produk Terpetakan Nyata",
+    badge: "STANDAR BKPDM NO. 020/2026",
+    title: "Modul Ajar Deep Learning & Diferensiasi",
+    shortDesc: "Prinsip Mindful, Meaningful, & Joyful Terpetakan Nyata",
     tagline: "Format Resmi Supervisi & Ringkas Harian",
     fullDesc:
       "Menyusun struktur modul ajar lengkap dengan 3 pilar diferensiasi (konten, proses, produk), asesmen diagnostik, formatif, dan sumatif, pemetaan 6 Dimensi Profil Pancasila, serta lampiran LKPD dan Lembar Pengesahan Pengawas Sekolah.",
@@ -75,7 +75,7 @@ const FEATURES: TickerFeature[] = [
     id: "perangkat-tahunan",
     badge: "ALOKASI PEKAN EFEKTIF",
     title: "ATP, Prota, & Promes Terintegrasi",
-    shortDesc: "Dekonstruksi Capaian Pembelajaran BSKAP 2024",
+    shortDesc: "Dekonstruksi Capaian Pembelajaran BKPDM",
     tagline: "Distribusi Jam Pembelajaran Kalender Akademik",
     fullDesc:
       "Menghitung rincian pekan efektif semester, membagi jam pelajaran per materi pokok, menyusun Alur Tujuan Pembelajaran (ATP) runtut, dan menghasilkan matriks Program Semester (Promes) mingguan.",
@@ -387,8 +387,8 @@ export function InteractiveTicker() {
                 <span className="text-[10px] font-mono font-bold text-slate-500 uppercase tracking-wider">
                   SPESIFIKASI BERKAS RESMI
                 </span>
-                <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-white border border-slate-200 text-slate-700">
-                  100% VALID BSKAP
+                <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-white border border-slate-200 text-slate-700">
+                  Standar Resmi BKPDM
                 </span>
               </div>
 
@@ -412,7 +412,7 @@ export function InteractiveTicker() {
                   <ShieldCheck className="w-3.5 h-3.5 text-slate-700" />
                   <span>Siap Supervisi Pengawas</span>
                 </div>
-                <span>v2.4-BSKAP</span>
+                <span>v3.0-BKPDM</span>
               </div>
             </div>
           </motion.div>

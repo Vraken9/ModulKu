@@ -47,20 +47,32 @@ export async function POST(req: NextRequest) {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function callGeminiModulAI(data: any, apiKey: string): Promise<Partial<TeachingModule>> {
-  const prompt = `Anda adalah Spesialis Kurikulum Merdeka BSKAP Kemendikbudristek Indonesia.
-Rancang Modul Ajar resmi untuk:
-- Mapel: ${data.subject} (${data.grade}, Fase ${data.phase})
-- Materi: ${data.chapter_or_material}
-- Model: ${data.learning_model}
-- Alokasi: ${data.total_meetings} Pertemuan (${data.duration_jp} JP)
-- Dimensi Profil Pancasila: ${data.pancasila_dimensions.join(", ")}
-- Format: ${data.format_mode}
+  const prompt = `Anda adalah Pengembang Kurikulum Resmi BKPDM Kemendikdasmen Republik Indonesia.
+Rancang Modul Ajar berstandar Keputusan Kepala BKPDM No. 020 Tahun 2026 dan Permendikdasmen No. 13 Tahun 2025:
+- Jenjang: ${data.education_level} (${data.grade}, Fase ${data.phase})
+- Mapel: ${data.subject}
+- Materi Pokok: ${data.chapter_or_material}
+- Model Pembelajaran: ${data.learning_model}
+- Alokasi Waktu: ${data.total_meetings} Pertemuan (${data.duration_jp} JP)
+- Karakter & Profil Lulusan BKPDM: ${data.pancasila_dimensions.join(", ")}
+- Pendekatan Utama: Deep Learning (Mindful, Meaningful, Joyful) terintegrasi Diferensiasi Konten, Proses, & Produk.
+- Format Mode: ${data.format_mode}
 
-Wajib memuat:
-1. Informasi Umum (Kompetensi awal, sarpras, target siswa)
-2. Komponen Inti: Tujuan Pembelajaran, Pemahaman Bermakna, Pertanyaan Pemantik, Skenario Pembelajaran (Pendahuluan, Inti dengan 3 Diferensiasi: Konten, Proses, Produk, Penutup), Asesmen (Diagnostik, Formatif, Sumatif + Rubrik), Pengayaan & Remedial, Refleksi
-3. Lampiran: LKPD Lengkap, Glosarium, Bahan Bacaan, Daftar Pustaka.
-Hasilkan output JSON murni sesuai format TeachingModule.`;
+Wajib menyusun komponen terstruktur:
+1. Informasi Umum (Identitas, Kompetensi Awal, Sarpras, Target Peserta Didik)
+2. Komponen Inti:
+   - Tujuan Pembelajaran terukur
+   - Pemahaman Bermakna (Meaningful Learning: terhubung kehidupan nyata)
+   - Pertanyaan Pemantik (Mindful Hook)
+   - Skenario Pembelajaran:
+     * Pendahuluan Berkesadaran (Mindful Awareness)
+     * Kegiatan Inti Berdiferensiasi (Konten, Proses, Produk) & Penyelidikan Bermakna (Meaningful Inquiry)
+     * Penutup Menggembirakan (Joyful Reflection & Self-Regulation)
+   - Asesmen: Diagnostik, Formatif Berkelanjutan, Sumatif + Rubrik Kriteria Ketercapaian (KKTP)
+   - Pengayaan & Remedial
+3. Lampiran: Lembar Kerja Peserta Didik (LKPD), Bahan Bacaan, Glosarium, Daftar Pustaka.
+
+Hasilkan output JSON murni sesuai format TeachingModule tanpa markdown pembungkus.`;
 
   const response = await fetch(
     `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
@@ -85,11 +97,9 @@ Hasilkan output JSON murni sesuai format TeachingModule.`;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function generatePedagogicalModule(data: any): Partial<TeachingModule> {
-  const isScience = /fisika|ipa|kimia|biologi|ipas/i.test(data.subject);
-
   return {
     id: crypto.randomUUID(),
-    title: `Modul Ajar: ${data.subject} - ${data.chapter_or_material}`,
+    title: `Modul Ajar BKPDM: ${data.subject} - ${data.chapter_or_material}`,
     subject: data.subject,
     grade: data.grade,
     phase: data.phase,
@@ -103,14 +113,14 @@ function generatePedagogicalModule(data: any): Partial<TeachingModule> {
     initial_competency: data.initial_competency,
     learning_objectives: [
       data.learning_objectives,
-      `Peserta didik dapat merancang penyelidikan ilmiah sederhana untuk membuktikan prinsip ${data.chapter_or_material}.`,
-      `Peserta didik mampu mengomunikasikan hasil analisis secara tertulis dan lisan dengan bernalar kritis.`,
+      `Peserta didik dapat menganalisis dan menerapkan konsep ${data.chapter_or_material} dalam pemecahan masalah kontekstual secara kritis.`,
+      `Peserta didik mampu mengomunikasikan hasil investigasi secara kolaboratif dengan etika komunikasi ilmiah yang santun.`,
     ],
-    meaningful_understanding: `Peserta didik memahami bahwa konsep ${data.chapter_or_material} merupakan hukum alam fundamental yang mengatur pergerakan benda di sekitar kita, dari pergerakan kendaraan sehari-hari hingga orbit satelit di luar angkasa, serta dapat dimanfaatkan untuk efisiensi teknologi transportasi dan keselamatan kerja.`,
+    meaningful_understanding: `Peserta didik menyadari bahwa materi ${data.chapter_or_material} bukan sekadar teori tekstual, melainkan konsep fundamental yang terhubung langsung dengan fenomena lingkungan sekitar, pemecahan masalah nyata, serta inovasi teknologi berkelanjutan.`,
     trigger_questions: [
-      `Mengapa saat kendaraan yang kita tumpangi mengerem mendadak, tubuh kita terdorong ke arah depan?`,
-      `Bagaimanakah keterkaitan antara massa benda, gaya dorong, dan percepatan yang dialami oleh benda tersebut?`,
-      `Apa yang membedakan konsep kelajuan dengan kecepatan dalam fenomena atlet lari di lintasan melingkar?`,
+      `Bagaimanakah keterkaitan langsung antara fenomena ${data.chapter_or_material} dengan kejadian yang kita jumpai dalam kehidupan sehari-hari?`,
+      `Mengapa pemahaman mendalam terhadap prinsip ini penting untuk menyelesaikan tantangan di masa depan?`,
+      `Apa akibat logis yang timbul apabila variabel pendukung dalam sistem ini mengalami perubahan drastis?`,
     ],
     learning_activities: {
       meetings: [
@@ -118,84 +128,69 @@ function generatePedagogicalModule(data: any): Partial<TeachingModule> {
           meeting_number: 1,
           duration_minutes: data.duration_jp * 45,
           introduction: [
-            "Guru membuka kelas dengan salam, memeriksa kesiapan fisik dan psikis peserta didik, serta berdoa bersama.",
-            "Guru menyampaikan apersepsi dengan menayangkan video singkat kecelakaan lalu lintas terkait gaya inersia dan pengereman kendaraan.",
-            "Guru memberikan Pertanyaan Pemantik untuk memicu rasa ingin tahu peserta didik.",
-            "Guru melaksanakan Asesmen Diagnostik Kognitif Awal (3 butir pertanyaan pemantik konsep dasar).",
-            "Guru menyampaikan Tujuan Pembelajaran, alur kegiatan kelas, serta indikator penilaian yang akan dicapai.",
+            "Pilar Mindful (Berkesadaran): Guru membuka kelas dengan salam hangat, membimbing hening cipta sejenak untuk menata fokus dan kesiapan emosional siswa.",
+            "Apersepsi Kontekstual: Menayangkan studi kasus nyata atau demonstrasi singkat terkait fenomena " + data.chapter_or_material + ".",
+            "Mindful Questioning: Guru melontarkan Pertanyaan Pemantik untuk membangkitkan rasa ingin tahu alami peserta didik tanpa menghakimi benar/salah.",
+            "Asesmen Diagnostik Awal: Mengidentifikasi kesiapan belajar dan pra-konsepsi peserta didik melalui kuis interaktif singkat.",
+            "Penyampaian Tujuan & Kontrak Belajar: Menjelaskan kriteria keberhasilan dan alur kegiatan belajar yang humanis dan terstruktur.",
           ],
           core_activities: {
             syntax_steps: [
-              "Fase 1 (Orientasi pada Masalah): Peserta didik mengamati fenomena demonstrasi gerak koin di atas kertas yang ditarik perlahan vs ditarik secara cepat.",
-              "Fase 2 (Mengorganisasikan Peserta Didik): Peserta didik dibagi ke dalam kelompok heterogen beranggotakan 4-5 orang berdasarkan hasil asesmen awal.",
-              "Fase 3 (Membimbing Penyelidikan Mandiri/Kelompok): Kelompok melakukan simulasi praktikum gerak dan percepatan menggunakan alat peraga ticker timer atau sensor gerak digital pada smartphone.",
-              "Fase 4 (Mengembangkan dan Menyajikan Hasil Karya): Setiap kelompok mengolah data pengukuran, merumuskan grafik hubungan v-t, dan menyusun laporan ringkas.",
-              "Fase 5 (Menganalisis dan Mengevaluasi): Perwakilan kelompok mempresentasikan temuan di depan kelas dan kelompok lain memberikan tanggapan kritis.",
+              "Tahap 1 (Orientasi Masalah Kontekstual): Peserta didik mengamati simulasi atau wacana autentik yang memuat tantangan riil terkait " + data.chapter_or_material + ".",
+              "Tahap 2 (Organisasi Belajar Kolaboratif): Peserta didik berkolaborasi dalam kelompok heterogen dengan peran tugas yang jelas.",
+              "Tahap 3 (Meaningful Inquiry & Penyelidikan Terbimbing): Setiap kelompok melakukan eksplorasi data, eksperimen atau studi pustaka menggunakan LKPD terstruktur.",
+              "Tahap 4 (Konstruksi & Visualisasi Solusi): Peserta didik menyusun temuan dan menghubungkan konsep ilmiah dengan alternatif solusi konkret.",
+              "Tahap 5 (Evaluasi & Umpan Balik Rekan): Kelompok membagikan hasil temuan untuk mendapatkan masukan kritis dan reflektif dari teman sejawat.",
             ],
             differentiation_content:
-              "Diferensiasi Konten: Peserta didik kelompok reguler menggunakan buku teks dan modul ajar; kelompok yang membutuhkan bimbingan diberikan panduan infografis bertahap dan video animasi konsep; sedangkan kelompok mahir diberikan artikel jurnal ilmiah dan studi kasus data aerodinamika roket.",
+              "Diferensiasi Konten: Disediakan bahan ajar modular bertingkat (ringkasan infografis untuk kesiapan pemula, modul analisis komprehensif untuk reguler, dan studi kasus mutakhir untuk kelompok mahir).",
             differentiation_process:
-              "Diferensiasi Proses: Guru memberikan pendampingan bertingkat (scaffolding intensif) kepada kelompok dengan kesiapan belajar rendah, memberikan pemantik berkala pada kelompok sedang, dan memberikan keleluasaan inkuiri mandiri bagi kelompok berkemampuan tinggi.",
+              "Diferensiasi Proses: Guru memberikan pendampingan adaptif (scaffolding terarah) bagi siswa yang membutuhkan bantuan konsep dasar, serta memberikan tantangan eksplorasi mandiri bagi siswa berkemampuan tinggi.",
             differentiation_product:
-              "Diferensiasi Produk: Peserta didik bebas memilih format laporan hasil penyelidikan: lembar kerja tertulis, poster/infografis Canva, atau rekaman video penjelasan berdurasi 2 menit.",
+              "Diferensiasi Produk: Peserta didik dapat menyajikan laporan solusi dalam format yang sesuai minat: laporan analitis, infografis ringkas, atau presentasi lisan interaktif.",
+            deep_learning_principles: {
+              mindful_awareness: "Siswa secara sadar memetakan strategi belajarnya sendiri dan mengenali hal yang sudah maupun belum dipahami.",
+              meaningful_inquiry: "Setiap aktivitas diarahkan pada pemahaman konsep fungsional yang aplikatif di dunia nyata, bukan sekadar menghafal rumus.",
+              joyful_reflection: "Pembelajaran berlangsung interaktif, saling mengapresiasi keunikan ide, dan merayakan progres pencapaian setiap anak.",
+            },
           },
           closing: [
-            "Peserta didik bersama guru menyimpulkan poin-poin utama konsep yang telah dipelajari.",
-            "Guru memandu refleksi kelas dua arah (Apa hal paling bermakna yang dipelajari hari ini? Apa kendala yang dihadapi?).",
-            "Guru memberikan asesmen formatif akhir sesi berupa kuis tiket keluar (exit ticket 2 soal).",
-            "Guru menyampaikan gambaran aktivitas pada pertemuan berikutnya dan menutup pembelajaran dengan doa.",
+            "Pilar Joyful (Menggembirakan): Refleksi belajar bermakna dengan menanyakan: 'Apa hal paling berkesan dan bermanfaat yang Anda temukan hari ini?'.",
+            "Apresiasi Guru: Guru memberikan penguatan positif atas kerja keras, kolaborasi, dan nalar kritis seluruh siswa.",
+            "Tindak Lanjut & Rencana Pertemuan Berikutnya: Memberikan arahan penugasan eksploratif ringan dan menutup sesi dengan doa bersama.",
           ],
         },
       ],
     },
     assessments: {
       diagnostic:
-        "Asesmen Diagnostik Awal: Tes lisan apersepsi dan kuis 3 soal pilihan ganda di awal sesi untuk memetakan kesiapan belajar peserta didik.",
+        "Asesmen Diagnostik Non-Kognitif & Kognitif: Pemetaan gaya belajar, kondisi emosi, serta tes uji 3 butir konsep prasyarat.",
       formative:
-        "Asesmen Formatif (Proses): Lembar observasi keaktifan diskusi, lembar ceklis partisipasi bernalar kritis dan gotong royong, serta penilaian kinerja presentasi.",
+        "Asesmen Formatif Berkelanjutan: Observasi keterlibatan diskusi kelompok, lembar ceklis nalar kritis, dan catatan penilaian unjuk kerja berkala.",
       summative:
-        "Asesmen Sumatif (Akhir Lingkup Materi): Tes tertulis berupa 10 butir soal pilihan ganda berstandar AKM dan 2 butir soal uraian penalaran analitis.",
+        "Asesmen Sumatif (KKTP): Tes performa pemecahan masalah kontekstual atau tes tulis butir soal analitis dengan rubrik analitik berjenjang (Perlu Bimbingan, Cukup, Baik, Mahir).",
       rubric: {
-        skala: "1 - 4 (Perlu Bimbingan, Cukup, Baik, Sangat Baik)",
-        kriteria: [
-          "Kemampuan merumuskan hipotesis ilmiah",
-          "Keterampilan mengolah data dan grafik",
-          "Kualitas argumentasi penalaran logis",
+        aspek_penilaian: [
+          "Kedalaman Pemahaman Konsep (Meaningful Learning)",
+          "Keterampilan Bernalar Kritis & Pemecahan Masalah",
+          "Kolaborasi dan Komunikasi Efektif (Karakter BKPDM)",
         ],
+        rentang_nilai: "Kriteria Ketercapaian Tujuan Pembelajaran (KKTP) Skala 0 - 100",
       },
     },
     appendices: {
-      student_worksheet_lkpd: `LEMBAR KERJA PESERTA DIDIK (LKPD) TERSTRUKTUR
-Materi: ${data.chapter_or_material}
-Kelas / Semester: ${data.grade} / ${data.semester}
-Kelompok: ................................ Anggota: ................................
-
-A. Petunjuk Pengerjaan:
-1. Bacalah pengantar masalah secara seksama bersama anggota kelompok Anda.
-2. Siapkan alat dan bahan praktikum: papan luncur, balok beban, stopwatch / smartphone sensor.
-3. Catat data hasil variasi massa balok terhadap waktu tempuh pada tabel pengamatan di bawah.
-
-B. Tabel Pengamatan:
-| Percobaan | Massa Beban (kg) | Jarak Tempuh (m) | Waktu Tempuh (s) | Percepatan (m/s2) |
-| 1         | 0.1              | 1.0              |                  |                   |
-| 2         | 0.2              | 1.0              |                  |                   |
-| 3         | 0.3              | 1.0              |                  |                   |
-
-C. Pertanyaan Analisis:
-1. Bagaimana grafik hubungan antara besarnya percepatan terhadap massa beban saat gaya dorong dibuat tetap?
-2. Berdasarkan data di atas, buktikan apakah hukum II Newton berlaku pada percobaan Anda!`,
-      reading_materials: `BAHAN BACAAN GURU DAN PESERTA DIDIK:
-${isScience ? "Konsep mekanika klasik Newtonian menjelaskan bahwa keadaan alami benda adalah mempertahankan kecepatannya jika tidak ada gaya total luar yang mempengaruhinya. Hukum I Newton menyatakan bahwa inersia adalah sifat kelembaman suatu materi. Hukum II Newton menjembatani hubungan antara gaya total net, massa benda, dan percepatan yang timbul: F = m x a. Hukum III Newton menekankan bahwa gaya senantiasa muncul berpasangan (aksi-reaksi) yang besarnya sama namun berlawanan arah dan bekerja pada dua benda yang berbeda." : "Penerapan konsep materi ini menuntut pemahaman mendalam tentang prinsip kerja sistematis dan keterkaitannya dengan fenomena kontekstual di masyarakat."}`,
+      student_worksheet_lkpd: `LEMBAR KERJA PESERTA DIDIK (LKPD) BKPDM\nTopik: ${data.chapter_or_material}\nKelas/Fase: ${data.grade} / Fase ${data.phase}\n\nA. Tujuan Penyelidikan:\nPeserta didik mampu mengidentifikasi variabel dan merumuskan kesimpulan berbasis bukti empiris.\n\nB. Stimulus Fenomena Nyata:\nAmati kondisi kontekstual di lingkungan sekitar terkait topik ini.\n\nC. Langkah Investigasi:\n1. Rumuskan pertanyaan mendasar mengenai faktor-faktor yang berpengaruh.\n2. Catat data hasil observasi pada tabel instrumen.\n3. Diskusikan bersama rekan kelompok: apa pola yang ditemukan?\n\nD. Refleksi Diri (Mindful Check):\n- Bagian mana yang paling menantang bagi saya?\n- Bagaimana saya mengatasi kesulitan tersebut?`,
+      reading_materials: `Buku Siswa dan Panduan Guru Kurikulum Nasional Kemendikdasmen, Buku Referensi Kontekstual SIKN, serta sumber digital pendukung resmi.`,
       glossary: [
-        { term: "Inersia", definition: "Kecenderungan alami suatu benda untuk mempertahankan keadaan diam atau gerak lurus beraturannya." },
-        { term: "Percepatan", definition: "Laju perubahan kecepatan suatu benda tiap satuan waktu tertentu." },
-        { term: "Gaya Net", definition: "Resultan atau jumlah vektor dari seluruh gaya yang bekerja pada suatu benda." },
-        { term: "Diferensiasi Pembelajaran", definition: "Pendekatan pembelajaran yang menyesuaikan konten, proses, dan produk berdasarkan kebutuhan dan kesiapan belajar peserta didik." },
+        { term: "Mindful Learning", definition: "Pembelajaran dengan kesadaran penuh terhadap tujuan, proses, dan emosi belajar diri sendiri." },
+        { term: "Meaningful Learning", definition: "Pembelajaran bermakna yang mengaitkan konsep baru secara kontekstual dengan kehidupan nyata peserta didik." },
+        { term: "Joyful Learning", definition: "Suasana belajar yang humanis, menyenangkan, bebas intimidasi, dan menumbuhkan rasa ingin tahu berkelanjutan." },
+        { term: "Diferensiasi", definition: "Penyesuaian strategi pembelajaran berdasarkan kesiapan, minat, dan profil belajar unik setiap murid." },
       ],
       references: [
-        "Kemendikbudristek. 2024. Panduan Pembelajaran dan Asesmen Kurikulum Merdeka. Jakarta: BSKAP.",
-        "Kanginan, Marthen. 2022. Fisika untuk SMA/MA Kelas X Berdasarkan Kurikulum Merdeka. Jakarta: Penerbit Erlangga.",
-        "Halliday, David, Robert Resnick, dan Jearl Walker. 2018. Fundamentals of Physics 11th Edition. New York: John Wiley & Sons.",
+        "Keputusan Kepala BKPDM Kemendikdasmen No. 020 Tahun 2026 tentang Capaian Pembelajaran.",
+        "Permendikdasmen No. 13 Tahun 2025 tentang Kerangka Dasar Kurikulum Pendidikan Dasar dan Menengah.",
+        "Panduan Pembelajaran dan Asesmen (PPA) Kemendikdasmen.",
       ],
     },
     format_mode: data.format_mode,

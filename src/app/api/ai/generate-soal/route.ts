@@ -77,8 +77,8 @@ async function callGeminiLLM(
   data: any,
   apiKey: string
 ): Promise<QuestionItem[]> {
-  const prompt = `Anda adalah Asisten Penyusun Soal Resmi Kurikulum Merdeka Kemendikbudristek BSKAP Indonesia.
-Buatkan ${data.total_questions} butir soal berkualitas tinggi dengan rincian:
+  const prompt = `Anda adalah Spesialis Evaluasi dan Asesmen Kurikulum Nasional BKPDM Kemendikdasmen Indonesia (Keputusan Kepala BKPDM No. 020 Tahun 2026 dan Permendikdasmen No. 13 Tahun 2025).
+Buatkan ${data.total_questions} butir soal berkualitas tinggi berbasis Pembelajaran Mendalam (Deep Learning) dengan rincian:
 - Mata Pelajaran: ${data.subject}
 - Jenjang: ${data.education_level} (${data.grade}, Fase ${data.phase})
 - Bab/Materi: ${data.chapter_or_material}
@@ -87,6 +87,7 @@ Buatkan ${data.total_questions} butir soal berkualitas tinggi dengan rincian:
 - Jumlah Opsi: ${data.options_count} (A-${String.fromCharCode(64 + data.options_count)})
 - Komposisi Kognitif: LOTS ${data.cognitive_distribution.lots}%, MOTS ${data.cognitive_distribution.mots}%, HOTS ${data.cognitive_distribution.hots}%
 - Komposisi Kesulitan: Mudah ${data.difficulty_distribution.mudah}%, Sedang ${data.difficulty_distribution.sedang}%, Sulit ${data.difficulty_distribution.sulit}%
+- Prinsip Asesmen: Utamakan stimulus kontekstual berbasis pemecahan masalah dunia nyata (Meaningful Problem Solving) dan nalar kritis, hindari pertanyaan hafalan dangkal.
 - Gunakan rumus matematika/fisika dalam format LaTeX ($...$ atau $$...$$) jika relevan.
 - Berikan kunci jawaban dan pembahasan analitis mendalam.
 Hasilkan output JSON murni berupa array of QuestionItem.`;

@@ -241,7 +241,7 @@ export default function SoalGeneratorPage() {
             <div className="rounded-2xl bg-white border border-slate-200 text-slate-900 p-6 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div className="space-y-1.5">
                 <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-700">
-                  <span>Evaluasi & Asesmen BSKAP 032</span>
+                  <span>Evaluasi & Asesmen Standar BKPDM No. 020/2026</span>
                 </div>
                 <h2 className="text-lg sm:text-xl font-black tracking-tight text-slate-900">
                   Susun Paket Asesmen dengan Kontrol Kognitif Terstandarisasi
@@ -732,7 +732,7 @@ export default function SoalGeneratorPage() {
                 className="bg-slate-900 hover:bg-slate-800 text-white font-bold gap-2 px-8 h-11 rounded-xl shadow-xs cursor-pointer transition-all"
               >
                 <Sparkles className="w-4 h-4 text-white" />
-                <span>{isLoading ? "Sedang Menyusun Soal BSKAP..." : "Buat Paket Soal Sekarang"}</span>
+                <span>{isLoading ? "Sedang Menyusun Paket Soal BKPDM..." : "Buat Paket Soal Sekarang"}</span>
               </Button>
             </div>
           </div>

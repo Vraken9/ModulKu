@@ -153,7 +153,7 @@ function generateFallbackPerangkat(input: {
     grade: input.grade,
     academic_year: input.academic_year,
     rationale:
-      "Alur Tujuan Pembelajaran ini disusun secara sistematis dan spiral dari ranah pemahaman konseptual hingga kreasi proyek kontekstual, mendukung pencapaian Profil Pelajar Pancasila sesuai regulasi BSKAP Kemendikbudristek No. 032/H/KR/2024.",
+      "Alur Tujuan Pembelajaran ini disusun secara sistematis dan spiral dari ranah pemahaman konseptual hingga kreasi proyek kontekstual, mendukung pencapaian Profil Pelajar Pancasila dan 8 Dimensi Karakter sesuai regulasi BKPDM Kemendikdasmen No. 020/2026 dan Permendikdasmen No. 13/2025.",
     elements: [
       {
         name: element,

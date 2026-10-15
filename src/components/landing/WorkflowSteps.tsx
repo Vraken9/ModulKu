@@ -56,7 +56,7 @@ const WORKFLOW_STEPS: WorkflowStep[] = [
       "Kunci jawaban disertai pembahasan analitis untuk feedback",
     ],
     mockupSnippet: {
-      badge: "Standar BSKAP 032",
+      badge: "Standar BKPDM 2026",
       label: "Konstruksi Instrumen",
       data: ["Stimulus: Efisiensi Panel Surya", "Taksonomi: C4 Menganalisis", "Rubrik Penskoran: Analitik"],
       footer: "Kisi-Kisi Terkonstruksi",

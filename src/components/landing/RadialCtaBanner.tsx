@@ -28,7 +28,7 @@ export function RadialCtaBanner() {
         </h2>
 
         <p className="text-xs sm:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed">
-          Hilangkan lembur klerikal malam hari. Hasilkan paket asesmen HOTS, modul ajar supervisi, dan matriks kisi-kisi standar BSKAP 2024 dalam hitungan detik.
+          Hilangkan lembur klerikal malam hari. Hasilkan paket asesmen HOTS, modul ajar supervisi, dan matriks kisi-kisi standar BKPDM Kemendikdasmen dalam hitungan detik.
         </p>
 
         {/* Buttons */}
@@ -51,7 +51,7 @@ export function RadialCtaBanner() {
         <div className="pt-4 flex flex-wrap items-center justify-center gap-y-2 gap-x-6 text-xs text-slate-400 font-medium font-mono">
           <div className="flex items-center gap-1.5">
             <CheckCircle2 className="w-4 h-4 text-slate-300" />
-            <span>100% REGULASI BSKAP NO. 032/2024</span>
+            <span>100% REGULASI BKPDM KEMENDIKDASMEN</span>
           </div>
           <div className="flex items-center gap-1.5">
             <CheckCircle2 className="w-4 h-4 text-slate-300" />

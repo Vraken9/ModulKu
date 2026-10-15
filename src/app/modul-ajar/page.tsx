@@ -60,9 +60,9 @@ export default function ModulAjarPage() {
   const [targetStudents, setTargetStudents] = useState("Peserta Didik Reguler (Tipikal)");
 
   const [pancasilaDimensions, setPancasilaDimensions] = useState<string[]>([
-    "Bernalar Kritis",
-    "Bergotong Royong",
-    "Mandiri",
+    "Penalaran Kritis",
+    "Kreativitas",
+    "Gotong Royong dan Kolaborasi",
   ]);
 
   const [chapter, setChapter] = useState("Kinematika Gerak Lurus dan Hukum Newton");
@@ -73,7 +73,7 @@ export default function ModulAjarPage() {
     "Peserta didik mampu menganalisis gerak lurus beraturan (GLB) dan gerak lurus berubah beraturan (GLBB) serta menerapkan hukum Newton untuk memecahkan permasalahan gerak dalam kehidupan sehari-hari."
   );
 
-  const [formatMode, setFormatMode] = useState<"ringkas" | "lengkap_bskap">("lengkap_bskap");
+  const [formatMode, setFormatMode] = useState<"ringkas" | "lengkap_bskap" | "lengkap_bkpdm">("lengkap_bkpdm");
 
   const [isLoading, setIsLoading] = useState(false);
   const [generatedModule, setGeneratedModule] = useState<TeachingModule | null>(null);
@@ -173,14 +173,14 @@ export default function ModulAjarPage() {
               <span>/</span>
               <span className="text-slate-700 font-medium">Perangkat Ajar</span>
               <span>/</span>
-              <span className="text-slate-900 font-bold">Modul Ajar BSKAP</span>
+              <span className="text-slate-900 font-bold">Modul Ajar BKPDM</span>
             </div>
             <h1 className="text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2.5">
               <FileText className="w-6 h-6 text-slate-900" />
-              <span>Generator Modul Ajar Kurikulum Merdeka</span>
+              <span>Generator Modul Ajar Deep Learning (Standar BKPDM)</span>
             </h1>
             <p className="text-xs text-slate-600 mt-1">
-              Penyusunan modul ajar resmi standar BSKAP 032/H/KR/2024 terintegrasi 3 pilar diferensiasi & asesmen terstruktur.
+              Penyusunan modul ajar resmi standar BKPDM Kemendikdasmen No. 020/2026 terintegrasi Deep Learning (Mindful, Meaningful, Joyful) & 3 pilar diferensiasi.
             </p>
           </div>
 
@@ -208,13 +208,13 @@ export default function ModulAjarPage() {
               <div className="space-y-2">
                 <div className="inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-slate-100 text-xs font-semibold text-slate-700 border border-slate-200">
                   <Sparkles className="w-3 h-3 text-slate-700" />
-                  <span>Standar BSKAP No. 032 Supervisi Resmi</span>
+                  <span>Standar BKPDM No. 020/2026 Supervisi Resmi</span>
                 </div>
                 <h2 className="text-xl font-black tracking-tight text-slate-900">
-                  Susun Modul Ajar Resmi dengan Diferensiasi Terpeta
+                  Susun Modul Ajar Resmi dengan Deep Learning & Diferensiasi Terpeta
                 </h2>
                 <p className="text-xs text-slate-600 max-w-2xl leading-relaxed">
-                  Menghasilkan struktur lengkap: Informasi Umum, Komponen Inti (dengan 3 pilar diferensiasi: konten, proses, produk), Asesmen diagnostik/formatif/sumatif, serta lampiran LKPD dan Lembar Pengesahan Pengawas Sekolah.
+                  Menghasilkan struktur lengkap berstandar BKPDM Kemendikdasmen: Informasi Umum, Komponen Inti (dengan 3 pilar Deep Learning: Mindful, Meaningful, Joyful & diferensiasi konten, proses, produk), Asesmen diagnostik/formatif/sumatif, serta lampiran LKPD dan Lembar Pengesahan.
                 </p>
               </div>
               <div className="text-right text-xs text-slate-600 font-mono bg-slate-50 p-3.5 rounded-xl border border-slate-200 shrink-0">
@@ -345,7 +345,7 @@ export default function ModulAjarPage() {
                   className="text-xs gap-1.5 border-slate-300 text-slate-900 bg-white hover:bg-slate-100 font-bold shadow-xs cursor-pointer"
                 >
                   <BookOpen className="w-3.5 h-3.5 text-slate-800" />
-                  <span>Ambil CP Resmi BSKAP</span>
+                  <span>Ambil CP Resmi BKPDM</span>
                 </Button>
               </CardHeader>
               <CardContent className="pt-4 space-y-4">
@@ -423,18 +423,18 @@ export default function ModulAjarPage() {
                     <Label>Format Dokumen Luaran</Label>
                     <div className="grid grid-cols-2 gap-2 text-xs">
                       <div
-                        onClick={() => setFormatMode("lengkap_bskap")}
+                        onClick={() => setFormatMode("lengkap_bkpdm")}
                         className={`p-3 rounded-xl border cursor-pointer transition-all ${
-                          formatMode === "lengkap_bskap"
+                          formatMode === "lengkap_bkpdm" || formatMode === "lengkap_bskap"
                             ? "border-slate-900 bg-slate-900 font-bold text-white shadow-xs"
                             : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
                         }`}
                       >
-                        <p className={`font-bold ${formatMode === "lengkap_bskap" ? "text-white" : "text-slate-900"}`}>
-                          Mode Lengkap BSKAP
+                        <p className={`font-bold ${formatMode === "lengkap_bkpdm" || formatMode === "lengkap_bskap" ? "text-white" : "text-slate-900"}`}>
+                          Mode Lengkap BKPDM
                         </p>
-                        <p className={`text-[10px] font-normal mt-0.5 ${formatMode === "lengkap_bskap" ? "text-slate-300" : "text-slate-500"}`}>
-                          Format resmi supervisi (LKPD, Glosarium, Refleksi).
+                        <p className={`text-[10px] font-normal mt-0.5 ${formatMode === "lengkap_bkpdm" || formatMode === "lengkap_bskap" ? "text-slate-300" : "text-slate-500"}`}>
+                          Format resmi supervisi (Deep Learning, LKPD, Glosarium).
                         </p>
                       </div>
                       <div
@@ -449,7 +449,7 @@ export default function ModulAjarPage() {
                           Mode Ringkas (1-2 Lembar)
                         </p>
                         <p className={`text-[10px] font-normal mt-0.5 ${formatMode === "ringkas" ? "text-slate-300" : "text-slate-500"}`}>
-                          Tujuan, langkah, dan asesmen esensial harian.
+                          Tujuan, langkah Deep Learning, dan asesmen esensial harian.
                         </p>
                       </div>
                     </div>
@@ -457,15 +457,15 @@ export default function ModulAjarPage() {
                 </CardContent>
               </Card>
 
-              {/* 6 Dimensi Profil Pelajar Pancasila */}
+              {/* 8 Dimensi Karakter & Profil Lulusan BKPDM */}
               <Card className="bg-white border-slate-200 shadow-xs">
                 <CardHeader className="pb-3 border-b border-slate-100 flex flex-row items-center justify-between">
                   <div>
                     <CardTitle className="text-sm font-bold text-slate-900">
-                      Dimensi Profil Pelajar Pancasila
+                      Dimensi Karakter & Profil Lulusan BKPDM
                     </CardTitle>
                     <CardDescription className="text-xs text-slate-500">
-                      Pilih 1 s/d 3 dimensi yang paling relevan
+                      Pilih 1 s/d 4 dimensi yang paling relevan
                     </CardDescription>
                   </div>
                   <Badge variant="outline" className="bg-slate-100 text-slate-800 border-slate-200 font-bold font-mono text-[10px]">
@@ -474,12 +474,14 @@ export default function ModulAjarPage() {
                 </CardHeader>
                 <CardContent className="pt-4 space-y-2">
                   {[
-                    "Beriman, Bertakwa kepada Tuhan YME, dan Berakhlak Mulia",
-                    "Berkebinekaan Global",
-                    "Bergotong Royong",
-                    "Mandiri",
-                    "Bernalar Kritis",
-                    "Kreatif",
+                    "Keimanan dan Ketakwaan kepada Tuhan YME serta Akhlak Mulia",
+                    "Kewargaan dan Kebinekaan Global",
+                    "Kemandirian",
+                    "Penalaran Kritis",
+                    "Kreativitas",
+                    "Gotong Royong dan Kolaborasi",
+                    "Kesehatan Mental dan Raga",
+                    "Literasi dan Numerasi Berkelanjutan",
                   ].map((dim) => {
                     const isChecked = pancasilaDimensions.includes(dim);
                     return (
@@ -516,7 +518,7 @@ export default function ModulAjarPage() {
                 className="bg-slate-900 hover:bg-slate-800 text-white font-bold gap-2 px-8 h-11 rounded-xl shadow-xs cursor-pointer transition-all"
               >
                 <Sparkles className="w-4 h-4 text-white" />
-                <span>{isLoading ? "Sedang Menyusun Modul Ajar BSKAP..." : "Buat Modul Ajar Sekarang"}</span>
+                <span>{isLoading ? "Sedang Menyusun Modul Ajar BKPDM..." : "Buat Modul Ajar Sekarang"}</span>
               </Button>
             </div>
           </div>
@@ -539,7 +541,7 @@ export default function ModulAjarPage() {
                   {generatedModule.title}
                 </h2>
                 <p className="text-xs text-slate-600">
-                  Model: {generatedModule.learning_model} | Format: {generatedModule.format_mode === "ringkas" ? "Ringkas (1-2 Lembar)" : "Lengkap BSKAP"}
+                  Model: {generatedModule.learning_model} | Format: {generatedModule.format_mode === "ringkas" ? "Ringkas (1-2 Lembar)" : "Lengkap BKPDM"}
                 </p>
               </div>
 
@@ -552,7 +554,7 @@ export default function ModulAjarPage() {
                       ...generatedModule,
                       format_mode:
                         generatedModule.format_mode === "ringkas"
-                          ? "lengkap_bskap"
+                          ? "lengkap_bkpdm"
                           : "ringkas",
                     })
                   }
@@ -561,7 +563,7 @@ export default function ModulAjarPage() {
                   <Layers className="w-3.5 h-3.5" />
                   <span>
                     {generatedModule.format_mode === "ringkas"
-                      ? "Beralih ke Mode Lengkap"
+                      ? "Beralih ke Mode Lengkap BKPDM"
                       : "Beralih ke Mode Ringkas"}
                   </span>
                 </Button>

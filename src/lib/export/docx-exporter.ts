@@ -416,7 +416,7 @@ export async function exportKisiKisiToDocx(
   triggerDownload(blob, `Kisi_Kisi_${subject.replace(/\s+/g, "_")}.docx`);
 }
 
-// 3. Ekspor Modul Ajar BSKAP 2024 ke DOCX
+// 3. Ekspor Modul Ajar BKPDM Kemendikdasmen ke DOCX
 export async function exportModulAjarToDocx(module: TeachingModule): Promise<void> {
   const paragraphs: Paragraph[] = [];
 
@@ -427,7 +427,7 @@ export async function exportModulAjarToDocx(module: TeachingModule): Promise<voi
       spacing: { after: 100 },
       children: [
         new TextRun({
-          text: "MODUL AJAR KURIKULUM MERDEKA",
+          text: "MODUL AJAR KURIKULUM NASIONAL BKPDM",
           bold: true,
           size: 28,
           font: "Arial",

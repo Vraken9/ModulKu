@@ -108,11 +108,11 @@ export function DashboardShell({ children, activeItem }: DashboardShellProps) {
           desc: "AKM, HOTS, & Kisi-Kisi",
         },
         {
-          name: "Modul Ajar BSKAP",
+          name: "Modul Ajar BKPDM",
           href: "/modul-ajar",
           icon: FileText,
           id: "modul-ajar",
-          desc: "Diferensiasi 3 Pilar",
+          desc: "Deep Learning & Karakter",
         },
         {
           name: "ATP, Prota, & Promes",
@@ -302,7 +302,7 @@ export function DashboardShell({ children, activeItem }: DashboardShellProps) {
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-1.5 text-xs text-emerald-800 font-semibold bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-              <span>BSKAP 032/H/KR/2024</span>
+              <span>BKPDM Kemendikdasmen</span>
             </div>
 
             <Link href="/profil-sekolah">

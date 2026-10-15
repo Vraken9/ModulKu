@@ -25,22 +25,14 @@ export const teachingModuleSchema = z.object({
     "Inkuiri Terbimbing",
     "Cooperative Learning",
     "Direct Instruction",
+    "Pembelajaran Berbasis Riset / Kasus",
   ]),
 
   target_students: z.string().default("Peserta Didik Reguler (Tipikal)"),
 
   pancasila_dimensions: z
-    .array(
-      z.enum([
-        "Beriman, Bertakwa kepada Tuhan YME, dan Berakhlak Mulia",
-        "Berkebinekaan Global",
-        "Bergotong Royong",
-        "Mandiri",
-        "Bernalar Kritis",
-        "Kreatif",
-      ])
-    )
-    .min(1, "Pilih minimal 1 dimensi Profil Pelajar Pancasila"),
+    .array(z.string())
+    .min(1, "Pilih minimal 1 dimensi karakter/profil lulusan"),
 
   chapter_or_material: safeText.min(3, "Bab atau materi pokok wajib diisi"),
   initial_competency: safeText.min(5, "Kompetensi awal prasyarat wajib diisi"),
@@ -48,7 +40,13 @@ export const teachingModuleSchema = z.object({
 
   facilities_and_infrastructure: safeText.optional().or(z.literal("")),
 
-  format_mode: z.enum(["ringkas", "lengkap_bskap"]).default("lengkap_bskap"),
+  format_mode: z
+    .enum(["ringkas", "lengkap_bskap", "lengkap_bkpdm"])
+    .default("lengkap_bkpdm"),
+
+  deep_learning_emphasis: z
+    .enum(["seimbang", "mindful", "meaningful", "joyful"])
+    .default("seimbang"),
 });
 
 export type TeachingModuleFormValues = z.infer<typeof teachingModuleSchema>;

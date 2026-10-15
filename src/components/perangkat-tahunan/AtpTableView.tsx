@@ -51,7 +51,7 @@ export function AtpTableView({ data }: AtpTableViewProps) {
       {/* Capaian Pembelajaran Elemen */}
       <div className="space-y-2">
         <h3 className="text-xs font-bold uppercase tracking-wide text-slate-700">
-          Capaian Pembelajaran Berdasarkan Regulasi BSKAP 032/H/KR/2024
+          Capaian Pembelajaran Berdasarkan Regulasi BKPDM Kemendikdasmen No. 020/2026
         </h3>
         {data.elements.map((el, i) => (
           <div key={i} className="border border-slate-200 rounded p-3 text-xs bg-white">

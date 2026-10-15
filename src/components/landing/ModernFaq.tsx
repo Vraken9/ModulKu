@@ -15,9 +15,9 @@ interface FaqItem {
 const FAQ_ITEMS: FaqItem[] = [
   {
     id: "faq-1",
-    category: "REGULASI BSKAP",
-    question: "Apakah seluruh dokumen luaran sesuai regulasi Kurikulum Merdeka terbaru?",
-    answer: "Ya. Sistem ModulKu dikembangkan mengacu langsung pada Keputusan Kepala BSKAP Kemendikbudristek No. 032/H/KR/2024 tentang Capaian Pembelajaran, Permendikbudristek No. 12 Tahun 2024, serta panduan pembelajaran dan asesmen nasional terbaru.",
+    category: "REGULASI BKPDM",
+    question: "Apakah seluruh dokumen luaran sesuai regulasi Kurikulum Nasional BKPDM terbaru?",
+    answer: "Ya. Sistem ModulKu dikembangkan mengacu langsung pada Keputusan Kepala BKPDM Kemendikdasmen No. 020 Tahun 2026 tentang Capaian Pembelajaran, Permendikdasmen No. 13 Tahun 2025, serta panduan Pembelajaran Mendalam (Deep Learning: Mindful, Meaningful, Joyful) terbaru.",
   },
   {
     id: "faq-2",

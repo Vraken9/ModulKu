@@ -21,7 +21,7 @@ export function ModernFooter() {
               <span className="relative inline-flex rounded-full h-2 w-2 bg-slate-700" />
             </span>
             <span className="font-semibold text-slate-800">
-              Sistem BSKAP 2024 Engine:
+              Sistem BKPDM Engine:
             </span>
             <span className="text-slate-900 font-bold">
               Beroperasi Normal (99.9% Uptime)
@@ -30,10 +30,10 @@ export function ModernFooter() {
 
           <div className="flex items-center gap-4 text-slate-600 font-medium">
             <span className="hidden md:inline">
-              Standar Regulasi: Permendikbudristek No. 12/2024
+              Standar Regulasi: Permendikdasmen No. 13/2025
             </span>
             <span className="text-slate-800 font-semibold text-xs px-2.5 py-1 rounded-full bg-slate-100 border border-slate-200">
-              Sistem Aktif BSKAP
+              Sistem Aktif BKPDM
             </span>
           </div>
         </div>
@@ -45,7 +45,7 @@ export function ModernFooter() {
           {/* Kolom 1: Brand & Profil (lg:col-span-4) */}
           <div className="lg:col-span-4 space-y-4">
             <Link href="/" className="flex items-center gap-2.5">
-              <ModulKuLogo size="md" showSubtitle subtitleText="Kurikulum Merdeka BSKAP" />
+              <ModulKuLogo size="md" showSubtitle subtitleText="Standar BKPDM Kemendikdasmen" />
             </Link>
 
             <p className="text-xs text-slate-600 leading-relaxed max-w-sm">
@@ -105,21 +105,21 @@ export function ModernFooter() {
 
           {/* Kolom 3: Regulasi & Pedoman (lg:col-span-3) */}
           <div className="lg:col-span-3 space-y-3">
-            <span className="font-bold text-slate-900 uppercase tracking-wider text-[11px] block font-mono">
-              // LANDASAN REGULASI
+            <span className="font-bold text-slate-900 text-xs block">
+              Landasan Regulasi Resmi
             </span>
             <ul className="space-y-2 text-xs">
               <li className="flex items-start gap-1.5">
                 <CheckCircle2 className="w-3.5 h-3.5 text-slate-800 mt-0.5 shrink-0" />
-                <span>Keputusan BSKAP No. 032/H/KR/2024</span>
+                <span>Keputusan Kepala BKPDM No. 020/2026</span>
               </li>
               <li className="flex items-start gap-1.5">
                 <CheckCircle2 className="w-3.5 h-3.5 text-slate-800 mt-0.5 shrink-0" />
-                <span>Permendikbudristek No. 12 Tahun 2024</span>
+                <span>Permendikdasmen No. 13 Tahun 2025</span>
               </li>
               <li className="flex items-start gap-1.5">
                 <CheckCircle2 className="w-3.5 h-3.5 text-slate-800 mt-0.5 shrink-0" />
-                <span>Perdirjen GTK No. 7607 (Kinerja PMM)</span>
+                <span>Pendekatan Deep Learning (Mindful, Meaningful, Joyful)</span>
               </li>
               <li className="flex items-start gap-1.5">
                 <CheckCircle2 className="w-3.5 h-3.5 text-slate-800 mt-0.5 shrink-0" />
@@ -134,8 +134,8 @@ export function ModernFooter() {
 
           {/* Kolom 4: Spesifikasi Luaran (lg:col-span-2) */}
           <div className="lg:col-span-2 space-y-3">
-            <span className="font-bold text-slate-900 uppercase tracking-wider text-[11px] block font-mono">
-              // SPESIFIKASI BERKAS
+            <span className="font-bold text-slate-900 text-xs block">
+              Spesifikasi Berkas
             </span>
             <div className="space-y-2 text-xs">
               <div className="p-2.5 bg-white rounded-xl border border-slate-200">
@@ -170,8 +170,8 @@ export function ModernFooter() {
           </div>
 
           <div className="flex items-center gap-4">
-            <span className="text-slate-500 font-mono">
-              v2.4-BSKAP
+            <span className="text-slate-500 font-mono text-[10px]">
+              v3.0-BKPDM
             </span>
             <button
               onClick={scrollToTop}

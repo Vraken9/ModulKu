@@ -50,8 +50,8 @@ export async function exportPresentationToPptx(
 ): Promise<void> {
   const pptx = new PptxGenJS();
   pptx.layout = "LAYOUT_16x9";
-  pptx.author = "GuruHub AI";
-  pptx.company = "Kurikulum Merdeka";
+  pptx.author = "ModulKu Engine";
+  pptx.company = "Standar BKPDM Kemendikdasmen";
   pptx.title = bundle.topic;
   pptx.subject = bundle.subject;
 
@@ -70,7 +70,7 @@ export async function exportPresentationToPptx(
       slide.background = { color: palette.primary };
 
       // Header Top Tag
-      slide.addText("KURIKULUM MERDEKA - BAHAN TAYANG PEMBELAJARAN", {
+      slide.addText("DEEP LEARNING STANDAR BKPDM - BAHAN TAYANG PEMBELAJARAN", {
         x: 0.8,
         y: 1.0,
         w: 11.7,

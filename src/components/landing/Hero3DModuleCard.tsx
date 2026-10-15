@@ -119,7 +119,7 @@ export function Hero3DModuleCard() {
         >
           <div className="flex justify-between items-center text-[10px] text-slate-500 font-medium border-b border-slate-200 pb-2">
             <span>Lampiran Matriks Kisi-Kisi</span>
-            <span>Standar BSKAP 032</span>
+            <span>Standar BKPDM Kemendikdasmen</span>
           </div>
           <div className="mt-3 space-y-2 opacity-50">
             <div className="h-2.5 bg-slate-300 rounded w-3/4" />
@@ -157,7 +157,7 @@ export function Hero3DModuleCard() {
                   Modul Ajar Terverifikasi
                 </span>
                 <span className="text-[10px] text-slate-600 font-mono block">
-                  KODE DOKUMEN: MODULKU-BSKAP-2024
+                  KODE DOKUMEN: MODULKU-BKPDM-2026
                 </span>
               </div>
             </div>
@@ -243,7 +243,7 @@ export function Hero3DModuleCard() {
               VERIFIKASI RESMI
             </span>
             <span className="text-xs font-black text-white block">
-              Standar BSKAP No. 032/2024
+              Standar BKPDM No. 020/2026
             </span>
           </div>
         </div>

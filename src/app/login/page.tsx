@@ -247,7 +247,7 @@ export default function LoginPage() {
             <div className="bg-slate-900 text-white p-7 rounded-2xl shadow-sm space-y-4 border border-slate-800">
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-[11px] font-semibold text-slate-200">
                 <ShieldCheck className="w-3.5 h-3.5 text-slate-300" />
-                <span>Standar Regulasi BSKAP 2024</span>
+                <span>Standar Regulasi BKPDM Kemendikdasmen</span>
               </div>
 
               <h2 className="text-xl font-black tracking-tight leading-snug">

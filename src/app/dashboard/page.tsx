@@ -58,11 +58,11 @@ export default function DashboardPage() {
       buttonText: "Buka Soal Generator",
     },
     {
-      title: "Modul Ajar BSKAP 2024",
-      desc: "Rancang modul ajar dengan 3 pilar diferensiasi (konten, proses, produk) dan format supervisi kedinasan.",
+      title: "Modul Ajar BKPDM (Deep Learning)",
+      desc: "Rancang modul ajar dengan 3 pilar diferensiasi, pendekatan Mindful, Meaningful, Joyful, dan format supervisi kedinasan.",
       href: "/modul-ajar",
       icon: FileText,
-      badge: "BSKAP 032/2024",
+      badge: "BKPDM 020/2026",
       outputTag: "Supervisi KS",
       buttonText: "Buka Modul Generator",
     },
@@ -95,7 +95,7 @@ export default function DashboardPage() {
             <div className="space-y-2 max-w-2xl">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-700">
                 <Sparkles className="w-3.5 h-3.5 text-slate-800" />
-                <span>Ruang Kerja Administrasi Resmi BSKAP</span>
+                <span>Ruang Kerja Administrasi Resmi BKPDM</span>
               </div>
 
               <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight leading-snug">
@@ -306,7 +306,7 @@ export default function DashboardPage() {
                     <div className="w-4 h-4 rounded-full bg-slate-100 text-slate-800 flex items-center justify-center shrink-0 mt-0.5 border border-slate-200">
                       <Check className="w-2.5 h-2.5 text-slate-800 stroke-[3]" />
                     </div>
-                    <span>Materi selaras dengan Capaian Pembelajaran (CP) BSKAP 2024.</span>
+                    <span>Materi selaras dengan Capaian Pembelajaran (CP) BKPDM 2026.</span>
                   </div>
                 </div>
               </div>

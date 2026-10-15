@@ -28,7 +28,7 @@ export const ModulAjarView: React.FC<ModulAjarViewProps> = ({
       {/* JUDUL DOKUMEN MODUL AJAR */}
       <div className="text-center py-4 mb-6 border-b border-black">
         <h1 className="text-base font-bold uppercase tracking-wider">
-          MODUL AJAR KURIKULUM MERDEKA
+          MODUL AJAR KURIKULUM NASIONAL BKPDM
         </h1>
         <h2 className="text-xs font-bold uppercase text-gray-800 mt-1">
           MATA PELAJARAN: {moduleData.subject}
@@ -169,10 +169,10 @@ export const ModulAjarView: React.FC<ModulAjarViewProps> = ({
                   ))}
                 </ul>
 
-                {/* TABEL DIFERENSIASI PEMBELAJARAN (3 PILAR NYATA) */}
+                {/* TABEL DIFERENSIASI & DEEP LEARNING PEMBELAJARAN (STANDAR BKPDM) */}
                 <div className="mt-3 p-3 bg-blue-50/50 border border-blue-200 rounded text-[11px] space-y-1.5">
                   <p className="font-bold text-blue-900 uppercase tracking-wide">
-                    Penerapan Pembelajaran Berdiferensiasi (Kurikulum Merdeka):
+                    Penerapan Deep Learning & Diferensiasi Pembelajaran (Standar BKPDM Kemendikdasmen):
                   </p>
                   <p className="leading-relaxed">
                     <strong>1. {meeting.core_activities.differentiation_content}</strong>
@@ -183,6 +183,22 @@ export const ModulAjarView: React.FC<ModulAjarViewProps> = ({
                   <p className="leading-relaxed">
                     <strong>3. {meeting.core_activities.differentiation_product}</strong>
                   </p>
+                  {meeting.core_activities.deep_learning_principles && (
+                    <div className="pt-2 mt-2 border-t border-blue-200 grid grid-cols-1 sm:grid-cols-3 gap-2">
+                      <div className="p-2 bg-white rounded border border-blue-100">
+                        <span className="font-bold text-blue-950 block text-[10px] uppercase">Mindful (Berkesadaran):</span>
+                        <span className="text-[10px] text-gray-700">{meeting.core_activities.deep_learning_principles.mindful_awareness}</span>
+                      </div>
+                      <div className="p-2 bg-white rounded border border-blue-100">
+                        <span className="font-bold text-blue-950 block text-[10px] uppercase">Meaningful (Bermakna):</span>
+                        <span className="text-[10px] text-gray-700">{meeting.core_activities.deep_learning_principles.meaningful_inquiry}</span>
+                      </div>
+                      <div className="p-2 bg-white rounded border border-blue-100">
+                        <span className="font-bold text-blue-950 block text-[10px] uppercase">Joyful (Menggembirakan):</span>
+                        <span className="text-[10px] text-gray-700">{meeting.core_activities.deep_learning_principles.joyful_reflection}</span>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
 

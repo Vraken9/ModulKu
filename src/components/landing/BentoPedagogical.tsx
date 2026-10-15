@@ -14,13 +14,13 @@ export function BentoPedagogical() {
       <div className="text-center max-w-3xl mx-auto space-y-3">
         <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-800">
           <BookOpen className="w-3.5 h-3.5 text-slate-700" />
-          <span>Standar Pedagogis Resmi BSKAP 032</span>
+          <span>Standar Pedagogis Resmi BKPDM Kemendikdasmen</span>
         </div>
         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
           Bukan Sekadar Generator Teks AI Biasa
         </h2>
         <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-          Setiap butir soal, skenario pembelajaran, dan instrumen asesmen dikonstruksi secara ilmiah mengacu langsung pada Taksonomi Bloom Terkoreksi dan Keputusan Kepala BSKAP No. 032/H/KR/2024.
+          Setiap butir soal, skenario pembelajaran, dan instrumen asesmen dikonstruksi secara ilmiah mengacu langsung pada Taksonomi Bloom Terkoreksi, Keputusan Kepala BKPDM No. 020 Tahun 2026, serta paradigma Pembelajaran Mendalam (Deep Learning).
         </p>
       </div>
 
@@ -35,11 +35,11 @@ export function BentoPedagogical() {
                   <Layers className="w-4.5 h-4.5 text-white" />
                 </div>
                 <span className="font-extrabold text-base text-slate-900">
-                  3 Pilar Pembelajaran Berdiferensiasi
+                  3 Pilar Pembelajaran Berdiferensiasi & Deep Learning
                 </span>
               </div>
               <Badge variant="outline" className="text-[10px] font-medium bg-slate-100 text-slate-700 border-slate-200">
-                Standar BSKAP 2024
+                Standar BKPDM 2026
               </Badge>
             </div>
 
