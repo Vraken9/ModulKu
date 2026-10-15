@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ModulKuLogo } from "@/components/ui/ModulKuLogo";
 import { SchoolProfile, TeacherProfile } from "@/types";
 
 interface MenuItem {
@@ -154,12 +155,7 @@ export function DashboardShell({ children, activeItem }: DashboardShellProps) {
       {/* Mobile Topbar */}
       <header className="md:hidden bg-white border-b border-slate-200 px-4 h-14 flex items-center justify-between sticky top-0 z-40">
         <Link href="/dashboard" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center font-bold text-sm shadow-xs">
-            M
-          </div>
-          <span className="font-extrabold text-base tracking-tight text-slate-900">
-            ModulKu
-          </span>
+          <ModulKuLogo size="sm" />
         </Link>
 
         <Button
@@ -182,17 +178,7 @@ export function DashboardShell({ children, activeItem }: DashboardShellProps) {
           {/* Logo Brand Header */}
           <div className="h-16 px-6 border-b border-slate-100 flex items-center justify-between">
             <Link href="/dashboard" className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-slate-900 text-white flex items-center justify-center font-black text-base shadow-sm">
-                M
-              </div>
-              <div className="leading-tight">
-                <span className="font-extrabold text-base tracking-tight text-slate-900 block">
-                  ModulKu
-                </span>
-                <span className="text-[10px] text-slate-600 block uppercase font-medium tracking-wider font-mono">
-                  Kurikulum Merdeka
-                </span>
-              </div>
+              <ModulKuLogo size="md" />
             </Link>
           </div>
 

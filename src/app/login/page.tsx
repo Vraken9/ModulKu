@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { ModulKuLogo } from "@/components/ui/ModulKuLogo";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -54,17 +55,7 @@ export default function LoginPage() {
       {/* Top Navbar Minimalis */}
       <header className="h-16 px-6 sm:px-10 border-b border-slate-200 bg-white flex items-center justify-between sticky top-0 z-20">
         <Link href="/" className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center font-bold text-sm shadow-xs">
-            M
-          </div>
-          <div className="leading-none">
-            <span className="font-extrabold text-base tracking-tight text-slate-900">
-              ModulKu
-            </span>
-            <span className="text-[10px] block font-mono text-slate-500 uppercase tracking-wider">
-              Portal Guru
-            </span>
-          </div>
+          <ModulKuLogo size="md" showSubtitle subtitleText="Portal Guru" />
         </Link>
 
         <Link

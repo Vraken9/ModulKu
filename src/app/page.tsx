@@ -24,6 +24,7 @@ import { BentoPedagogical } from "@/components/landing/BentoPedagogical";
 import { ModernFaq } from "@/components/landing/ModernFaq";
 import { RadialCtaBanner } from "@/components/landing/RadialCtaBanner";
 import { ModernFooter } from "@/components/landing/ModernFooter";
+import { ModulKuLogo } from "@/components/ui/ModulKuLogo";
 
 export default function LandingPage() {
   return (
@@ -35,17 +36,7 @@ export default function LandingPage() {
       <header className="sticky top-0 z-50 bg-white/85 backdrop-blur-md border-b border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-slate-900 text-white flex items-center justify-center font-black text-base shadow-xs">
-              M
-            </div>
-            <div className="leading-tight">
-              <span className="font-extrabold text-base tracking-tight text-slate-900 block">
-                ModulKu
-              </span>
-              <span className="text-[10px] text-slate-500 block uppercase font-medium tracking-wider font-mono">
-                Kurikulum Merdeka BSKAP
-              </span>
-            </div>
+            <ModulKuLogo size="md" showSubtitle subtitleText="Kurikulum Merdeka BSKAP" />
           </Link>
 
           {/* Desktop Nav Links */}

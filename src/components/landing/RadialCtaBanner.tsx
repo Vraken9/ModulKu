@@ -36,7 +36,8 @@ export function RadialCtaBanner() {
             </Button>
           </Link>
           <Link href="/login" className="w-full sm:w-auto">
-            <Button variant="outline" size="lg" className="w-full sm:w-auto text-slate-900 bg-white border-slate-700 hover:text-black font-bold text-sm h-12 px-6">
+            <Button variant="outline" size="lg" className="w-full sm:w-auto text-slate-900
+             bg-white border-slate-700 hover:text-black font-bold text-sm h-12 px-6">
               Masuk ke Dashboard Guru
             </Button>
           </Link>

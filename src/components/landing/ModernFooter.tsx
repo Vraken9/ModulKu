@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { ArrowUp, ShieldCheck, CheckCircle2, ChevronRight, FileText, Lock, Globe } from "lucide-react";
+import { ModulKuLogo } from "@/components/ui/ModulKuLogo";
 
 export function ModernFooter() {
   const scrollToTop = () => {
@@ -44,17 +45,7 @@ export function ModernFooter() {
           {/* Kolom 1: Brand & Profil (lg:col-span-4) */}
           <div className="lg:col-span-4 space-y-4">
             <Link href="/" className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-slate-900 text-white flex items-center justify-center font-black text-base shadow-xs">
-                M
-              </div>
-              <div className="leading-tight">
-                <span className="font-extrabold text-base tracking-tight text-slate-900 block">
-                  ModulKu
-                </span>
-                <span className="text-[10px] text-slate-500 block uppercase font-medium tracking-wider font-mono">
-                  Kurikulum Merdeka BSKAP
-                </span>
-              </div>
+              <ModulKuLogo size="md" showSubtitle subtitleText="Kurikulum Merdeka BSKAP" />
             </Link>
 
             <p className="text-xs text-slate-600 leading-relaxed max-w-sm">
