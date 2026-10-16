@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { FolderArchive } from "lucide-react";
+import { FolderArchive, Download, Printer } from "lucide-react";
 import { PerangkatTahunanBundle, Phase } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,8 +16,11 @@ import { ProtaTableView } from "@/components/perangkat-tahunan/ProtaTableView";
 import { PromesMatrixView } from "@/components/perangkat-tahunan/PromesMatrixView";
 import { KalkulatorMingguEfektif } from "@/components/perangkat-tahunan/KalkulatorMingguEfektif";
 import { saveDocumentToVault } from "@/lib/document-vault";
+import { exportPerangkatTahunanToDocx } from "@/lib/export/docx-exporter";
+import { useNotification } from "@/components/providers/NotificationProvider";
 
 export default function PerangkatTahunanPage() {
+  const { toast } = useNotification();
   const [isSavedToVault, setIsSavedToVault] = useState(false);
   const [subject, setSubject] = useState("Fisika");
   const [phase, setPhase] = useState<Phase>("E");
@@ -93,15 +96,24 @@ export default function PerangkatTahunanPage() {
 
     if (res.success) {
       setIsSavedToVault(true);
-      alert("Bundel Perangkat Tahunan (ATP, Prota, Promes, RPE) berhasil disimpan ke Bank Dokumen Anda!");
+      toast.success(
+        "Bundel Perangkat Tahunan (ATP, Prota, Promes, RPE) berhasil disimpan ke Bank Dokumen Anda!",
+        "Berhasil Disimpan"
+      );
     } else {
-      alert(res.error || "Gagal menyimpan perangkat tahunan ke Bank Dokumen.");
+      toast.error(res.error || "Gagal menyimpan perangkat tahunan ke Bank Dokumen.");
     }
   };
 
   function handlePrint() {
     window.print();
   }
+
+  const handleDownloadDocx = () => {
+    if (!bundle) return;
+    exportPerangkatTahunanToDocx(bundle);
+    toast.success("Dokumen Word (.docx) Perangkat Tahunan berhasil diunduh.", "Unduhan Berhasil");
+  };
 
   return (
     <DashboardShell activeItem="perangkat-tahunan">
@@ -131,10 +143,20 @@ export default function PerangkatTahunanPage() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={handlePrint}
-                className="text-xs font-bold bg-slate-900 text-white hover:bg-slate-800 h-9 px-4 rounded-xl shadow-xs cursor-pointer"
+                onClick={handleDownloadDocx}
+                className="text-xs font-bold border-blue-300 text-blue-700 hover:bg-blue-50 h-9 px-4 rounded-xl shadow-xs cursor-pointer flex items-center gap-1.5"
               >
-                Cetak Dokumen Resmi (A4)
+                <Download className="w-3.5 h-3.5" />
+                <span>Unduh Berkas Word (.docx)</span>
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handlePrint}
+                className="text-xs font-bold bg-slate-900 text-white hover:bg-slate-800 h-9 px-4 rounded-xl shadow-xs cursor-pointer flex items-center gap-1.5"
+              >
+                <Printer className="w-3.5 h-3.5" />
+                <span>Cetak Dokumen Resmi (A4)</span>
               </Button>
             </div>
           )}

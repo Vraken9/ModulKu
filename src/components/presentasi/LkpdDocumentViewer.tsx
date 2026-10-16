@@ -1,10 +1,12 @@
 "use client";
 
 import React from "react";
+import { Download, Printer } from "lucide-react";
 import { StudentWorksheetLKPD } from "@/types";
 import { OfficialLetterhead } from "@/components/kop-surat/OfficialLetterhead";
 import { EndorsementSheet } from "@/components/kop-surat/EndorsementSheet";
 import { Button } from "@/components/ui/button";
+import { exportLkpdToDocx } from "@/lib/export/docx-exporter";
 
 interface LkpdDocumentViewerProps {
   worksheet: StudentWorksheetLKPD;
@@ -15,10 +17,14 @@ export function LkpdDocumentViewer({ worksheet }: LkpdDocumentViewerProps) {
     window.print();
   }
 
+  function handleDownloadDocx() {
+    exportLkpdToDocx(worksheet);
+  }
+
   return (
     <div className="space-y-4">
       {/* Action Bar */}
-      <div className="flex justify-between items-center bg-white p-4 rounded-lg border border-slate-200 shadow-sm print:hidden">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm print:hidden">
         <div>
           <h4 className="font-bold text-sm text-slate-900">
             Lembar Aktivitas Siswa: {worksheet.title}
@@ -28,13 +34,25 @@ export function LkpdDocumentViewer({ worksheet }: LkpdDocumentViewerProps) {
           </p>
         </div>
 
-        <Button
-          onClick={handlePrint}
-          size="sm"
-          className="bg-blue-700 hover:bg-blue-800 text-white text-xs font-semibold"
-        >
-          Cetak LKPD Siswa (A4)
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            onClick={handleDownloadDocx}
+            size="sm"
+            variant="outline"
+            className="border-blue-300 text-blue-700 hover:bg-blue-50 text-xs font-semibold h-9 px-4 rounded-xl cursor-pointer flex items-center gap-1.5"
+          >
+            <Download className="w-3.5 h-3.5" />
+            <span>Unduh LKPD (.docx)</span>
+          </Button>
+          <Button
+            onClick={handlePrint}
+            size="sm"
+            className="bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold h-9 px-4 rounded-xl cursor-pointer flex items-center gap-1.5"
+          >
+            <Printer className="w-3.5 h-3.5" />
+            <span>Cetak LKPD Siswa (A4)</span>
+          </Button>
+        </div>
       </div>
 
       {/* A4 Paper Document Canvas */}

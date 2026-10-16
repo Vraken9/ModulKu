@@ -36,8 +36,10 @@ import { exportQuestionsToDocx } from "@/lib/export/docx-exporter";
 import { DashboardShell } from "@/components/layout/DashboardShell";
 import { saveDocumentToVault, formatBytes } from "@/lib/document-vault";
 import { QuestionPackage, QuestionItem, SchoolProfile, TeacherProfile } from "@/types";
+import { useNotification } from "@/components/providers/NotificationProvider";
 
 export default function SoalGeneratorPage() {
+  const { toast } = useNotification();
   const [isSavedToVault, setIsSavedToVault] = useState(false);
   const [resultTab, setResultTab] = useState<"soal" | "kisi-kisi" | "kartu-soal" | "rubrik">("soal");
   // Master Profile dari localStorage
@@ -140,7 +142,7 @@ export default function SoalGeneratorPage() {
           `Peserta didik mampu menelaah konsep pokok materi ${cleanName} sesuai acuan berkas ${file.name} dan memecahkan permasalahan kontekstual.`
         );
       } catch {
-        alert("Gagal membaca berkas. Pastikan berkas berformat PDF atau teks.");
+        toast.error("Gagal membaca berkas. Pastikan berkas berformat PDF atau teks.");
       } finally {
         setIsExtractingPdf(false);
       }
@@ -148,7 +150,7 @@ export default function SoalGeneratorPage() {
 
     reader.onerror = () => {
       setIsExtractingPdf(false);
-      alert("Terjadi kesalahan saat memproses berkas PDF.");
+      toast.error("Terjadi kesalahan saat memproses berkas PDF.");
     };
 
     reader.readAsText(file.slice(0, 50000));
@@ -293,9 +295,12 @@ export default function SoalGeneratorPage() {
 
     if (res.success) {
       setIsSavedToVault(true);
-      alert("Paket Soal & Kisi-Kisi berhasil disimpan ke Bank Dokumen Anda!");
+      toast.success(
+        "Paket Soal & Kisi-Kisi berhasil disimpan ke Bank Dokumen Anda!",
+        "Berhasil Disimpan"
+      );
     } else {
-      alert(res.error || "Gagal menyimpan ke Bank Dokumen.");
+      toast.error(res.error || "Gagal menyimpan ke Bank Dokumen.");
     }
   };
 

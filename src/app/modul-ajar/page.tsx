@@ -26,8 +26,10 @@ import { exportModulAjarToDocx } from "@/lib/export/docx-exporter";
 import { getOfficialCP } from "@/lib/data/capaian-pembelajaran";
 import { saveDocumentToVault } from "@/lib/document-vault";
 import { TeachingModule, SchoolProfile, TeacherProfile } from "@/types";
+import { useNotification } from "@/components/providers/NotificationProvider";
 
 export default function ModulAjarPage() {
+  const { toast } = useNotification();
   const [isSavedToVault, setIsSavedToVault] = useState(false);
   const [school, setSchool] = useState<Partial<SchoolProfile>>({
     school_name: "SMA NEGERI 1 PURWANTORO",
@@ -107,7 +109,10 @@ export default function ModulAjarPage() {
       setInitialCompetency(`Peserta didik telah menempuh capaian elemen prasyarat pada Fase ${String.fromCharCode(phase.charCodeAt(0) - 1)}.`);
       setLearningObjectives(`Berdasarkan elemen "${cpData.element}", peserta didik mampu: ${cpData.description}`);
     } else {
-      alert(`Data CP untuk Fase ${phase} dan Mapel ${subject} belum tersedia di database cepat. Anda dapat mengetik manual.`);
+      toast.info(
+        `Data CP untuk Fase ${phase} dan Mapel ${subject} belum tersedia di database cepat. Anda dapat mengetik manual.`,
+        "Capaian Pembelajaran"
+      );
     }
   };
 
@@ -182,9 +187,9 @@ export default function ModulAjarPage() {
 
     if (res.success) {
       setIsSavedToVault(true);
-      alert("Modul Ajar berhasil disimpan ke Bank Dokumen Anda!");
+      toast.success("Modul Ajar berhasil disimpan ke Bank Dokumen Anda!", "Berhasil Disimpan");
     } else {
-      alert(res.error || "Gagal menyimpan modul ke Bank Dokumen.");
+      toast.error(res.error || "Gagal menyimpan modul ke Bank Dokumen.");
     }
   };
 
@@ -611,7 +616,7 @@ export default function ModulAjarPage() {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => exportModulAjarToDocx(generatedModule)}
+                  onClick={() => exportModulAjarToDocx(generatedModule, school, teacher)}
                   className="text-xs gap-1.5 text-blue-700 border-blue-200 bg-blue-50 hover:bg-blue-100 font-semibold"
                 >
                   <Download className="w-3.5 h-3.5" />

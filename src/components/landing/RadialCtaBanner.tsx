@@ -21,7 +21,7 @@ export function RadialCtaBanner() {
 
         <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-tight leading-[1.15]">
           Punya Materi untuk Diajarkan? Susun Bersama{" "}
-          <span className="relative inline-block px-2.5 sm:px-3.5 py-0.5 sm:py-1 mx-1 rounded-xl bg-blue-50 text-slate-900 shadow-md">
+          <span className="relative inline-block px-2.5 sm:px-3.5 py-0.5 sm:py-1 mx-1 rounded-md bg-blue-50 text-slate-900 shadow-md">
             ModulKu
           </span>{" "}
           Sekarang.
@@ -40,7 +40,7 @@ export function RadialCtaBanner() {
             </Button>
           </Link>
           <Link href="/login" className="w-full sm:w-auto">
-            <Button variant="outline" size="lg" className="w-full sm:w-auto text-white bg-slate-900/60 border-slate-700 hover:bg-slate-800 hover:text-white font-bold text-sm h-11 sm:h-12 px-6 rounded-xl">
+            <Button variant="outline" size="lg" className="w-full sm:w-auto text-slate-900 bg-white border-slate-700 hover:bg-blue-200 hover:text-slate-950 font-extrabold text-sm h-11 sm:h-12 px-6 rounded-xl">
               Masuk ke Dashboard Guru
             </Button>
           </Link>

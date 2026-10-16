@@ -46,8 +46,16 @@ import {
   SubscriptionTier,
   StorageUsageSummary,
 } from "@/types";
+import {
+  exportModulAjarToDocx,
+  exportQuestionsToDocx,
+  exportPerangkatTahunanToDocx,
+  exportLkpdToDocx,
+} from "@/lib/export/docx-exporter";
+import { useNotification } from "@/components/providers/NotificationProvider";
 
 export default function BankDokumenPage() {
+  const { confirm, toast } = useNotification();
   const [documents, setDocuments] = useState<StoredDocument[]>(SEED_DOCUMENTS);
   const [usage, setUsage] = useState<StorageUsageSummary>(DEFAULT_STORAGE_SUMMARY);
   const [searchQuery, setSearchQuery] = useState("");
@@ -78,21 +86,45 @@ export default function BankDokumenPage() {
     return () => window.removeEventListener("modulku-vault-changed", handleVaultChange);
   }, []);
 
-  const handleDelete = (doc: StoredDocument) => {
-    const confirmDelete = window.confirm(
-      `Apakah Anda yakin ingin menghapus "${doc.title}"?\nKapasitas sebesar ${formatBytes(doc.fileSizeBytes)} akan dibebaskan.`
-    );
-    if (!confirmDelete) return;
+  const handleDelete = async (doc: StoredDocument) => {
+    const isConfirmed = await confirm({
+      title: "Hapus Dokumen",
+      message: `Apakah Anda yakin ingin menghapus "${doc.title}"?\nKapasitas penyimpanan sebesar ${formatBytes(doc.fileSizeBytes)} akan dibebaskan.`,
+      confirmText: "Hapus Permanen",
+      cancelText: "Batal",
+      variant: "danger",
+    });
+    if (!isConfirmed) return;
 
     const success = deleteDocumentFromVault(doc.id);
     if (success) {
-      setNotification(`Dokumen "${doc.title}" berhasil dihapus. Kuota penyimpanan diperbarui.`);
-      setTimeout(() => setNotification(null), 4000);
+      toast.success(`Dokumen "${doc.title}" berhasil dihapus. Kuota penyimpanan diperbarui.`, "Dokumen Dihapus");
     }
   };
 
   const handleSimulateDownload = (doc: StoredDocument) => {
-    // Simulasi download berkas teks atau JSON
+    if (doc.docType === "modul-ajar" && doc.contentData) {
+      exportModulAjarToDocx(doc.contentData);
+      toast.success(`Berkas Modul Ajar (.docx) untuk "${doc.title}" berhasil diunduh.`, "Unduhan Berhasil");
+      return;
+    }
+    if (doc.docType === "soal" && doc.contentData) {
+      exportQuestionsToDocx(doc.contentData, false);
+      toast.success(`Naskah Soal (.docx) untuk "${doc.title}" berhasil diunduh.`, "Unduhan Berhasil");
+      return;
+    }
+    if (doc.docType === "perangkat-tahunan" && doc.contentData) {
+      exportPerangkatTahunanToDocx(doc.contentData);
+      toast.success(`Bundel Perangkat Tahunan (.docx) untuk "${doc.title}" berhasil diunduh.`, "Unduhan Berhasil");
+      return;
+    }
+    if (doc.docType === "presentasi" && doc.contentData?.worksheet) {
+      exportLkpdToDocx(doc.contentData.worksheet);
+      toast.success(`Berkas LKPD (.docx) untuk "${doc.title}" berhasil diunduh.`, "Unduhan Berhasil");
+      return;
+    }
+
+    // Unduhan teks / JSON untuk berkas lainnya
     const content = doc.contentData
       ? JSON.stringify(doc.contentData, null, 2)
       : `DOKUMEN RESMI STANDAR BKPDM\n\nJudul: ${doc.title}\nMata Pelajaran: ${doc.subject}\nJenjang/Fase: ${doc.grade}\nTahun Ajaran: ${doc.academicYear} (${doc.semester})\nUkuran: ${formatBytes(doc.fileSizeBytes)}\nFormat Asli: .${doc.fileFormat}\n\nDokumen ini tersimpan secara aman di Bank Dokumen ModulKu.`;
@@ -106,6 +138,7 @@ export default function BankDokumenPage() {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+    toast.success(`Berkas "${doc.title}" berhasil diunduh.`, "Unduhan Berhasil");
   };
 
   // Filter Dokumen

@@ -30,6 +30,7 @@ import {
   TeacherProfileFormValues,
 } from "@/lib/validations/school-profile";
 import { SchoolProfile, TeacherProfile } from "@/types";
+import { useNotification } from "@/components/providers/NotificationProvider";
 
 const DEFAULT_SCHOOL: SchoolProfileFormValues = {
   government_agency: "PEMERINTAH PROVINSI JAWA TIMUR",
@@ -59,6 +60,7 @@ const DEFAULT_TEACHER: TeacherProfileFormValues = {
 };
 
 export default function ProfilSekolahPage() {
+  const { confirm, toast } = useNotification();
   const [schoolData, setSchoolData] = useState<SchoolProfileFormValues>(DEFAULT_SCHOOL);
   const [teacherData, setTeacherData] = useState<TeacherProfileFormValues>(DEFAULT_TEACHER);
   const [activeTab, setActiveTab] = useState<string>("sekolah");
@@ -123,22 +125,32 @@ export default function ProfilSekolahPage() {
     localStorage.setItem("guru_school_profile", JSON.stringify(schoolData));
     localStorage.setItem("guru_teacher_profile", JSON.stringify(teacherData));
     setIsSaved(true);
+    toast.success("Profil sekolah dan data guru kedinasan berhasil disimpan secara aman.", "Profil Disimpan");
 
     setTimeout(() => {
       setIsSaved(false);
     }, 4000);
   };
 
-  const handleReset = () => {
-    if (confirm("Kembalikan data profil ke format contoh standar kedinasan?")) {
-      setSchoolData(DEFAULT_SCHOOL);
-      setTeacherData(DEFAULT_TEACHER);
-      localStorage.setItem("guru_school_profile", JSON.stringify(DEFAULT_SCHOOL));
-      localStorage.setItem("guru_teacher_profile", JSON.stringify(DEFAULT_TEACHER));
-      setErrors({});
-      setIsSaved(true);
-      setTimeout(() => setIsSaved(false), 3000);
-    }
+  const handleReset = async () => {
+    const isConfirmed = await confirm({
+      title: "Atur Ulang Profil Kedinasan",
+      message:
+        "Apakah Anda yakin ingin mengembalikan seluruh data identitas sekolah dan guru ke format contoh standar kedinasan?",
+      confirmText: "Ya, Kembalikan Standar",
+      cancelText: "Batal",
+      variant: "warning",
+    });
+    if (!isConfirmed) return;
+
+    setSchoolData(DEFAULT_SCHOOL);
+    setTeacherData(DEFAULT_TEACHER);
+    localStorage.setItem("guru_school_profile", JSON.stringify(DEFAULT_SCHOOL));
+    localStorage.setItem("guru_teacher_profile", JSON.stringify(DEFAULT_TEACHER));
+    setErrors({});
+    setIsSaved(true);
+    toast.success("Data profil sekolah dan guru berhasil dikembalikan ke format standar.", "Pengaturan Ulang Berhasil");
+    setTimeout(() => setIsSaved(false), 3000);
   };
 
   const handlePrintPreview = () => {

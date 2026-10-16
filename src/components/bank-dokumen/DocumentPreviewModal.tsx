@@ -30,7 +30,12 @@ import { ProtaTableView } from "@/components/perangkat-tahunan/ProtaTableView";
 import { PromesMatrixView } from "@/components/perangkat-tahunan/PromesMatrixView";
 import { SlidePreviewViewer } from "@/components/presentasi/SlidePreviewViewer";
 import { LkpdDocumentViewer } from "@/components/presentasi/LkpdDocumentViewer";
-import { exportModulAjarToDocx, exportQuestionsToDocx } from "@/lib/export/docx-exporter";
+import {
+  exportModulAjarToDocx,
+  exportQuestionsToDocx,
+  exportPerangkatTahunanToDocx,
+  exportLkpdToDocx,
+} from "@/lib/export/docx-exporter";
 
 interface DocumentPreviewModalProps {
   document: StoredDocument | null;
@@ -85,6 +90,10 @@ export function DocumentPreviewModal({
       exportModulAjarToDocx(doc.contentData);
     } else if (doc.docType === "soal" && doc.contentData) {
       exportQuestionsToDocx(doc.contentData, showAnswerKeys);
+    } else if (doc.docType === "perangkat-tahunan" && doc.contentData) {
+      exportPerangkatTahunanToDocx(doc.contentData);
+    } else if (doc.docType === "presentasi" && doc.contentData?.worksheet) {
+      exportLkpdToDocx(doc.contentData.worksheet);
     } else if (onDownload) {
       onDownload(doc);
     }

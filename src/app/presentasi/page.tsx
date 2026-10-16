@@ -13,8 +13,10 @@ import { DashboardShell } from "@/components/layout/DashboardShell";
 import { SlidePreviewViewer } from "@/components/presentasi/SlidePreviewViewer";
 import { LkpdDocumentViewer } from "@/components/presentasi/LkpdDocumentViewer";
 import { saveDocumentToVault } from "@/lib/document-vault";
+import { useNotification } from "@/components/providers/NotificationProvider";
 
 export default function PresentasiPage() {
+  const { toast } = useNotification();
   const [isSavedToVault, setIsSavedToVault] = useState(false);
   const [topic, setTopic] = useState("Hukum Gerak Newton & Penerapannya");
   const [subject, setSubject] = useState("Fisika");
@@ -86,9 +88,12 @@ export default function PresentasiPage() {
 
     if (res.success) {
       setIsSavedToVault(true);
-      alert("Paket Presentasi PPTX & LKPD berhasil disimpan ke Bank Dokumen Anda!");
+      toast.success(
+        "Paket Presentasi PPTX & LKPD berhasil disimpan ke Bank Dokumen Anda!",
+        "Berhasil Disimpan"
+      );
     } else {
-      alert(res.error || "Gagal menyimpan bahan presentasi ke Bank Dokumen.");
+      toast.error(res.error || "Gagal menyimpan bahan presentasi ke Bank Dokumen.");
     }
   };
 

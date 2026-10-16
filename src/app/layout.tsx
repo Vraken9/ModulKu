@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SmoothCursor } from "@/components/ui/smooth-cursor";
 import { AuthProvider } from "@/components/providers/AuthProvider";
+import { NotificationProvider } from "@/components/providers/NotificationProvider";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-sans-main",
@@ -35,7 +36,9 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col font-sans" suppressHydrationWarning>
         <SmoothCursor />
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <NotificationProvider>{children}</NotificationProvider>
+        </AuthProvider>
       </body>
     </html>
   );

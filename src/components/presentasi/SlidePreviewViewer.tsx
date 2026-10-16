@@ -6,12 +6,14 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { exportPresentationToPptx } from "@/lib/export/pptx-exporter";
+import { useNotification } from "@/components/providers/NotificationProvider";
 
 interface SlidePreviewViewerProps {
   bundle: PresentationBundle;
 }
 
 export function SlidePreviewViewer({ bundle }: SlidePreviewViewerProps) {
+  const { toast } = useNotification();
   const [currentIdx, setCurrentIdx] = useState(0);
   const [downloading, setDownloading] = useState(false);
   const currentSlide = bundle.slides[currentIdx];
@@ -20,9 +22,10 @@ export function SlidePreviewViewer({ bundle }: SlidePreviewViewerProps) {
     setDownloading(true);
     try {
       await exportPresentationToPptx(bundle);
+      toast.success("Berkas PowerPoint (.pptx) berhasil diunduh.", "Unduhan Berhasil");
     } catch (err: unknown) {
       console.error("Gagal mengunduh presentasi:", err);
-      alert("Gagal mengunduh presentasi PowerPoint");
+      toast.error("Gagal mengunduh presentasi PowerPoint.");
     } finally {
       setDownloading(false);
     }
