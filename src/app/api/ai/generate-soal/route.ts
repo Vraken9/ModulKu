@@ -77,12 +77,17 @@ async function callGeminiLLM(
   data: any,
   apiKey: string
 ): Promise<QuestionItem[]> {
+  const pdfContext =
+    data.source_type === "pdf" && data.pdf_filename
+      ? `\n- Sumber Acuan Berkas PDF: "${data.pdf_filename}"\n- Intisari Dokumen PDF: "${data.pdf_snippet || "Cakupan materi bersumber dari buku ajar / modul rujukan terlampir."}"\n- Instruksi Khusus: Rancang butir-butir soal yang secara spesifik mengevaluasi pemahaman konsep dari berkas PDF rujukan tersebut.`
+      : "";
+
   const prompt = `Anda adalah Spesialis Evaluasi dan Asesmen Kurikulum Nasional BKPDM Kemendikdasmen Indonesia (Keputusan Kepala BKPDM No. 020 Tahun 2026 dan Permendikdasmen No. 13 Tahun 2025).
 Buatkan ${data.total_questions} butir soal berkualitas tinggi berbasis Pembelajaran Mendalam (Deep Learning) dengan rincian:
 - Mata Pelajaran: ${data.subject}
 - Jenjang: ${data.education_level} (${data.grade}, Fase ${data.phase})
 - Bab/Materi: ${data.chapter_or_material}
-- Capaian Pembelajaran: ${data.learning_objectives}
+- Capaian Pembelajaran: ${data.learning_objectives}${pdfContext}
 - Bentuk Soal: ${data.question_type}
 - Jumlah Opsi: ${data.options_count} (A-${String.fromCharCode(64 + data.options_count)})
 - Komposisi Kognitif: LOTS ${data.cognitive_distribution.lots}%, MOTS ${data.cognitive_distribution.mots}%, HOTS ${data.cognitive_distribution.hots}%
@@ -177,7 +182,10 @@ function generatePedagogicalQuestions(data: any): QuestionItem[] {
         bloom_level: bloomLevel,
         cognitive_level: cogLevel,
         difficulty: diff,
-        competency_indicator: `Disajikan data gerak dan lintasan pada materi ${data.chapter_or_material}, peserta didik dapat menganalisis perbedaan kelajuan dan kecepatan secara kuantitatif.`,
+        competency_indicator:
+          data.source_type === "pdf" && data.pdf_filename
+            ? `Mengacu pada berkas rujukan "${data.pdf_filename}", peserta didik dapat menganalisis dan menyelesaikan persoalan materi ${data.chapter_or_material}.`
+            : `Disajikan data gerak dan lintasan pada materi ${data.chapter_or_material}, peserta didik dapat menganalisis perbedaan kelajuan dan kecepatan secara kuantitatif.`,
         score_weight: cogLevel === "HOTS" ? 4 : cogLevel === "MOTS" ? 2 : 1,
       });
     } else {

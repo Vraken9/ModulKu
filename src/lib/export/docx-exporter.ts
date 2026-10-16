@@ -35,6 +35,120 @@ function triggerDownload(blob: Blob, filename: string): void {
   URL.revokeObjectURL(url);
 }
 
+/**
+ * Membersihkan sintaks LaTeX / KaTeX matematika menjadi representasi teks Unicode
+ * yang rapi, natural, dan siap cetak di Microsoft Word tanpa simbol aneh ($ ... $).
+ */
+export function cleanLatexForDocx(raw: string | null | undefined): string {
+  if (!raw) return "";
+  let text = String(raw);
+
+  // 1. Ekstrak teks dalam perintah pemformatan \text{...}, \mathrm{...}, dsb.
+  text = text.replace(/\\(?:text|mathrm|mathbf|mathit)\{([^{}]+)\}/g, "$1");
+
+  // 2. Vektor & Garis: \vec{v} -> v, \bar{v} -> v
+  text = text.replace(/\\vec\{([^{}]+)\}/g, "$1");
+  text = text.replace(/\\bar\{([^{}]+)\}/g, "$1");
+
+  // 3. Pecahan: \frac{a}{b} -> a/b
+  for (let i = 0; i < 3; i++) {
+    text = text.replace(/\\frac\{([^{}]+)\}\{([^{}]+)\}/g, "$1/$2");
+  }
+
+  // 4. Huruf Yunani & Simbol Sains
+  const greekMap: Record<string, string> = {
+    "\\pi": "π",
+    "\\Delta": "Δ",
+    "\\delta": "δ",
+    "\\theta": "θ",
+    "\\alpha": "α",
+    "\\beta": "β",
+    "\\gamma": "γ",
+    "\\lambda": "λ",
+    "\\mu": "μ",
+    "\\Sigma": "Σ",
+    "\\sigma": "σ",
+    "\\Omega": "Ω",
+    "\\omega": "ω",
+    "\\phi": "φ",
+    "\\rho": "ρ",
+    "\\epsilon": "ε",
+    "\\eta": "η",
+  };
+  for (const [tex, uni] of Object.entries(greekMap)) {
+    text = text.replaceAll(tex, uni);
+  }
+
+  // 5. Operator & Simbol Matematika
+  const opMap: Record<string, string> = {
+    "\\times": "×",
+    "\\cdot": "·",
+    "\\div": "÷",
+    "\\pm": "±",
+    "\\mp": "∓",
+    "\\approx": "≈",
+    "\\neq": "≠",
+    "\\leq": "≤",
+    "\\le": "≤",
+    "\\geq": "≥",
+    "\\ge": "≥",
+    "\\infty": "∞",
+    "\\degree": "°",
+    "^\\circ": "°",
+    "\\%": "%",
+  };
+  for (const [tex, uni] of Object.entries(opMap)) {
+    text = text.replaceAll(tex, uni);
+  }
+
+  // Akar kuadrat: \sqrt{x} -> √(x)
+  text = text.replace(/\\sqrt\{([^{}]+)\}/g, "√($1)");
+  text = text.replace(/\\sqrt\b/g, "√");
+
+  // 6. Pangkat Unicode: ^2 -> ², ^3 -> ³, dll.
+  text = text.replace(/\^\{?-1\}?/g, "⁻¹");
+  text = text.replace(/\^\{?-2\}?/g, "⁻²");
+  text = text.replace(/\^\{?2\}?/g, "²");
+  text = text.replace(/\^\{?3\}?/g, "³");
+  text = text.replace(/\^\{?4\}?/g, "⁴");
+  text = text.replace(/\^\{?0\}?/g, "⁰");
+  text = text.replace(/\^\{?1\}?/g, "¹");
+
+  // 7. Indeks / Subscript Unicode: _0 -> ₀, _1 -> ₁, dll.
+  text = text.replace(/_\{?0\}?/g, "₀");
+  text = text.replace(/_\{?1\}?/g, "₁");
+  text = text.replace(/_\{?2\}?/g, "₂");
+  text = text.replace(/_\{?3\}?/g, "₃");
+  text = text.replace(/_\{?t\}?/g, "ₜ");
+  text = text.replace(/_\{?x\}?/g, "ₓ");
+  text = text.replace(/_\{?y\}?/g, "ᵧ");
+
+  // 8. Tanda Kurung Grup LaTeX
+  text = text.replace(/\\left\(/g, "(");
+  text = text.replace(/\\right\)/g, ")");
+  text = text.replace(/\\left\[/g, "[");
+  text = text.replace(/\\right\]/g, "]");
+  text = text.replace(/\\left\\\{/g, "{");
+  text = text.replace(/\\right\\\}/g, "}");
+
+  // 9. Spasi LaTeX
+  text = text.replace(/\\quad\b/g, "  ");
+  text = text.replace(/\\[;,!]/g, " ");
+
+  // 10. Bersihkan Pembatas Matematika LaTeX ($$ dan $)
+  text = text.replace(/\$\$([\s\S]*?)\$\$/g, "$1");
+  text = text.replace(/\$([^\$]+)\$/g, "$1");
+  text = text.replace(/\$/g, "");
+
+  // 11. Hapus sisa backslash perintah tunggal
+  text = text.replace(/\\([a-zA-Z]+)/g, "$1");
+
+  // 12. Normalisasi spasi berlebih
+  text = text.replace(/[ \t]{2,}/g, " ").trim();
+
+  return text;
+}
+
 // 1. Ekspor Naskah Soal Siswa & Kunci Pembahasan ke DOCX
 export async function exportQuestionsToDocx(
   pkg: QuestionPackage,
@@ -157,7 +271,7 @@ export async function exportQuestionsToDocx(
             spacing: { after: 100 },
             children: [
               new TextRun({
-                text: q.stimulus_text,
+                text: cleanLatexForDocx(q.stimulus_text),
                 italics: true,
                 size: 20,
                 font: "Arial",
@@ -179,7 +293,7 @@ export async function exportQuestionsToDocx(
               font: "Arial",
             }),
             new TextRun({
-              text: q.question_text,
+              text: cleanLatexForDocx(q.question_text),
               size: 22,
               font: "Arial",
             }),
@@ -202,7 +316,7 @@ export async function exportQuestionsToDocx(
                   font: "Arial",
                 }),
                 new TextRun({
-                  text: opt.text,
+                  text: cleanLatexForDocx(opt.text),
                   size: 22,
                   font: "Arial",
                 }),
@@ -239,7 +353,7 @@ export async function exportQuestionsToDocx(
             spacing: { after: 120 },
             children: [
               new TextRun({
-                text: `Pembahasan: ${q.explanation}`,
+                text: `Pembahasan: ${cleanLatexForDocx(q.explanation)}`,
                 size: 20,
                 italics: true,
                 font: "Arial",
@@ -348,13 +462,13 @@ export async function exportKisiKisiToDocx(
             children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: String(item.nomor_urut), size: 18, font: "Arial" })] })],
           }),
           new TableCell({
-            children: [new Paragraph({ children: [new TextRun({ text: item.capaian_pembelajaran, size: 18, font: "Arial" })] })],
+            children: [new Paragraph({ children: [new TextRun({ text: cleanLatexForDocx(item.capaian_pembelajaran), size: 18, font: "Arial" })] })],
           }),
           new TableCell({
-            children: [new Paragraph({ children: [new TextRun({ text: item.tujuan_pembelajaran_materi, size: 18, font: "Arial" })] })],
+            children: [new Paragraph({ children: [new TextRun({ text: cleanLatexForDocx(item.tujuan_pembelajaran_materi), size: 18, font: "Arial" })] })],
           }),
           new TableCell({
-            children: [new Paragraph({ children: [new TextRun({ text: item.indikator_soal, size: 18, font: "Arial" })] })],
+            children: [new Paragraph({ children: [new TextRun({ text: cleanLatexForDocx(item.indikator_soal), size: 18, font: "Arial" })] })],
           }),
           new TableCell({
             children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: item.level_kognitif, size: 18, font: "Arial" })] })],

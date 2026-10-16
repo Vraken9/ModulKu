@@ -19,6 +19,8 @@ export const questionGeneratorSchema = z
     curriculum: z.literal("Kurikulum Merdeka"),
 
     source_type: z.enum(["text", "pdf"]),
+    pdf_filename: z.string().optional(),
+    pdf_snippet: z.string().optional(),
     chapter_or_material: safeText.min(3, "Bab atau materi wajib diisi"),
     learning_objectives: safeText.min(5, "Tujuan atau capaian pembelajaran wajib diisi"),
 
