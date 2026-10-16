@@ -106,6 +106,8 @@ export interface QuestionPackage {
   };
   stimulus_type: "langsung" | "kutipan" | "teks_utuh" | "variatif";
   questions?: QuestionItem[];
+  kisi_kisi?: KisiKisiItem[];
+  scoring_guide?: ScoringGuide;
   created_at: string;
   updated_at: string;
 }

@@ -34,7 +34,7 @@ export const EndorsementSheet: React.FC<EndorsementSheetProps> = ({
   const schoolName = school?.school_name || "SMA NEGERI 1 PURWANTORO";
 
   return (
-    <div className="w-full bg-white text-black p-6 font-serif leading-relaxed select-none border border-gray-200 rounded-lg">
+    <div className="w-full bg-white text-black p-6 font-serif leading-relaxed select-none border border-gray-200 rounded-lg print:border-none print:p-0 print:rounded-none print-avoid-break break-inside-avoid">
       <div className="text-center mb-8">
         <h2 className="text-base font-bold tracking-wider uppercase">
           LEMBAR PENGESAHAN

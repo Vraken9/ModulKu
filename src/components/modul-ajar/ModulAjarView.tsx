@@ -20,13 +20,15 @@ export const ModulAjarView: React.FC<ModulAjarViewProps> = ({
 
   return (
     <div
-      className={`w-full bg-white text-black p-8 sm:p-12 font-serif text-xs leading-relaxed select-none shadow-sm border border-slate-300 rounded-lg print-page ${className}`}
+      className={`w-full bg-white text-black p-8 sm:p-12 font-serif text-xs leading-relaxed select-none shadow-sm border border-slate-300 rounded-lg print:border-none print:shadow-none print:rounded-none print:p-0 print:m-0 print:text-black print:w-full print-page ${className}`}
     >
       {/* 1. KOP SURAT RESMI DI HALAMAN PERTAMA */}
-      <OfficialLetterhead school={school} />
+      <div className="print-avoid-break break-inside-avoid">
+        <OfficialLetterhead school={school} />
+      </div>
 
       {/* JUDUL DOKUMEN MODUL AJAR */}
-      <div className="text-center py-4 mb-6 border-b border-black">
+      <div className="text-center py-4 mb-6 border-b border-black print-avoid-break break-inside-avoid">
         <h1 className="text-base font-bold uppercase tracking-wider">
           MODUL AJAR KURIKULUM NASIONAL BKPDM
         </h1>
@@ -41,7 +43,7 @@ export const ModulAjarView: React.FC<ModulAjarViewProps> = ({
       {/* ============================================================== */}
       {/* BAGIAN I: INFORMASI UMUM                                       */}
       {/* ============================================================== */}
-      <div className="mb-6 space-y-3">
+      <div className="mb-6 space-y-3 print-avoid-break break-inside-avoid">
         <h2 className="text-xs font-bold uppercase tracking-wide bg-gray-100 p-1.5 border-l-4 border-black">
           I. INFORMASI UMUM
         </h2>
@@ -143,7 +145,7 @@ export const ModulAjarView: React.FC<ModulAjarViewProps> = ({
           <p className="font-bold text-[11px] text-gray-900">D. Kegiatan Pembelajaran:</p>
 
           {moduleData.learning_activities.meetings.map((meeting) => (
-            <div key={meeting.meeting_number} className="border border-black p-3.5 space-y-3 rounded-sm">
+            <div key={meeting.meeting_number} className="border border-black p-3.5 space-y-3 rounded-sm print-avoid-break break-inside-avoid">
               <div className="font-bold text-xs uppercase border-b border-black pb-1">
                 Pertemuan ke-{meeting.meeting_number} (Alokasi: {meeting.duration_minutes} Menit)
               </div>
@@ -216,7 +218,7 @@ export const ModulAjarView: React.FC<ModulAjarViewProps> = ({
         </div>
 
         {/* Rencana Asesmen */}
-        <div className="space-y-2">
+        <div className="space-y-2 print-avoid-break break-inside-avoid">
           <p className="font-bold text-[11px] text-gray-900">E. Rencana Asesmen dan Evaluasi:</p>
           <table className="w-full border-collapse border border-black text-[11px]">
             <thead>
@@ -258,7 +260,7 @@ export const ModulAjarView: React.FC<ModulAjarViewProps> = ({
 
           {/* LKPD */}
           {moduleData.appendices.student_worksheet_lkpd && (
-            <div className="space-y-1.5 border border-black p-3.5 rounded-sm bg-gray-50/30">
+            <div className="space-y-1.5 border border-black p-3.5 rounded-sm bg-gray-50/30 print-avoid-break break-inside-avoid">
               <p className="font-bold text-xs uppercase tracking-wide">
                 A. Lembar Kerja Peserta Didik (LKPD):
               </p>
@@ -270,7 +272,7 @@ export const ModulAjarView: React.FC<ModulAjarViewProps> = ({
 
           {/* Bahan Bacaan */}
           {moduleData.appendices.reading_materials && (
-            <div className="space-y-1">
+            <div className="space-y-1 print-avoid-break break-inside-avoid">
               <p className="font-bold text-[11px] text-gray-900">B. Bahan Bacaan Guru dan Peserta Didik:</p>
               <p className="text-[11px] text-gray-800 leading-relaxed p-3 bg-gray-50 border border-gray-200 rounded">
                 {moduleData.appendices.reading_materials}
@@ -280,7 +282,7 @@ export const ModulAjarView: React.FC<ModulAjarViewProps> = ({
 
           {/* Glosarium */}
           {moduleData.appendices.glossary && (
-            <div className="space-y-1">
+            <div className="space-y-1 print-avoid-break break-inside-avoid">
               <p className="font-bold text-[11px] text-gray-900">C. Glosarium Istilah:</p>
               <ul className="list-disc list-inside text-[11px] text-gray-800 space-y-1 pl-4">
                 {moduleData.appendices.glossary.map((item, idx) => (
@@ -294,7 +296,7 @@ export const ModulAjarView: React.FC<ModulAjarViewProps> = ({
 
           {/* Daftar Pustaka */}
           {moduleData.appendices.references && (
-            <div className="space-y-1">
+            <div className="space-y-1 print-avoid-break break-inside-avoid">
               <p className="font-bold text-[11px] text-gray-900">D. Daftar Pustaka:</p>
               <ul className="list-disc list-inside text-[11px] text-gray-800 space-y-0.5 pl-4">
                 {moduleData.appendices.references.map((ref, idx) => (
@@ -307,7 +309,7 @@ export const ModulAjarView: React.FC<ModulAjarViewProps> = ({
       )}
 
       {/* LEMBAR PENGESAHAN RESMI DI HALAMAN AKHIR */}
-      <div className="pt-6 border-t-2 border-black">
+      <div className="pt-6 border-t-2 border-black print-avoid-break break-inside-avoid">
         <EndorsementSheet
           school={school}
           teacher={teacher}

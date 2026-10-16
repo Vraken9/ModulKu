@@ -179,9 +179,9 @@ export function DashboardShell({ children, activeItem }: DashboardShellProps) {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col md:flex-row text-slate-900">
+    <div className="min-h-screen bg-slate-50 flex flex-col md:flex-row text-slate-900 print:bg-white print:block">
       {/* Mobile Topbar */}
-      <header className="md:hidden bg-white border-b border-slate-200 px-4 h-14 flex items-center justify-between sticky top-0 z-40">
+      <header className="md:hidden bg-white border-b border-slate-200 px-4 h-14 flex items-center justify-between sticky top-0 z-40 print:hidden">
         <Link href="/dashboard" className="flex items-center gap-2">
           <ModulKuLogo size="sm" />
         </Link>
@@ -198,7 +198,7 @@ export function DashboardShell({ children, activeItem }: DashboardShellProps) {
 
       {/* Sidebar Desktop & Mobile Drawer */}
       <aside
-        className={`fixed md:sticky top-0 left-0 z-30 h-screen w-64 bg-white border-r border-slate-200 flex flex-col justify-between transition-transform duration-200 ease-in-out ${
+        className={`fixed md:sticky top-0 left-0 z-30 h-screen w-64 bg-white border-r border-slate-200 flex flex-col justify-between transition-transform duration-200 ease-in-out print:hidden ${
           mobileMenuOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         }`}
       >
@@ -342,9 +342,9 @@ export function DashboardShell({ children, activeItem }: DashboardShellProps) {
       </aside>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
+      <div className="flex-1 flex flex-col min-w-0 overflow-y-auto print:overflow-visible print:block print:w-full">
         {/* Topbar Desktop */}
-        <header className="hidden md:flex h-16 bg-white border-b border-slate-200 px-8 items-center justify-between sticky top-0 z-20">
+        <header className="hidden md:flex h-16 bg-white border-b border-slate-200 px-8 items-center justify-between sticky top-0 z-20 print:hidden">
           <div className="flex items-center gap-3">
             <span className="text-xs font-semibold text-slate-600">Satuan Pendidikan:</span>
             <Badge variant="outline" className="text-xs font-bold bg-slate-50 text-slate-800">
@@ -368,7 +368,7 @@ export function DashboardShell({ children, activeItem }: DashboardShellProps) {
         </header>
 
         {/* Page Body */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8">
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 print:p-0 print:m-0 print:block print:w-full">
           {children}
         </main>
       </div>

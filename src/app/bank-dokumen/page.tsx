@@ -22,12 +22,14 @@ import {
   Tag,
   ArrowUpRight,
   BookOpen,
+  Eye,
 } from "lucide-react";
 import { DashboardShell } from "@/components/layout/DashboardShell";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { DocumentPreviewModal } from "@/components/bank-dokumen/DocumentPreviewModal";
 import {
   getStoredDocuments,
   getStorageUsageSummary,
@@ -53,6 +55,13 @@ export default function BankDokumenPage() {
   const [onlyPmm, setOnlyPmm] = useState(false);
   const [activeTab, setActiveTab] = useState<"grid" | "table">("grid");
   const [notification, setNotification] = useState<string | null>(null);
+  const [previewDoc, setPreviewDoc] = useState<StoredDocument | null>(null);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+
+  const handleOpenPreview = (doc: StoredDocument) => {
+    setPreviewDoc(doc);
+    setIsPreviewOpen(true);
+  };
 
   // Muat dokumen saat inisialisasi & sinkronisasi event
   const refreshVault = () => {
@@ -453,7 +462,11 @@ export default function BankDokumenPage() {
                         <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
                           {getDocTypeLabel(doc.docType)}
                         </span>
-                        <h4 className="text-sm font-bold text-slate-900 tracking-tight leading-snug line-clamp-2">
+                        <h4
+                          onClick={() => handleOpenPreview(doc)}
+                          className="text-sm font-bold text-slate-900 tracking-tight leading-snug line-clamp-2 hover:text-blue-700 cursor-pointer transition-colors"
+                          title="Klik untuk melihat pratinjau dokumen"
+                        >
                           {doc.title}
                         </h4>
                       </div>
@@ -518,8 +531,18 @@ export default function BankDokumenPage() {
                     <Button
                       variant="outline"
                       size="sm"
+                      onClick={() => handleOpenPreview(doc)}
+                      className="text-xs font-bold h-8 px-3 text-blue-700 bg-blue-50/60 border-blue-200 hover:bg-blue-100/80 gap-1.5 cursor-pointer"
+                    >
+                      <Eye className="w-3.5 h-3.5 text-blue-700" />
+                      <span>Pratinjau</span>
+                    </Button>
+
+                    <Button
+                      variant="outline"
+                      size="sm"
                       onClick={() => handleSimulateDownload(doc)}
-                      className="text-xs font-bold h-8 px-3 text-slate-800 border-slate-200 hover:bg-slate-100 gap-1.5"
+                      className="text-xs font-bold h-8 px-3 text-slate-800 border-slate-200 hover:bg-slate-100 gap-1.5 cursor-pointer"
                     >
                       <Download className="w-3.5 h-3.5 text-slate-700" />
                       <span>Unduh</span>
@@ -529,7 +552,7 @@ export default function BankDokumenPage() {
                       variant="ghost"
                       size="sm"
                       onClick={() => handleDelete(doc)}
-                      className="text-xs font-semibold h-8 w-8 p-0 text-slate-600 hover:text-red-700 hover:bg-red-50"
+                      className="text-xs font-semibold h-8 w-8 p-0 text-slate-600 hover:text-red-700 hover:bg-red-50 cursor-pointer"
                       title="Hapus dari Bank Dokumen"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
@@ -540,6 +563,14 @@ export default function BankDokumenPage() {
             ))}
           </div>
         )}
+
+        {/* Modal Pratinjau Dokumen Responsif */}
+        <DocumentPreviewModal
+          document={previewDoc}
+          isOpen={isPreviewOpen}
+          onClose={() => setIsPreviewOpen(false)}
+          onDownload={handleSimulateDownload}
+        />
       </div>
     </DashboardShell>
   );

@@ -190,7 +190,7 @@ export default function ModulAjarPage() {
 
   return (
     <DashboardShell activeItem="modul-ajar">
-      <div className="space-y-6 max-w-6xl mx-auto pb-12">
+      <div className="space-y-6 max-w-6xl mx-auto pb-12 print:p-0 print:m-0 print:max-w-none print:w-full print:space-y-0">
         {/* Breadcrumb & Header Title */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 no-print">
           <div>
@@ -552,7 +552,7 @@ export default function ModulAjarPage() {
           </div>
         ) : (
           /* JIKA SUDAH ADA HASIL MODUL AJAR: TAMPILKAN VIEWER DOKUMEN CETAK */
-          <div className="space-y-6">
+          <div className="space-y-6 print:space-y-0 print:p-0 print:m-0">
             {/* Header Kontrol Hasil */}
             <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4 no-print">
               <div>
@@ -630,7 +630,7 @@ export default function ModulAjarPage() {
             </div>
 
             {/* Viewer Dokumen Cetak Siap Pakai */}
-            <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-slate-200">
+            <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-slate-200 print:border-none print:shadow-none print:rounded-none print:overflow-visible print:p-0 print:m-0">
               <ModulAjarView
                 moduleData={generatedModule}
                 school={school}

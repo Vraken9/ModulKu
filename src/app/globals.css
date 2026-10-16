@@ -105,17 +105,50 @@ body {
 }
 
 /* Custom Print Styles for Official Indonesian Documents (A4 Standard) */
+@page {
+  size: A4 portrait;
+  margin: 15mm 20mm 15mm 20mm;
+}
+
 @media print {
+  *,
+  *::before,
+  *::after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  html,
   body {
     background: #ffffff !important;
     color: #000000 !important;
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
-  .no-print {
+
+  .no-print,
+  .print-hidden,
+  [data-print-hidden="true"] {
     display: none !important;
   }
+
+  .print-avoid-break {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
   .print-page {
-    page-break-after: always;
-    margin: 0;
-    padding: 2cm 2.5cm 2cm 2.5cm;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    background: transparent !important;
   }
 }
+
