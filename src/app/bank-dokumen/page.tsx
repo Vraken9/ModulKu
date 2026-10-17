@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   FolderArchive,
   Search,
@@ -30,7 +31,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { DocumentPreviewModal } from "@/components/bank-dokumen/DocumentPreviewModal";
-import { SubscriptionCheckoutModal } from "@/components/payment/SubscriptionCheckoutModal";
 import {
   getStoredDocuments,
   getStorageUsageSummary,
@@ -56,6 +56,7 @@ import {
 import { useNotification } from "@/components/providers/NotificationProvider";
 
 export default function BankDokumenPage() {
+  const router = useRouter();
   const { confirm, toast } = useNotification();
   const [documents, setDocuments] = useState<StoredDocument[]>(SEED_DOCUMENTS);
   const [usage, setUsage] = useState<StorageUsageSummary>(DEFAULT_STORAGE_SUMMARY);
@@ -308,7 +309,7 @@ export default function BankDokumenPage() {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => setIsCheckoutOpen(true)}
+                  onClick={() => router.push("/pembayaran?plan=profesional_annual")}
                   className="text-xs font-bold h-7 px-2.5 text-blue-700 border-blue-200 hover:bg-blue-50 cursor-pointer"
                 >
                   Upgrade Kuota
@@ -608,13 +609,6 @@ export default function BankDokumenPage() {
           isOpen={isPreviewOpen}
           onClose={() => setIsPreviewOpen(false)}
           onDownload={handleSimulateDownload}
-        />
-
-        {/* Modal Berlangganan / Upgrade Kuota */}
-        <SubscriptionCheckoutModal
-          isOpen={isCheckoutOpen}
-          onClose={() => setIsCheckoutOpen(false)}
-          defaultPlanId="profesional_annual"
         />
       </div>
     </DashboardShell>

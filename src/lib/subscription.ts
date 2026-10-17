@@ -273,3 +273,117 @@ export function generateWhatsAppLink(
   );
   return `https://wa.me/${phone}?text=${message}`;
 }
+
+export interface ActivePaymentOrder {
+  orderId: string;
+  planId: string;
+  planName: string;
+  amount: number;
+  formattedAmount: string;
+  tier: SubscriptionTier;
+  createdAt: number;
+  expiresAt: number;
+  status: "waiting_transfer" | "waiting_approval" | "approved" | "expired";
+  paymentMethod: PaymentMethod;
+  senderName?: string;
+  proofImageUrl?: string;
+}
+
+const ACTIVE_ORDER_KEY = "modulku_active_payment_order";
+
+export function getActivePaymentOrder(): ActivePaymentOrder | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = localStorage.getItem(ACTIVE_ORDER_KEY);
+    if (!raw) return null;
+    const order: ActivePaymentOrder = JSON.parse(raw);
+    return order;
+  } catch {
+    return null;
+  }
+}
+
+export function createOrGetActiveOrder(requestedPlanId = "profesional_annual"): ActivePaymentOrder {
+  const existing = getActivePaymentOrder();
+  const now = Date.now();
+
+  // Jika order aktif masih ada dan waktunya belum habis, arahkan ke order tersebut
+  if (existing && existing.expiresAt > now && existing.status !== "expired") {
+    if (existing.planId === requestedPlanId) {
+      return existing;
+    }
+  }
+
+  // Jika belum ada atau waktu sudah habis: buat order baru dengan timer 60 menit dari sekarang
+  const plan = SUBSCRIPTION_PLANS[requestedPlanId] || SUBSCRIPTION_PLANS.profesional_annual;
+  const randomSuffix = Math.floor(1000 + Math.random() * 9000);
+  const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+  const newOrder: ActivePaymentOrder = {
+    orderId: `INV-${dateStr}-${randomSuffix}`,
+    planId: plan.id,
+    planName: plan.name,
+    amount: plan.amount,
+    formattedAmount: plan.formattedAmount,
+    tier: plan.tier,
+    createdAt: now,
+    expiresAt: now + 60 * 60 * 1000,
+    status: "waiting_transfer",
+    paymentMethod: "QRIS",
+  };
+
+  try {
+    localStorage.setItem(ACTIVE_ORDER_KEY, JSON.stringify(newOrder));
+  } catch {
+    // ignore
+  }
+
+  return newOrder;
+}
+
+export function resetActiveOrder(planId = "profesional_annual"): ActivePaymentOrder {
+  const now = Date.now();
+  const plan = SUBSCRIPTION_PLANS[planId] || SUBSCRIPTION_PLANS.profesional_annual;
+  const randomSuffix = Math.floor(1000 + Math.random() * 9000);
+  const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+  const newOrder: ActivePaymentOrder = {
+    orderId: `INV-${dateStr}-${randomSuffix}`,
+    planId: plan.id,
+    planName: plan.name,
+    amount: plan.amount,
+    formattedAmount: plan.formattedAmount,
+    tier: plan.tier,
+    createdAt: now,
+    expiresAt: now + 60 * 60 * 1000,
+    status: "waiting_transfer",
+    paymentMethod: "QRIS",
+  };
+
+  try {
+    localStorage.setItem(ACTIVE_ORDER_KEY, JSON.stringify(newOrder));
+  } catch {
+    // ignore
+  }
+
+  return newOrder;
+}
+
+export function updateActiveOrderStatus(
+  status: ActivePaymentOrder["status"],
+  senderName?: string,
+  proofImageUrl?: string
+): void {
+  const existing = getActivePaymentOrder();
+  if (!existing) return;
+  const updated: ActivePaymentOrder = {
+    ...existing,
+    status,
+    senderName: senderName || existing.senderName,
+    proofImageUrl: proofImageUrl || existing.proofImageUrl,
+  };
+  try {
+    localStorage.setItem(ACTIVE_ORDER_KEY, JSON.stringify(updated));
+  } catch {
+    // ignore
+  }
+}
+

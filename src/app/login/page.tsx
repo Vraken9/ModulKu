@@ -40,6 +40,21 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
+      // Jika pengguna sudah login, langsung alihkan ke dashboard
+      const checkExistingSession = async () => {
+        try {
+          const { data: { session } } = await supabase.auth.getSession();
+          const localToken = localStorage.getItem("guru_auth_token");
+          if (session || localToken) {
+            router.replace("/dashboard");
+            return;
+          }
+        } catch {
+          // ignore
+        }
+      };
+      checkExistingSession();
+
       const params = new URLSearchParams(window.location.search);
       const err = params.get("error");
       if (err) {
@@ -52,7 +67,7 @@ export default function LoginPage() {
         }
       }
     }
-  }, []);
+  }, [router]);
 
   async function handleAuthSubmit(e: React.FormEvent) {
     e.preventDefault();

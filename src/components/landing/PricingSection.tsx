@@ -2,10 +2,10 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Check, Sparkles, ArrowRight, ShieldCheck, School, Zap, Award, HelpCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { SubscriptionCheckoutModal } from "@/components/payment/SubscriptionCheckoutModal";
 
 interface PricingTier {
   id: string;
@@ -95,16 +95,18 @@ const TIERS: PricingTier[] = [
 ];
 
 export function PricingSection() {
+  const router = useRouter();
   const [isAnnual, setIsAnnual] = useState(false);
-  const [checkoutPlanId, setCheckoutPlanId] = useState<string | null>(null);
 
   const handleOpenCheckout = (tierId: string) => {
     if (tierId === "gratis") return;
+    let plan = "profesional_annual";
     if (tierId === "profesional") {
-      setCheckoutPlanId(isAnnual ? "profesional_annual" : "profesional_monthly");
+      plan = isAnnual ? "profesional_annual" : "profesional_monthly";
     } else if (tierId === "sekolah") {
-      setCheckoutPlanId(isAnnual ? "sekolah_annual" : "sekolah_semester");
+      plan = isAnnual ? "sekolah_annual" : "sekolah_semester";
     }
+    router.push(`/pembayaran?plan=${plan}`);
   };
 
   return (
@@ -286,13 +288,6 @@ export function PricingSection() {
           <span>Faktur Kedinasan Resmi untuk SPJ Dana BOS</span>
         </div>
       </div>
-
-      {/* Modal Checkout Pembayaran Multi-Metode */}
-      <SubscriptionCheckoutModal
-        isOpen={Boolean(checkoutPlanId)}
-        onClose={() => setCheckoutPlanId(null)}
-        defaultPlanId={checkoutPlanId || "profesional_annual"}
-      />
     </div>
   );
 }

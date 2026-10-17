@@ -37,19 +37,38 @@ export default function AdminOverviewPage() {
   const [requests, setRequests] = useState<SubscriptionRequest[]>([]);
   const [selectedProof, setSelectedProof] = useState<string | null>(null);
   const [metrics, setMetrics] = useState(getApiUsageMetrics());
+  const [feedbackList, setFeedbackList] = useState<
+    Array<{
+      id: string;
+      senderName: string;
+      senderSchool: string;
+      category: string;
+      text: string;
+      timestamp: string;
+      status: string;
+    }>
+  >([]);
 
   const loadData = () => {
     setRequests(getSubscriptionRequests());
     setMetrics(getApiUsageMetrics());
+    try {
+      const raw = localStorage.getItem("modulku_admin_feedback_inbox");
+      if (raw) setFeedbackList(JSON.parse(raw));
+    } catch {
+      // ignore
+    }
   };
 
   useEffect(() => {
     loadData();
     window.addEventListener("modulku-subscription-changed", loadData);
     window.addEventListener("modulku-api-logs-changed", loadData);
+    window.addEventListener("modulku-feedback-received", loadData);
     return () => {
       window.removeEventListener("modulku-subscription-changed", loadData);
       window.removeEventListener("modulku-api-logs-changed", loadData);
+      window.removeEventListener("modulku-feedback-received", loadData);
     };
   }, []);
 
@@ -377,6 +396,57 @@ export default function AdminOverviewPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Kotak Masuk Feedback & Keluh Kesah Pendidik */}
+      <Card className="bg-slate-950 border-slate-800 text-white shadow-xs">
+        <CardHeader className="pb-3 border-b border-slate-800 flex flex-row items-center justify-between">
+          <div>
+            <CardTitle className="text-sm font-bold text-white">
+              Kotak Masuk Masukan & Keluh Kesah Pendidik
+            </CardTitle>
+            <CardDescription className="text-xs text-slate-400">
+              Umpan balik langsung yang dikirimkan oleh guru dari widget Chat Admin di ruang kerja dasbor.
+            </CardDescription>
+          </div>
+          <Badge variant="outline" className="text-xs font-mono bg-slate-900 border-slate-700 text-slate-300">
+            {feedbackList.length} Pesan Masuk
+          </Badge>
+        </CardHeader>
+        <CardContent className="pt-4">
+          {feedbackList.length === 0 ? (
+            <div className="text-center py-8 text-xs text-slate-500 font-mono">
+              Belum ada keluhan atau pesan feedback baru dari guru.
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {feedbackList.slice(0, 5).map((item) => (
+                <div
+                  key={item.id}
+                  className="p-3.5 rounded-xl bg-slate-900 border border-slate-800 space-y-2"
+                >
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold text-xs text-white">{item.senderName}</span>
+                      <span className="text-[11px] text-slate-400 font-mono">({item.senderSchool})</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-950 border border-indigo-700/60 text-indigo-300 uppercase">
+                        {item.category.replace(/_/g, " ")}
+                      </span>
+                      <span className="text-[10px] text-slate-500 font-mono">
+                        {new Date(item.timestamp).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" })}
+                      </span>
+                    </div>
+                  </div>
+                  <p className="text-xs text-slate-300 leading-relaxed bg-slate-950/60 p-2.5 rounded-lg border border-slate-800/80">
+                    {item.text}
+                  </p>
+                </div>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Modal Zoom Bukti Pembayaran */}
       {selectedProof && (

@@ -575,7 +575,7 @@ export default function SoalGeneratorPage() {
                       onClick={() => setSourceType("text")}
                       className={`px-3 py-1.5 rounded-lg border text-xs font-semibold transition-all cursor-pointer ${
                         sourceType === "text"
-                          ? "bg-slate-900 text-white border-slate-900 shadow-xs"
+                          ? "bg-blue-600 text-white border-blue-600 shadow-xs"
                           : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:text-slate-900"
                       }`}
                     >
@@ -586,7 +586,7 @@ export default function SoalGeneratorPage() {
                       onClick={() => setSourceType("pdf")}
                       className={`px-3 py-1.5 rounded-lg border text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
                         sourceType === "pdf"
-                          ? "bg-slate-900 text-white border-slate-900 shadow-xs"
+                          ? "bg-blue-600 text-white border-blue-600 shadow-xs"
                           : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:text-slate-900"
                       }`}
                     >
@@ -804,12 +804,12 @@ export default function SoalGeneratorPage() {
                         }
                         className={`p-3.5 rounded-xl border cursor-pointer transition-all ${
                           stimulusType === item.id
-                            ? "border-slate-900 bg-slate-900 text-white shadow-xs"
-                            : "border-slate-200 hover:bg-slate-50 text-slate-800"
+                            ? "border-blue-600 bg-blue-50/70 text-blue-950 ring-2 ring-blue-500/20 shadow-xs"
+                            : "border-slate-200 hover:bg-slate-50/80 text-slate-800 hover:border-slate-300"
                         }`}
                       >
-                        <p className={`text-xs font-bold ${stimulusType === item.id ? "text-white" : "text-slate-900"}`}>{item.title}</p>
-                        <p className={`text-[11px] mt-1 leading-normal ${stimulusType === item.id ? "text-slate-300" : "text-slate-500"}`}>{item.desc}</p>
+                        <p className={`text-xs font-bold ${stimulusType === item.id ? "text-blue-900" : "text-slate-900"}`}>{item.title}</p>
+                        <p className={`text-[11px] mt-1 leading-normal ${stimulusType === item.id ? "text-blue-700/80" : "text-slate-500"}`}>{item.desc}</p>
                       </div>
                     ))}
                   </div>
@@ -817,7 +817,7 @@ export default function SoalGeneratorPage() {
               </CardContent>
             </Card>
 
-            {/* Bagian 4: Pengaturan Kognitif & Taksonomi Bloom (Sesuai Gambar 2) */}
+            {/* Bagian 4: Pengaturan Kognitif & Taksonomi Bloom */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Komposisi Kesulitan */}
               <Card className="shadow-xs">
@@ -830,9 +830,15 @@ export default function SoalGeneratorPage() {
                       Atur proporsi tingkat kesulitan (Total 100%)
                     </CardDescription>
                   </div>
-                  <Badge variant={difficulty.mudah + difficulty.sedang + difficulty.sulit === 100 ? "success" : "destructive"}>
+                  <div
+                    className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold border transition-colors ${
+                      difficulty.mudah + difficulty.sedang + difficulty.sulit === 100
+                        ? "bg-slate-100 text-slate-700 border-slate-300"
+                        : "bg-rose-50 text-rose-700 border-rose-200"
+                    }`}
+                  >
                     {difficulty.mudah + difficulty.sedang + difficulty.sulit}%
-                  </Badge>
+                  </div>
                 </CardHeader>
                 <CardContent className="pt-4 grid grid-cols-3 gap-3">
                   <div className="space-y-1">
@@ -873,9 +879,15 @@ export default function SoalGeneratorPage() {
                       Atur proporsi LOTS, MOTS, dan HOTS (Total 100%)
                     </CardDescription>
                   </div>
-                  <Badge variant={cognitive.lots + cognitive.mots + cognitive.hots === 100 ? "success" : "destructive"}>
+                  <div
+                    className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold border transition-colors ${
+                      cognitive.lots + cognitive.mots + cognitive.hots === 100
+                        ? "bg-slate-100 text-slate-700 border-slate-300"
+                        : "bg-rose-50 text-rose-700 border-rose-200"
+                    }`}
+                  >
                     {cognitive.lots + cognitive.mots + cognitive.hots}%
-                  </Badge>
+                  </div>
                 </CardHeader>
                 <CardContent className="pt-4 grid grid-cols-3 gap-3">
                   <div className="space-y-1">
@@ -971,7 +983,7 @@ export default function SoalGeneratorPage() {
                 size="lg"
                 onClick={handleGenerate}
                 disabled={isLoading}
-                className="bg-slate-900 hover:bg-slate-800 text-white font-bold gap-2 px-8 h-11 rounded-xl shadow-xs cursor-pointer transition-all"
+                className="bg-blue-600 hover:bg-blue-700 text-white font-bold gap-2 px-8 h-11 rounded-xl shadow-xs cursor-pointer transition-all"
               >
                 <Sparkles className="w-4 h-4 text-white" />
                 <span>{isLoading ? "Sedang Menyusun Paket Soal BKPDM..." : "Buat Paket Soal Sekarang"}</span>

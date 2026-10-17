@@ -36,7 +36,7 @@ import {
   DEFAULT_STORAGE_SUMMARY,
   setActiveUserId,
 } from "@/lib/document-vault";
-import { SubscriptionCheckoutModal } from "@/components/payment/SubscriptionCheckoutModal";
+import { AdminChatWidget } from "@/components/chat/AdminChatWidget";
 
 interface MenuItem {
   name: string;
@@ -353,7 +353,7 @@ export function DashboardShell({ children, activeItem }: DashboardShellProps) {
             <span>{formatBytes(vaultSummary.usedBytes)} / {TIER_CONFIGS[vaultSummary.tier].formattedLimit}</span>
             <button
               type="button"
-              onClick={() => setIsCheckoutOpen(true)}
+              onClick={() => router.push("/pembayaran?plan=profesional_annual")}
               className="text-blue-600 hover:underline font-bold cursor-pointer"
             >
               Upgrade
@@ -432,12 +432,8 @@ export function DashboardShell({ children, activeItem }: DashboardShellProps) {
         </main>
       </div>
 
-      {/* Modal Checkout Pembayaran Langganan Multi-Metode */}
-      <SubscriptionCheckoutModal
-        isOpen={isCheckoutOpen}
-        onClose={() => setIsCheckoutOpen(false)}
-        defaultPlanId="profesional_annual"
-      />
+      {/* Widget Layanan Bantuan & Chat Feedback Admin */}
+      <AdminChatWidget />
     </div>
   );
 }
