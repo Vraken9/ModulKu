@@ -13,6 +13,7 @@ import {
   Layers,
   BookOpen,
   FolderArchive,
+  Check,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -457,31 +458,41 @@ export default function ModulAjarPage() {
                     <div className="grid grid-cols-2 gap-2 text-xs">
                       <div
                         onClick={() => setFormatMode("lengkap_bkpdm")}
-                        className={`p-3 rounded-xl border cursor-pointer transition-all ${
+                        className={`p-3 rounded-xl border-2 cursor-pointer transition-all ${
                           formatMode === "lengkap_bkpdm" || formatMode === "lengkap_bskap"
-                            ? "border-slate-900 bg-slate-900 font-bold text-white shadow-xs"
-                            : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                            ? "border-slate-900 bg-slate-100 shadow-xs"
+                            : "border-slate-200 bg-white hover:bg-slate-50/80"
                         }`}
                       >
-                        <p className={`font-bold ${formatMode === "lengkap_bkpdm" || formatMode === "lengkap_bskap" ? "text-white" : "text-slate-900"}`}>
-                          Mode Lengkap BKPDM
-                        </p>
-                        <p className={`text-[10px] font-normal mt-0.5 ${formatMode === "lengkap_bkpdm" || formatMode === "lengkap_bskap" ? "text-slate-300" : "text-slate-500"}`}>
+                        <div className="flex items-center justify-between">
+                          <p className="font-bold text-slate-900">
+                            Mode Lengkap BKPDM
+                          </p>
+                          {(formatMode === "lengkap_bkpdm" || formatMode === "lengkap_bskap") && (
+                            <Check className="w-4 h-4 text-slate-900 shrink-0" />
+                          )}
+                        </div>
+                        <p className="text-[10px] font-normal mt-0.5 text-slate-600">
                           Format resmi supervisi (Deep Learning, LKPD, Glosarium).
                         </p>
                       </div>
                       <div
                         onClick={() => setFormatMode("ringkas")}
-                        className={`p-3 rounded-xl border cursor-pointer transition-all ${
+                        className={`p-3 rounded-xl border-2 cursor-pointer transition-all ${
                           formatMode === "ringkas"
-                            ? "border-slate-900 bg-slate-900 font-bold text-white shadow-xs"
-                            : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                            ? "border-slate-900 bg-slate-100 shadow-xs"
+                            : "border-slate-200 bg-white hover:bg-slate-50/80"
                         }`}
                       >
-                        <p className={`font-bold ${formatMode === "ringkas" ? "text-white" : "text-slate-900"}`}>
-                          Mode Ringkas (1-2 Lembar)
-                        </p>
-                        <p className={`text-[10px] font-normal mt-0.5 ${formatMode === "ringkas" ? "text-slate-300" : "text-slate-500"}`}>
+                        <div className="flex items-center justify-between">
+                          <p className="font-bold text-slate-900">
+                            Mode Ringkas (1-2 Lembar)
+                          </p>
+                          {formatMode === "ringkas" && (
+                            <Check className="w-4 h-4 text-slate-900 shrink-0" />
+                          )}
+                        </div>
+                        <p className="text-[10px] font-normal mt-0.5 text-slate-600">
                           Tujuan, langkah Deep Learning, dan asesmen esensial harian.
                         </p>
                       </div>
@@ -521,9 +532,9 @@ export default function ModulAjarPage() {
                       <label
                         key={dim}
                         onClick={() => handleDimensionToggle(dim)}
-                        className={`p-2.5 rounded-xl border flex items-center gap-3 cursor-pointer text-xs transition-colors ${
+                        className={`p-2.5 rounded-xl border-2 flex items-center gap-3 cursor-pointer text-xs transition-colors ${
                           isChecked
-                            ? "border-slate-900 bg-slate-50 font-bold text-slate-900 shadow-2xs"
+                            ? "border-slate-900 bg-slate-100 font-bold text-slate-900 shadow-2xs"
                             : "border-slate-200 bg-white hover:bg-slate-50 text-slate-700"
                         }`}
                       >
@@ -531,7 +542,7 @@ export default function ModulAjarPage() {
                           type="checkbox"
                           checked={isChecked}
                           readOnly
-                          className="w-4 h-4 rounded text-slate-900 focus:ring-slate-900 border-slate-300"
+                          className="w-4 h-4 rounded text-slate-900 focus:ring-slate-900 border-slate-300 accent-slate-900"
                         />
                         <span className="font-medium text-slate-900">{dim}</span>
                       </label>

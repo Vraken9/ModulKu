@@ -188,10 +188,10 @@ export default function ProfilSekolahPage() {
       <div className="space-y-6 max-w-6xl mx-auto pb-12">
         {/* Banner Onboarding Terpandu jika Pengguna Baru */}
         {isOnboarding && (
-          <div className="p-5 rounded-2xl bg-gradient-to-r from-blue-50/90 via-indigo-50/40 to-slate-50 border border-blue-200/80 shadow-xs space-y-3 no-print">
+          <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 shadow-xs space-y-3 no-print">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="space-y-1">
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-100/80 border border-blue-200 text-blue-800 text-[11px] font-bold">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-slate-100 border border-slate-200 text-slate-800 text-[11px] font-bold">
                   <span>Langkah Awal Pendidik (Opsional)</span>
                 </div>
                 <h3 className="text-base font-bold tracking-tight text-slate-900">
@@ -215,7 +215,7 @@ export default function ProfilSekolahPage() {
                     handleSave();
                     router.push("/dashboard");
                   }}
-                  className="text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white h-9 px-4 rounded-xl shadow-xs cursor-pointer"
+                  className="text-xs font-bold bg-slate-900 hover:bg-slate-800 text-white h-9 px-4 rounded-xl shadow-xs cursor-pointer"
                 >
                   Simpan & Lanjut ke Dasbor
                 </Button>
@@ -253,7 +253,7 @@ export default function ProfilSekolahPage() {
               <Printer className="w-3.5 h-3.5 text-slate-600" />
               Cetak A4
             </Button>
-            <Button variant="default" size="sm" onClick={handleSave} className="text-xs gap-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl h-9 px-4 shadow-xs cursor-pointer">
+            <Button variant="default" size="sm" onClick={handleSave} className="text-xs gap-1.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl h-9 px-4 shadow-xs cursor-pointer">
               <Save className="w-3.5 h-3.5 text-white" />
               Simpan Profil
             </Button>
@@ -261,12 +261,12 @@ export default function ProfilSekolahPage() {
         </div>
         {/* Status Alert */}
         {isSaved && (
-          <div className="p-4 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-900 flex items-center justify-between text-xs no-print">
+          <div className="p-4 rounded-lg bg-[#ECFDF5] border border-emerald-200 text-[#065F46] flex items-center justify-between text-xs no-print">
             <div className="flex items-center gap-2 font-medium">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <CheckCircle2 className="w-4 h-4 text-[#059669]" />
               <span>Data profil sekolah dan pejabat penandatangan berhasil disimpan secara permanen.</span>
             </div>
-            <span className="text-[11px] text-emerald-700">Tersinkronisasi Otomatis</span>
+            <span className="text-[11px] text-[#059669] font-semibold">Tersinkronisasi Otomatis</span>
           </div>
         )}
 
@@ -560,7 +560,7 @@ export default function ProfilSekolahPage() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <h4 className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
-                <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                <ShieldCheck className="w-4 h-4 text-[#059669]" />
                 <span>Kepatuhan UU Pelindungan Data Pribadi (UU PDP No. 27/2022)</span>
               </h4>
               <p className="text-[11px] text-slate-500">

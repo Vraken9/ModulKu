@@ -151,14 +151,14 @@ export function AdminChatWidget() {
           <button
             type="button"
             onClick={() => setIsOpen(true)}
-            className="group flex items-center gap-2.5 px-4 py-3 rounded-full bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl transition-all cursor-pointer border border-blue-500/50"
+            className="group flex items-center gap-2.5 px-3.5 py-2.5 rounded-full bg-white hover:bg-slate-50 text-slate-900 shadow-md hover:shadow-lg transition-all cursor-pointer border border-[#E2E8F0]"
             title="Layanan Bantuan & Masukan Pendidik"
           >
             <div className="relative">
-              <Headphones className="w-5 h-5 text-white" />
-              <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-emerald-400 rounded-full border-2 border-blue-600 animate-pulse" />
+              <Headphones className="w-4 h-4 text-slate-700" />
+              <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-[#059669] rounded-full border border-white" />
             </div>
-            <span className="text-xs font-bold tracking-tight">Chat Admin & Feedback</span>
+            <span className="text-xs font-semibold text-[#0F172A]">Bantuan & Feedback</span>
           </button>
         </div>
       )}
@@ -169,15 +169,15 @@ export function AdminChatWidget() {
           {/* Header Chat */}
           <div className="bg-slate-900 text-white p-4 flex items-center justify-between border-b border-slate-800">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center text-white shrink-0">
-                <Headphones className="w-4 h-4" />
+              <div className="w-9 h-9 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-white shrink-0">
+                <Headphones className="w-4 h-4 text-slate-200" />
               </div>
               <div>
                 <h3 className="text-xs font-bold text-white flex items-center gap-2">
                   <span>Layanan Pendidik ModulKu</span>
                 </h3>
                 <div className="flex items-center gap-1.5 text-[11px] text-emerald-400 mt-0.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#059669]" />
                   <span>Admin Siaga (Respon Aktif)</span>
                 </div>
               </div>
@@ -206,7 +206,7 @@ export function AdminChatWidget() {
                   onClick={() => setSelectedCategory(cat.id)}
                   className={`text-[10px] font-semibold px-2.5 py-1 rounded-lg border transition-all cursor-pointer ${
                     selectedCategory === cat.id
-                      ? "bg-blue-600 text-white border-blue-600"
+                      ? "bg-slate-900 text-white border-slate-900"
                       : "bg-white text-slate-700 border-slate-200 hover:bg-slate-100"
                   }`}
                 >
@@ -226,12 +226,12 @@ export function AdminChatWidget() {
                 <div
                   className={`max-w-[85%] rounded-2xl p-3 text-xs leading-relaxed ${
                     msg.sender === "user"
-                      ? "bg-blue-600 text-white rounded-br-none"
+                      ? "bg-slate-900 text-white rounded-br-none"
                       : "bg-white text-slate-800 border border-slate-200 shadow-2xs rounded-bl-none"
                   }`}
                 >
                   {msg.category && msg.sender === "user" && (
-                    <span className="inline-block text-[9px] font-bold uppercase tracking-wider bg-blue-700/80 text-blue-100 px-1.5 py-0.5 rounded mb-1">
+                    <span className="inline-block text-[9px] font-bold uppercase tracking-wider bg-slate-800 text-slate-200 px-1.5 py-0.5 rounded mb-1">
                       {CATEGORIES.find((c) => c.id === msg.category)?.label || msg.category}
                     </span>
                   )}
@@ -246,18 +246,18 @@ export function AdminChatWidget() {
           </div>
 
           {/* Quick WhatsApp Action Strip */}
-          <div className="px-3 py-2 bg-emerald-50 border-t border-emerald-200 flex items-center justify-between text-[11px]">
-            <span className="text-emerald-800 font-medium truncate">
+          <div className="px-3 py-2 bg-[#ECFDF5] border-t border-emerald-200 flex items-center justify-between text-[11px]">
+            <span className="text-[#065F46] font-medium truncate">
               Butuh respon cepat langsung?
             </span>
             <a
               href={getWhatsAppDirectLink()}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 font-bold text-emerald-800 hover:text-emerald-950 underline shrink-0"
+              className="inline-flex items-center gap-1 font-bold text-[#065F46] hover:text-[#059669] underline shrink-0"
             >
               <span>WhatsApp Admin (089530123608)</span>
-              <ExternalLink className="w-3 h-3" />
+              <ExternalLink className="w-3 h-3 text-[#059669]" />
             </a>
           </div>
 
@@ -268,13 +268,13 @@ export function AdminChatWidget() {
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               placeholder="Tulis kendala, saran, atau keluh kesah..."
-              className="flex-1 text-xs border border-slate-300 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-900 bg-white"
+              className="flex-1 text-xs border border-slate-300 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-slate-900 text-slate-900 bg-white"
             />
             <Button
               type="submit"
               size="sm"
               disabled={!inputText.trim()}
-              className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl h-9 px-3.5 cursor-pointer disabled:opacity-50"
+              className="bg-slate-900 hover:bg-slate-800 text-white rounded-xl h-9 px-3.5 cursor-pointer disabled:opacity-50"
             >
               <Send className="w-3.5 h-3.5" />
             </Button>

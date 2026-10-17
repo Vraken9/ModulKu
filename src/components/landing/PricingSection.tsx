@@ -150,7 +150,7 @@ export function PricingSection() {
               }`}
             >
               <span>Tahunan</span>
-              <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.5 rounded-md">
+              <span className="text-[10px] bg-[#ECFDF5] text-[#065F46] border border-emerald-200 font-bold px-1.5 py-0.5 rounded-md">
                 Hemat 36%
               </span>
             </button>
@@ -180,11 +180,11 @@ export function PricingSection() {
                   <span
                     className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-tight shadow-xs ${
                       isFeatured
-                        ? "bg-blue-600 text-white border border-blue-500"
+                        ? "bg-slate-800 text-white border border-slate-700"
                         : "bg-slate-100 text-slate-800 border border-slate-200"
                     }`}
                   >
-                    <Sparkles className="w-3 h-3" />
+                    <Sparkles className="w-3 h-3 text-emerald-400" />
                     <span>{tier.badge}</span>
                   </span>
                 </div>

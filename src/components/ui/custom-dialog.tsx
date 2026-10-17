@@ -75,7 +75,7 @@ export const CustomConfirmModal: React.FC<CustomConfirmModalProps> = ({
       case "success":
         return "bg-emerald-50 border-emerald-200 text-emerald-600";
       case "info":
-        return "bg-blue-50 border-blue-200 text-blue-600";
+        return "bg-slate-100 border-slate-200 text-slate-800";
       default:
         return "bg-slate-100 border-slate-200 text-slate-800";
     }
@@ -90,7 +90,7 @@ export const CustomConfirmModal: React.FC<CustomConfirmModalProps> = ({
       case "success":
         return "bg-emerald-600 hover:bg-emerald-700 text-white font-bold";
       case "info":
-        return "bg-blue-600 hover:bg-blue-700 text-white font-bold";
+        return "bg-slate-900 hover:bg-slate-800 text-white font-bold";
       default:
         return "bg-slate-900 hover:bg-slate-800 text-white font-bold";
     }

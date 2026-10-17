@@ -204,7 +204,7 @@ export default function PembayaranPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans selection:bg-blue-100 selection:text-blue-900">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans selection:bg-slate-200 selection:text-slate-900">
       {/* Top Header Navigasi Resmi */}
       <header className="bg-white border-b border-slate-200 sticky top-0 z-30">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
@@ -214,7 +214,7 @@ export default function PembayaranPage() {
 
           <div className="flex items-center gap-2 sm:gap-3 text-xs">
             <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 text-slate-700 font-semibold border border-slate-200">
-              <Lock className="w-3.5 h-3.5 text-blue-600" />
+              <Lock className="w-3.5 h-3.5 text-slate-700" />
               <span>Koneksi Enkripsi 256-Bit SSL</span>
             </div>
             <Link href="/dashboard">
@@ -233,8 +233,8 @@ export default function PembayaranPage() {
         <div className="mb-8">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-200">
             <div>
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-100/80 text-blue-800 text-[11px] font-bold mb-2">
-                <ShieldCheck className="w-3.5 h-3.5" />
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-slate-100 border border-slate-200 text-slate-800 text-[11px] font-bold mb-2">
+                <ShieldCheck className="w-3.5 h-3.5 text-slate-700" />
                 <span>Pusat Pembayaran Resmi ModulKu</span>
               </div>
               <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
@@ -247,7 +247,7 @@ export default function PembayaranPage() {
 
             <div className="flex items-center gap-2 shrink-0">
               <div className="flex items-center gap-2 bg-white px-3.5 py-2 rounded-xl border border-slate-200 shadow-2xs">
-                <span className="w-2.5 h-2.5 rounded-full bg-blue-600" />
+                <span className="w-2.5 h-2.5 rounded-full bg-slate-900" />
                 <span className="text-xs font-bold text-slate-800">Langkah 2 dari 2: Verifikasi Pembayaran</span>
               </div>
             </div>
@@ -277,10 +277,10 @@ export default function PembayaranPage() {
                     <button
                       type="button"
                       onClick={() => activeOrder && handleCopy(activeOrder.orderId, "invoice")}
-                      className="font-mono font-bold text-blue-700 hover:underline inline-flex items-center gap-1 cursor-pointer"
+                      className="font-mono font-bold text-slate-900 hover:underline inline-flex items-center gap-1 cursor-pointer"
                     >
                       <span>{activeOrder?.orderId || "INV-MEMUAT..."}</span>
-                      {copiedField === "invoice" ? <Check className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3" />}
+                      {copiedField === "invoice" ? <Check className="w-3 h-3 text-[#059669]" /> : <Copy className="w-3 h-3" />}
                     </button>
                   </div>
                   <div className="flex items-center justify-between text-[11px] text-slate-600">
@@ -316,21 +316,21 @@ export default function PembayaranPage() {
                   </div>
                   <div className="flex justify-between text-slate-600">
                     <span>Biaya Layanan & Administrasi:</span>
-                    <span className="font-mono text-emerald-600 font-semibold">Gratis</span>
+                    <span className="font-mono text-[#065F46] font-semibold">Gratis</span>
                   </div>
                   <div className="pt-2 border-t border-slate-200 flex justify-between items-baseline font-bold text-slate-900">
                     <span className="text-sm">Total Pembayaran:</span>
-                    <span className="text-xl font-mono text-blue-700">{currentPlan.formattedAmount}</span>
+                    <span className="text-xl font-mono text-slate-900">{currentPlan.formattedAmount}</span>
                   </div>
                 </div>
 
                 {/* Keamanan & Transparansi */}
-                <div className="p-3 rounded-xl bg-blue-50/60 border border-blue-200/80 text-[11px] text-blue-900 space-y-1.5">
-                  <div className="flex items-center gap-1.5 font-bold text-blue-950">
-                    <ShieldCheck className="w-4 h-4 text-blue-700" />
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-[11px] text-slate-800 space-y-1.5">
+                  <div className="flex items-center gap-1.5 font-bold text-slate-900">
+                    <ShieldCheck className="w-4 h-4 text-slate-700" />
                     <span>Jaminan Keamanan & Hak Konsumen</span>
                   </div>
-                  <p className="leading-relaxed text-blue-800">
+                  <p className="leading-relaxed text-slate-600">
                     Akun aktif langsung setelah bukti transfer diverifikasi oleh administrator. Dilengkapi kuitansi resmi bertanda tangan digital untuk bukti dukung SPJ Dana BOS/BOSP.
                   </p>
                 </div>
@@ -354,7 +354,7 @@ export default function PembayaranPage() {
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div className="flex items-center gap-3">
                     <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border ${
-                      isExpired ? "bg-rose-50 text-rose-600 border-rose-200" : "bg-blue-50 text-blue-700 border-blue-200"
+                      isExpired ? "bg-rose-50 text-rose-600 border-rose-200" : "bg-slate-100 text-slate-800 border-slate-200"
                     }`}>
                       <Clock className="w-5 h-5" />
                     </div>
@@ -379,7 +379,7 @@ export default function PembayaranPage() {
                       <Button
                         size="sm"
                         onClick={handleResetSession}
-                        className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs h-9 rounded-xl gap-1.5 cursor-pointer"
+                        className="bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs h-9 rounded-xl gap-1.5 cursor-pointer"
                       >
                         <RotateCcw className="w-3.5 h-3.5" />
                         <span>Mulai Ulang Waktu</span>
@@ -406,39 +406,39 @@ export default function PembayaranPage() {
                   <button
                     type="button"
                     onClick={() => setSelectedMethod("QRIS")}
-                    className={`p-3 rounded-xl border text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-1.5 ${
+                    className={`p-3 rounded-xl border-2 text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-1.5 ${
                       selectedMethod === "QRIS"
-                        ? "border-blue-600 bg-blue-50/70 text-blue-950 ring-2 ring-blue-500/20 shadow-xs font-bold"
-                        : "border-slate-200 hover:bg-slate-50 text-slate-700"
+                        ? "border-slate-900 bg-slate-100 text-slate-900 shadow-xs font-bold"
+                        : "border-slate-200 bg-white hover:bg-slate-50 text-slate-700"
                     }`}
                   >
-                    <QrCode className="w-5 h-5 text-blue-700" />
+                    <QrCode className="w-5 h-5 text-slate-900" />
                     <span className="text-xs">QRIS Dinamis</span>
                   </button>
 
                   <button
                     type="button"
                     onClick={() => setSelectedMethod("DANA")}
-                    className={`p-3 rounded-xl border text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-1.5 ${
+                    className={`p-3 rounded-xl border-2 text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-1.5 ${
                       selectedMethod === "DANA" || selectedMethod === "ShopeePay"
-                        ? "border-blue-600 bg-blue-50/70 text-blue-950 ring-2 ring-blue-500/20 shadow-xs font-bold"
-                        : "border-slate-200 hover:bg-slate-50 text-slate-700"
+                        ? "border-slate-900 bg-slate-100 text-slate-900 shadow-xs font-bold"
+                        : "border-slate-200 bg-white hover:bg-slate-50 text-slate-700"
                     }`}
                   >
-                    <Smartphone className="w-5 h-5 text-blue-700" />
+                    <Smartphone className="w-5 h-5 text-slate-900" />
                     <span className="text-xs">E-Wallet</span>
                   </button>
 
                   <button
                     type="button"
                     onClick={() => setSelectedMethod("BRI")}
-                    className={`p-3 rounded-xl border text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-1.5 ${
+                    className={`p-3 rounded-xl border-2 text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-1.5 ${
                       selectedMethod === "BRI"
-                        ? "border-blue-600 bg-blue-50/70 text-blue-950 ring-2 ring-blue-500/20 shadow-xs font-bold"
-                        : "border-slate-200 hover:bg-slate-50 text-slate-700"
+                        ? "border-slate-900 bg-slate-100 text-slate-900 shadow-xs font-bold"
+                        : "border-slate-200 bg-white hover:bg-slate-50 text-slate-700"
                     }`}
                   >
-                    <Building2 className="w-5 h-5 text-blue-700" />
+                    <Building2 className="w-5 h-5 text-slate-900" />
                     <span className="text-xs">Transfer Bank</span>
                   </button>
                 </div>
@@ -457,9 +457,9 @@ export default function PembayaranPage() {
                         <a
                           href={currentPlan.qrisImage}
                           download={`QRIS_ModulKu_${currentPlan.amount}.jpg`}
-                          className="mt-2 text-[11px] font-bold text-blue-700 hover:underline inline-flex items-center gap-1"
+                          className="mt-2 text-[11px] font-bold text-slate-900 hover:underline inline-flex items-center gap-1"
                         >
-                          <Download className="w-3 h-3" />
+                          <Download className="w-3 h-3 text-slate-700" />
                           <span>Unduh Gambar QRIS</span>
                         </a>
                       </div>
@@ -489,7 +489,7 @@ export default function PembayaranPage() {
                       <div>
                         <div className="flex items-center gap-2">
                           <span className="font-bold text-sm text-slate-900">{PAYMENT_CHANNELS.dana.name}</span>
-                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-800 font-bold">Resmi</span>
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-800 font-bold border border-slate-200">Resmi</span>
                         </div>
                         <p className="text-xs text-slate-600 mt-0.5">a.n. {PAYMENT_CHANNELS.dana.accountName}</p>
                         <p className="font-mono font-bold text-base text-slate-900 mt-1">{PAYMENT_CHANNELS.dana.accountNumber}</p>
@@ -537,7 +537,7 @@ export default function PembayaranPage() {
                       <div>
                         <div className="flex items-center gap-2">
                           <span className="font-bold text-sm text-slate-900">{PAYMENT_CHANNELS.bri.bankName}</span>
-                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-800 font-bold">BOS / BOSP Ready</span>
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-800 font-bold border border-slate-200">BOS / BOSP Ready</span>
                         </div>
                         <p className="text-xs text-slate-600 mt-0.5">a.n. {PAYMENT_CHANNELS.bri.accountName}</p>
                         <p className="font-mono font-bold text-lg text-slate-900 mt-1">{PAYMENT_CHANNELS.bri.accountNumber}</p>
@@ -576,12 +576,12 @@ export default function PembayaranPage() {
                   )}
 
                   {submitSuccess ? (
-                    <div className="p-5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 space-y-3 animate-in fade-in">
-                      <div className="flex items-center gap-2.5 font-bold text-sm text-emerald-950">
-                        <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+                    <div className="p-5 rounded-2xl bg-[#ECFDF5] border border-emerald-200 text-[#065F46] space-y-3 animate-in fade-in">
+                      <div className="flex items-center gap-2.5 font-bold text-sm text-[#065F46]">
+                        <CheckCircle2 className="w-5 h-5 text-[#059669] shrink-0" />
                         <span>Bukti Pembayaran Berhasil Diterima</span>
                       </div>
-                      <p className="text-xs text-emerald-800 leading-relaxed">
+                      <p className="text-xs text-[#065F46] leading-relaxed">
                         Terima kasih, <strong>{senderName}</strong>. Bukti transfer telah tersimpan dalam sistem antrean admin. Administrator kami akan memverifikasi dalam waktu kurang dari 15 menit. Anda juga dapat melakukan konfirmasi cepat via WhatsApp.
                       </p>
 
@@ -597,14 +597,14 @@ export default function PembayaranPage() {
                             target="_blank"
                             rel="noopener noreferrer"
                           >
-                            <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs h-9 rounded-xl gap-2 cursor-pointer">
+                            <Button size="sm" className="bg-[#059669] hover:bg-emerald-700 text-white font-bold text-xs h-9 rounded-xl gap-2 cursor-pointer">
                               <span>Konfirmasi Instan ke WhatsApp Admin</span>
                               <ExternalLink className="w-3.5 h-3.5" />
                             </Button>
                           </a>
                         )}
                         <Link href="/dashboard">
-                          <Button variant="outline" size="sm" className="text-xs font-semibold h-9 rounded-xl border-emerald-300 text-emerald-900 bg-white hover:bg-emerald-100">
+                          <Button variant="outline" size="sm" className="text-xs font-semibold h-9 rounded-xl border-emerald-300 text-[#065F46] bg-white hover:bg-emerald-50">
                             Kembali ke Ruang Kerja
                           </Button>
                         </Link>
@@ -648,7 +648,7 @@ export default function PembayaranPage() {
                                   onChange={handleFileChange}
                                   className="hidden"
                                 />
-                                <span className="text-xs font-bold text-blue-700 hover:underline">
+                                <span className="text-xs font-bold text-slate-900 hover:underline">
                                   Ganti Foto Struk
                                 </span>
                               </label>
@@ -679,7 +679,7 @@ export default function PembayaranPage() {
                         <Button
                           type="submit"
                           disabled={isSubmitting || isExpired}
-                          className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs h-10 px-6 rounded-xl shadow-xs cursor-pointer disabled:opacity-50"
+                          className="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs h-10 px-6 rounded-xl shadow-xs cursor-pointer disabled:opacity-50"
                         >
                           <FileCheck2 className="w-4 h-4 mr-1.5" />
                           <span>{isSubmitting ? "Mengirim Verifikasi..." : "Konfirmasi Pembayaran Saya"}</span>

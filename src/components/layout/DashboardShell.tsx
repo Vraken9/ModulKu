@@ -354,7 +354,7 @@ export function DashboardShell({ children, activeItem }: DashboardShellProps) {
             <button
               type="button"
               onClick={() => router.push("/pembayaran?plan=profesional_annual")}
-              className="text-blue-600 hover:underline font-bold cursor-pointer"
+              className="text-slate-900 hover:text-slate-700 hover:underline font-bold cursor-pointer"
             >
               Upgrade
             </button>
@@ -412,8 +412,8 @@ export function DashboardShell({ children, activeItem }: DashboardShellProps) {
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1.5 text-xs text-emerald-800 font-semibold bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+            <div className="flex items-center gap-1.5 text-xs text-[#065F46] font-semibold bg-[#ECFDF5] px-2.5 py-1 rounded-full border border-emerald-200">
+              <ShieldCheck className="w-3.5 h-3.5 text-[#059669]" />
               <span>BKPDM Kemendikdasmen</span>
             </div>
 

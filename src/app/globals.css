@@ -12,20 +12,20 @@
   --popover: #ffffff;
   --popover-foreground: #0f172a;
 
-  /* Primary: Deep Indonesian Education Blue */
-  --primary: #1e40af;
+  /* Primary: Unified Monochromatic Slate 900 */
+  --primary: #0f172a;
   --primary-foreground: #ffffff;
 
-  /* Secondary: Slate Indigo */
-  --secondary: #eff6ff;
-  --secondary-foreground: #1e40af;
+  /* Secondary: Soft Slate Fill */
+  --secondary: #f1f5f9;
+  --secondary-foreground: #0f172a;
 
   /* Muted */
   --muted: #f1f5f9;
   --muted-foreground: #475569;
 
-  /* Accent: Emerald Green */
-  --accent: #16a34a;
+  /* Accent: Calm Emerald 600 */
+  --accent: #059669;
   --accent-foreground: #ffffff;
 
   /* Destructive */
@@ -35,7 +35,7 @@
   /* Borders & Inputs (WCAG 2.2 AA compliant contrast) */
   --border: #e2e8f0;
   --input: #cbd5e1;
-  --ring: #1e40af;
+  --ring: #0f172a;
 
   --radius: 0.625rem;
 }

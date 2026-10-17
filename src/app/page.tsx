@@ -98,7 +98,7 @@ export default function LandingPage() {
               <Link href="/dashboard">
                 <Button
                   size="sm"
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm h-8 sm:h-9 px-3.5 sm:px-4 rounded-xl shadow-xs whitespace-nowrap gap-2"
+                  className="bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm h-8 sm:h-9 px-3.5 sm:px-4 rounded-xl shadow-xs whitespace-nowrap gap-2"
                 >
                   <LayoutDashboard className="w-3.5 h-3.5" />
                   <span>Kembali ke Dashboard</span>
@@ -118,7 +118,7 @@ export default function LandingPage() {
                 <Link href="/login">
                   <Button
                     size="sm"
-                    className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm h-8 sm:h-9 px-3.5 sm:px-4 rounded-xl shadow-xs whitespace-nowrap"
+                    className="bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm h-8 sm:h-9 px-3.5 sm:px-4 rounded-xl shadow-xs whitespace-nowrap"
                   >
                     Coba Gratis
                   </Button>
@@ -133,7 +133,7 @@ export default function LandingPage() {
               <Link href="/dashboard" className="sm:hidden">
                 <Button
                   size="sm"
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs h-8 px-2.5 rounded-lg shadow-xs gap-1.5"
+                  className="bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs h-8 px-2.5 rounded-lg shadow-xs gap-1.5"
                 >
                   <LayoutDashboard className="w-3 h-3" />
                   <span>Dashboard</span>
@@ -143,7 +143,7 @@ export default function LandingPage() {
               <Link href="/login" className="sm:hidden">
                 <Button
                   size="sm"
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs h-8 px-3 rounded-lg shadow-xs"
+                  className="bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs h-8 px-3 rounded-lg shadow-xs"
                 >
                   Masuk
                 </Button>
@@ -204,7 +204,7 @@ export default function LandingPage() {
             <div className="pt-2 border-t border-slate-100 flex flex-col gap-2">
               {isLoggedIn ? (
                 <Link href="/dashboard" onClick={() => setMobileMenuOpen(false)}>
-                  <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs h-9 gap-2">
+                  <Button className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs h-9 gap-2">
                     <LayoutDashboard className="w-3.5 h-3.5" />
                     <span>Kembali ke Ruang Kerja Dashboard</span>
                   </Button>
@@ -217,7 +217,7 @@ export default function LandingPage() {
                     </Button>
                   </Link>
                   <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
-                    <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs h-9">
+                    <Button className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs h-9">
                       Coba Gratis Sekarang
                     </Button>
                   </Link>
@@ -248,9 +248,9 @@ export default function LandingPage() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
               {/* Kolom Kiri: Copywriting & Actions */}
               <div className="lg:col-span-6 space-y-6 text-center lg:text-left">
-                {/* Monochromatic Clean Badge */}
-                <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-slate-100 border border-slate-200 text-xs sm:text-sm font-semibold text-slate-800 shadow-2xs">
-                  <Sparkles className="w-4 h-4 text-slate-700" />
+                {/* Standard Curriculum Emerald Badge */}
+                <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-[#ECFDF5] border border-emerald-200 text-xs sm:text-sm font-semibold text-[#065F46] shadow-2xs">
+                  <Sparkles className="w-4 h-4 text-[#059669]" />
                   <span>Platform Resmi Standar BKPDM Kemendikdasmen</span>
                 </div>
 
@@ -269,7 +269,7 @@ export default function LandingPage() {
                 {/* Action Buttons */}
                 <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5 pt-1">
                   <Link href={isLoggedIn ? "/dashboard" : "/login"} className="w-full sm:w-auto">
-                    <Button size="lg" className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-sm sm:text-base h-11 sm:h-12 px-6 sm:px-7 rounded-xl shadow-md gap-3">
+                    <Button size="lg" className="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-sm sm:text-base h-11 sm:h-12 px-6 sm:px-7 rounded-xl shadow-md gap-3">
                       <span>{isLoggedIn ? "Buka Ruang Kerja Dashboard" : "Mulai Susun Modul Sekarang"}</span>
                       <ArrowRight className="w-4 h-4 text-white" />
                     </Button>

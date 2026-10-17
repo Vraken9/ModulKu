@@ -447,7 +447,7 @@ export default function LoginPage() {
                           type="checkbox"
                           checked={agreePrivacy}
                           onChange={(e) => setAgreePrivacy(e.target.checked)}
-                          className="mt-0.5 rounded border-slate-300 text-slate-900 focus:ring-slate-900 w-4 h-4"
+                          className="mt-0.5 rounded border-slate-300 accent-slate-900 text-slate-900 focus:ring-slate-900 w-4 h-4"
                           required
                         />
                         <span className="text-[11px] text-slate-600 leading-snug">
@@ -455,7 +455,7 @@ export default function LoginPage() {
                           <button
                             type="button"
                             onClick={() => setIsPrivacyModalOpen(true)}
-                            className="font-bold text-slate-900 underline hover:text-blue-700 inline"
+                            className="font-bold text-slate-900 underline hover:text-slate-700 inline"
                           >
                             Kebijakan Privasi & Perlindungan Data Kedinasan
                           </button>{" "}

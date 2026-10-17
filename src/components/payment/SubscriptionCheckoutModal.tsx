@@ -332,7 +332,7 @@ export function SubscriptionCheckoutModal({
                     onClick={() => setPaymentMethod("QRIS")}
                     className={`p-3 rounded-xl border flex flex-col items-center gap-1.5 text-center transition-all cursor-pointer ${
                       paymentMethod === "QRIS"
-                        ? "border-slate-900 bg-slate-50 font-bold text-slate-900 shadow-2xs"
+                        ? "border-2 border-slate-900 bg-slate-100 font-bold text-slate-900 shadow-2xs"
                         : "border-slate-200 hover:bg-slate-50 text-slate-600"
                     }`}
                   >
@@ -345,11 +345,11 @@ export function SubscriptionCheckoutModal({
                     onClick={() => setPaymentMethod("DANA")}
                     className={`p-3 rounded-xl border flex flex-col items-center gap-1.5 text-center transition-all cursor-pointer ${
                       paymentMethod === "DANA" || paymentMethod === "ShopeePay"
-                        ? "border-slate-900 bg-slate-50 font-bold text-slate-900 shadow-2xs"
+                        ? "border-2 border-slate-900 bg-slate-100 font-bold text-slate-900 shadow-2xs"
                         : "border-slate-200 hover:bg-slate-50 text-slate-600"
                     }`}
                   >
-                    <Smartphone className="w-5 h-5 text-blue-600" />
+                    <Smartphone className="w-5 h-5 text-slate-800" />
                     <span className="text-xs">DANA / ShopeePay</span>
                   </button>
 
@@ -358,11 +358,11 @@ export function SubscriptionCheckoutModal({
                     onClick={() => setPaymentMethod("BRI")}
                     className={`p-3 rounded-xl border flex flex-col items-center gap-1.5 text-center transition-all cursor-pointer ${
                       paymentMethod === "BRI"
-                        ? "border-slate-900 bg-slate-50 font-bold text-slate-900 shadow-2xs"
+                        ? "border-2 border-slate-900 bg-slate-100 font-bold text-slate-900 shadow-2xs"
                         : "border-slate-200 hover:bg-slate-50 text-slate-600"
                     }`}
                   >
-                    <Building2 className="w-5 h-5 text-blue-700" />
+                    <Building2 className="w-5 h-5 text-slate-800" />
                     <span className="text-xs">Transfer Bank BRI</span>
                   </button>
                 </div>
@@ -416,7 +416,7 @@ export function SubscriptionCheckoutModal({
                     <div className="p-3.5 rounded-xl bg-white border border-slate-200 space-y-2">
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
-                          <span className="px-2 py-0.5 rounded bg-blue-100 text-blue-800 text-[10px] font-mono">
+                          <span className="px-2 py-0.5 rounded bg-slate-100 text-slate-800 text-[10px] font-mono">
                             DANA
                           </span>
                           <span>{PAYMENT_CHANNELS.dana.name}</span>
@@ -470,7 +470,7 @@ export function SubscriptionCheckoutModal({
                     <div className="p-4 rounded-xl bg-white border border-slate-200 space-y-2.5">
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
-                          <span className="px-2 py-0.5 rounded bg-blue-100 text-blue-900 text-[10px] font-mono font-bold">
+                          <span className="px-2 py-0.5 rounded bg-slate-100 text-slate-900 text-[10px] font-mono font-bold">
                             BRI
                           </span>
                           <span>{PAYMENT_CHANNELS.bri.bankName}</span>
