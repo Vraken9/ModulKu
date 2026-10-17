@@ -30,8 +30,45 @@ export const TIER_CONFIGS: Record<SubscriptionTier, TierStorageConfig> = {
   },
 };
 
-const VAULT_STORAGE_KEY = "modulku_document_vault_items";
-const TIER_STORAGE_KEY = "modulku_user_subscription_tier";
+export const DEFAULT_VAULT_STORAGE_KEY = "modulku_document_vault_items";
+export const DEFAULT_TIER_STORAGE_KEY = "modulku_user_subscription_tier";
+
+export function getActiveUserId(): string {
+  if (typeof window === "undefined") return "guest";
+  try {
+    const saved = localStorage.getItem("modulku_active_user_id");
+    if (saved && saved.trim()) return saved.trim();
+  } catch {
+    // Abaikan di server
+  }
+  return "guest";
+}
+
+export function setActiveUserId(userId: string | null): void {
+  if (typeof window === "undefined") return;
+  try {
+    if (userId && userId.trim()) {
+      localStorage.setItem("modulku_active_user_id", userId.trim());
+    } else {
+      localStorage.removeItem("modulku_active_user_id");
+    }
+    window.dispatchEvent(new CustomEvent("modulku-vault-changed"));
+  } catch {
+    // Abaikan
+  }
+}
+
+export function getVaultStorageKey(userId?: string): string {
+  const uid = userId || getActiveUserId();
+  if (!uid || uid === "guest") return DEFAULT_VAULT_STORAGE_KEY;
+  return `modulku_vault_${uid}`;
+}
+
+export function getTierStorageKey(userId?: string): string {
+  const uid = userId || getActiveUserId();
+  if (!uid || uid === "guest") return DEFAULT_TIER_STORAGE_KEY;
+  return `modulku_tier_${uid}`;
+}
 
 // 1. DATA SEED MODUL AJAR (STANDAR BKPDM & DEEP LEARNING)
 const SEED_MODUL_AJAR_CONTENT: TeachingModule = {
@@ -790,10 +827,11 @@ export function formatBytes(bytes: number, decimals = 1): string {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
 }
 
-export function getUserTier(): SubscriptionTier {
+export function getUserTier(userId?: string): SubscriptionTier {
   if (typeof window === "undefined") return "free";
   try {
-    const saved = localStorage.getItem(TIER_STORAGE_KEY) as SubscriptionTier | null;
+    const key = getTierStorageKey(userId);
+    const saved = localStorage.getItem(key) as SubscriptionTier | null;
     if (saved && (saved === "free" || saved === "pro" || saved === "school")) {
       return saved;
     }
@@ -803,31 +841,43 @@ export function getUserTier(): SubscriptionTier {
   return "free";
 }
 
-export function setUserTier(tier: SubscriptionTier): void {
+export function setUserTier(tier: SubscriptionTier, userId?: string): void {
   if (typeof window === "undefined") return;
   try {
-    localStorage.setItem(TIER_STORAGE_KEY, tier);
+    const key = getTierStorageKey(userId);
+    localStorage.setItem(key, tier);
     window.dispatchEvent(new CustomEvent("modulku-vault-changed"));
   } catch {
     // Abaikan
   }
 }
 
-export function getStoredDocuments(): StoredDocument[] {
-  if (typeof window === "undefined") return SEED_DOCUMENTS;
+export function getStoredDocuments(userId?: string): StoredDocument[] {
+  const uid = userId || getActiveUserId();
+  const key = getVaultStorageKey(uid);
+
+  if (typeof window === "undefined") {
+    return SEED_DOCUMENTS.map((d) => ({ ...d, user_id: uid }));
+  }
+
   try {
-    const raw = localStorage.getItem(VAULT_STORAGE_KEY);
+    const raw = localStorage.getItem(key);
     if (!raw) {
-      // Inisialisasi dengan dokumen contoh
-      localStorage.setItem(VAULT_STORAGE_KEY, JSON.stringify(SEED_DOCUMENTS));
-      return SEED_DOCUMENTS;
+      // Inisialisasi vault khusus untuk user ini dengan dokumen contoh bawaan
+      const userSeeds = SEED_DOCUMENTS.map((doc) => ({
+        ...doc,
+        id: `${doc.id}-${uid.slice(0, 6)}`,
+        user_id: uid,
+      }));
+      localStorage.setItem(key, JSON.stringify(userSeeds));
+      return userSeeds;
     }
     const parsed = JSON.parse(raw);
     if (Array.isArray(parsed)) {
       // Otomatis lengkapi contentData dokumen seed jika sebelumnya tersimpan tanpa contentData
       const enriched = parsed.map((doc: StoredDocument) => {
-        if (!doc.contentData && doc.id.startsWith("doc-seed-")) {
-          const matchingSeed = SEED_DOCUMENTS.find((s) => s.id === doc.id);
+        if (!doc.contentData && doc.id.includes("seed")) {
+          const matchingSeed = SEED_DOCUMENTS.find((s) => doc.id.startsWith(s.id));
           if (matchingSeed) {
             return { ...doc, contentData: matchingSeed.contentData };
           }
@@ -839,13 +889,13 @@ export function getStoredDocuments(): StoredDocument[] {
   } catch {
     // Fallback jika korup
   }
-  return SEED_DOCUMENTS;
+  return SEED_DOCUMENTS.map((d) => ({ ...d, user_id: uid }));
 }
 
-export function getStorageUsageSummary(): StorageUsageSummary {
-  const tier = getUserTier();
+export function getStorageUsageSummary(userId?: string): StorageUsageSummary {
+  const tier = getUserTier(userId);
   const config = TIER_CONFIGS[tier];
-  const docs = getStoredDocuments();
+  const docs = getStoredDocuments(userId);
 
   const usedBytes = docs.reduce((acc, curr) => acc + (curr.fileSizeBytes || 0), 0);
   const maxBytes = config.maxBytes;
@@ -866,13 +916,16 @@ export function getStorageUsageSummary(): StorageUsageSummary {
 }
 
 export function saveDocumentToVault(
-  doc: Omit<StoredDocument, "id" | "createdAt" | "updatedAt">
+  doc: Omit<StoredDocument, "id" | "createdAt" | "updatedAt">,
+  userId?: string
 ): { success: boolean; error?: string; document?: StoredDocument } {
   if (typeof window === "undefined") {
     return { success: false, error: "Lingkungan peramban tidak tersedia." };
   }
 
-  const summary = getStorageUsageSummary();
+  const uid = userId || getActiveUserId();
+  const key = getVaultStorageKey(uid);
+  const summary = getStorageUsageSummary(uid);
   const newSize = doc.fileSizeBytes || 150 * 1024; // Default 150 KB jika tidak dispesifikasi
 
   if (summary.usedBytes + newSize > summary.maxBytes) {
@@ -882,7 +935,7 @@ export function saveDocumentToVault(
     };
   }
 
-  const existingDocs = getStoredDocuments();
+  const existingDocs = getStoredDocuments(uid);
   const newDoc: StoredDocument = {
     ...doc,
     id: `doc-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
@@ -892,10 +945,10 @@ export function saveDocumentToVault(
 
   try {
     const updatedDocs = [newDoc, ...existingDocs];
-    localStorage.setItem(VAULT_STORAGE_KEY, JSON.stringify(updatedDocs));
+    localStorage.setItem(key, JSON.stringify(updatedDocs));
     window.dispatchEvent(new CustomEvent("modulku-vault-changed"));
     return { success: true, document: newDoc };
-  } catch (err) {
+  } catch {
     return {
       success: false,
       error: "Gagal menyimpan berkas ke penyimpanan lokal peramban.",
@@ -903,12 +956,14 @@ export function saveDocumentToVault(
   }
 }
 
-export function deleteDocumentFromVault(docId: string): boolean {
+export function deleteDocumentFromVault(docId: string, userId?: string): boolean {
   if (typeof window === "undefined") return false;
   try {
-    const docs = getStoredDocuments();
+    const uid = userId || getActiveUserId();
+    const key = getVaultStorageKey(uid);
+    const docs = getStoredDocuments(uid);
     const filtered = docs.filter((d) => d.id !== docId);
-    localStorage.setItem(VAULT_STORAGE_KEY, JSON.stringify(filtered));
+    localStorage.setItem(key, JSON.stringify(filtered));
     window.dispatchEvent(new CustomEvent("modulku-vault-changed"));
     return true;
   } catch {

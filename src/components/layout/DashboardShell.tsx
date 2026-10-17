@@ -28,11 +28,13 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ModulKuLogo } from "@/components/ui/ModulKuLogo";
 import { SchoolProfile, TeacherProfile } from "@/types";
+import { supabase } from "@/lib/supabase/client";
 import {
   getStorageUsageSummary,
   formatBytes,
   TIER_CONFIGS,
   DEFAULT_STORAGE_SUMMARY,
+  setActiveUserId,
 } from "@/lib/document-vault";
 
 interface MenuItem {
@@ -65,38 +67,89 @@ export function DashboardShell({ children, activeItem }: DashboardShellProps) {
     school_name: "SMA NEGERI 1 PURWANTORO",
   });
   const [teacher, setTeacher] = useState<Partial<TeacherProfile>>({
-    teacher_name: "Arfian Cahya, S.Pd.",
-    teacher_nip: "19880412 201402 1 002",
+    teacher_name: "Pendidik ModulKu",
+    teacher_nip: "-",
   });
 
   useEffect(() => {
-    try {
-      const savedSchool = localStorage.getItem("guru_school_profile");
-      const savedTeacher = localStorage.getItem("guru_teacher_profile");
-      if (savedSchool) setSchool(JSON.parse(savedSchool));
-      if (savedTeacher) setTeacher(JSON.parse(savedTeacher));
-      setVaultSummary(getStorageUsageSummary());
-    } catch {
-      // Abaikan di server
+    let isMounted = true;
+
+    async function checkAuthAndLoad() {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        const localToken = localStorage.getItem("guru_auth_token");
+
+        // Auth guard: Jika tidak ada session maupun token lokal, arahkan ke login
+        if (!session && !localToken) {
+          router.replace("/login");
+          return;
+        }
+
+        if (session?.user) {
+          setActiveUserId(session.user.id);
+          const userDisplayName =
+            session.user.user_metadata?.full_name ||
+            session.user.email?.split("@")[0] ||
+            "Pendidik ModulKu";
+
+          const savedTeacher = localStorage.getItem("guru_teacher_profile");
+          if (savedTeacher) {
+            const parsed = JSON.parse(savedTeacher);
+            if (isMounted) setTeacher(parsed);
+          } else {
+            const newProfile = { teacher_name: userDisplayName, teacher_nip: "-" };
+            if (isMounted) setTeacher(newProfile);
+          }
+        } else {
+          const savedTeacher = localStorage.getItem("guru_teacher_profile");
+          if (savedTeacher && isMounted) setTeacher(JSON.parse(savedTeacher));
+        }
+
+        const savedSchool = localStorage.getItem("guru_school_profile");
+        if (savedSchool && isMounted) setSchool(JSON.parse(savedSchool));
+
+        if (isMounted) setVaultSummary(getStorageUsageSummary());
+      } catch {
+        // Abaikan di server
+      }
     }
+
+    checkAuthAndLoad();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_OUT") {
+        setActiveUserId(null);
+        router.replace("/login");
+      } else if (session?.user) {
+        setActiveUserId(session.user.id);
+        setVaultSummary(getStorageUsageSummary());
+      }
+    });
 
     const handleVaultChange = () => {
       setVaultSummary(getStorageUsageSummary());
     };
     window.addEventListener("modulku-vault-changed", handleVaultChange);
-    return () => window.removeEventListener("modulku-vault-changed", handleVaultChange);
-  }, []);
+
+    return () => {
+      isMounted = false;
+      subscription.unsubscribe();
+      window.removeEventListener("modulku-vault-changed", handleVaultChange);
+    };
+  }, [router]);
 
   async function handleLogout() {
     try {
       localStorage.removeItem("guru_auth_token");
+      setActiveUserId(null);
+      await supabase.auth.signOut();
     } catch {
       // ignore
     }
     try {
-      await signOut({ callbackUrl: "/" });
+      await signOut({ callbackUrl: "/login" });
     } catch {
-      router.push("/");
+      router.push("/login");
     }
   }
 

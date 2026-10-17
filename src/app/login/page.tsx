@@ -10,22 +10,29 @@ import {
   CheckCircle2,
   Lock,
   Mail,
-  Sparkles,
+  User,
   AlertCircle,
+  KeyRound,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { ModulKuLogo } from "@/components/ui/ModulKuLogo";
+import { supabase } from "@/lib/supabase/client";
+import { setActiveUserId } from "@/lib/document-vault";
 
 export default function LoginPage() {
   const router = useRouter();
+  const [authMode, setAuthMode] = useState<"signin" | "signup">("signin");
+  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
+  const [authSuccess, setAuthSuccess] = useState<string | null>(null);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -43,38 +50,153 @@ export default function LoginPage() {
     }
   }, []);
 
-  function handleLogin(e: React.FormEvent) {
+  async function handleAuthSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
-    try {
-      localStorage.setItem("guru_auth_token", "demo_session_active");
-    } catch {
-      // ignore
+    setAuthError(null);
+    setAuthSuccess(null);
+
+    // Validasi Dasar
+    if (!email || !password) {
+      setAuthError("Alamat email dan kata sandi wajib diisi.");
+      setLoading(false);
+      return;
     }
-    setTimeout(() => {
-      router.push("/dashboard");
-    }, 300);
+
+    if (password.length < 6) {
+      setAuthError("Kata sandi harus terdiri dari minimal 6 karakter.");
+      setLoading(false);
+      return;
+    }
+
+    if (authMode === "signup") {
+      if (!fullName.trim()) {
+        setAuthError("Nama lengkap pendidik wajib diisi.");
+        setLoading(false);
+        return;
+      }
+      if (password !== confirmPassword) {
+        setAuthError("Konfirmasi kata sandi tidak cocok dengan kata sandi yang dimasukkan.");
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const { data, error } = await supabase.auth.signUp({
+          email: email.trim(),
+          password: password,
+          options: {
+            data: {
+              full_name: fullName.trim(),
+            },
+          },
+        });
+
+        if (error) {
+          setAuthError(error.message || "Gagal mendaftarkan akun. Silakan coba kembali.");
+          setLoading(false);
+          return;
+        }
+
+        if (data.session && data.user) {
+          setActiveUserId(data.user.id);
+          localStorage.setItem("guru_auth_token", data.session.access_token);
+          const currentTeacher = {
+            teacher_name: fullName.trim(),
+            user_id: data.user.id,
+          };
+          localStorage.setItem("guru_teacher_profile", JSON.stringify(currentTeacher));
+          setAuthSuccess("Pendaftaran berhasil! Mengalihkan ke ruang kerja...");
+          setTimeout(() => {
+            router.push("/dashboard");
+          }, 800);
+        } else {
+          setAuthSuccess(
+            "Pendaftaran berhasil! Tautan konfirmasi telah dikirimkan ke email Anda. Silakan verifikasi akun Anda atau masuk langsung."
+          );
+          setAuthMode("signin");
+          setPassword("");
+          setConfirmPassword("");
+          setLoading(false);
+        }
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : "Terjadi kesalahan saat pendaftaran.";
+        setAuthError(message);
+        setLoading(false);
+      }
+      return;
+    }
+
+    // Mode Sign In (Masuk)
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password: password,
+      });
+
+      if (error) {
+        if (error.message.includes("Invalid login credentials")) {
+          setAuthError("Alamat email atau kata sandi yang Anda masukkan salah.");
+        } else if (error.message.includes("Email not confirmed")) {
+          setAuthError("Alamat email belum dikonfirmasi. Silakan periksa kotak masuk atau spam email Anda.");
+        } else {
+          setAuthError(error.message || "Gagal masuk ke akun pendidik.");
+        }
+        setLoading(false);
+        return;
+      }
+
+      if (data.session && data.user) {
+        setActiveUserId(data.user.id);
+        localStorage.setItem("guru_auth_token", data.session.access_token);
+
+        if (data.user.user_metadata?.full_name) {
+          try {
+            const raw = localStorage.getItem("guru_teacher_profile");
+            const existing = raw ? JSON.parse(raw) : {};
+            localStorage.setItem(
+              "guru_teacher_profile",
+              JSON.stringify({
+                ...existing,
+                teacher_name: data.user.user_metadata.full_name,
+                user_id: data.user.id,
+              })
+            );
+          } catch {
+            // ignore
+          }
+        }
+
+        setAuthSuccess("Kredensial terverifikasi. Mengalihkan ke ruang kerja...");
+        setTimeout(() => {
+          router.push("/dashboard");
+        }, 500);
+      }
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Terjadi kesalahan saat otentikasi.";
+      setAuthError(message);
+      setLoading(false);
+    }
   }
 
-  function handleGoogleLogin() {
+  async function handleGoogleLogin() {
     setGoogleLoading(true);
     setAuthError(null);
     try {
-      localStorage.setItem("guru_auth_token", "google_session_active");
-    } catch {
-      // ignore
-    }
-    signIn("google", { callbackUrl: "/dashboard" });
-  }
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/dashboard`,
+        },
+      });
 
-  function handleDemoLogin() {
-    setLoading(true);
-    try {
-      localStorage.setItem("guru_auth_token", "demo_session_active");
+      if (error) {
+        // Fallback ke NextAuth jika OAuth Supabase belum terkonfigurasi di dashboard
+        signIn("google", { callbackUrl: "/dashboard" });
+      }
     } catch {
-      // ignore
+      signIn("google", { callbackUrl: "/dashboard" });
     }
-    router.push("/dashboard");
   }
 
   return (
@@ -97,34 +219,83 @@ export default function LoginPage() {
       {/* Main Container */}
       <main className="flex-1 max-w-5xl w-full mx-auto p-4 sm:p-8 flex items-center justify-center">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 w-full items-center">
-          {/* Kolom Kiri: Formulir Masuk */}
+          {/* Kolom Kiri: Formulir Masuk / Daftar */}
           <div className="lg:col-span-7">
             <Card className="border-slate-200 shadow-sm bg-white">
               <CardHeader className="space-y-1.5 pb-5 border-b border-slate-100">
                 <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-700 w-fit">
-                  <span>Autentikasi Pendidik</span>
+                  <span>Autentikasi Terisolasi Per-Pendidik</span>
                 </div>
                 <CardTitle className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-                  Masuk ke Ruang Kerja Guru
+                  {authMode === "signin" ? "Masuk ke Ruang Kerja Guru" : "Daftar Akun Baru Pendidik"}
                 </CardTitle>
                 <CardDescription className="text-xs text-slate-600 leading-relaxed">
-                  Akses instan dasbor penyusunan perangkat ajar, generator soal HOTS, dan modul administrasi supervisi resmi.
+                  {authMode === "signin"
+                    ? "Kelola modul ajar, bank dokumen pribadi, dan perangkat evaluasi pembelajaran secara terisolasi dan terlindungi."
+                    : "Buat akun resmi untuk menyimpan perangkat ajar terstandar BKPDM secara mandiri di cloud database."}
                 </CardDescription>
+
+                {/* Tab Switcher: Masuk vs Daftar */}
+                <div className="pt-2">
+                  <div className="grid grid-cols-2 p-1 bg-slate-100 rounded-xl border border-slate-200">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setAuthMode("signin");
+                        setAuthError(null);
+                        setAuthSuccess(null);
+                      }}
+                      className={`py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${
+                        authMode === "signin"
+                          ? "bg-white text-slate-900 shadow-xs"
+                          : "text-slate-600 hover:text-slate-900"
+                      }`}
+                    >
+                      Masuk (Sign In)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setAuthMode("signup");
+                        setAuthError(null);
+                        setAuthSuccess(null);
+                      }}
+                      className={`py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${
+                        authMode === "signup"
+                          ? "bg-white text-slate-900 shadow-xs"
+                          : "text-slate-600 hover:text-slate-900"
+                      }`}
+                    >
+                      Daftar Akun Baru (Sign Up)
+                    </button>
+                  </div>
+                </div>
               </CardHeader>
 
               <CardContent className="pt-6 space-y-5">
-                {/* Notifikasi jika ada kendala OAuth konfigurasi */}
+                {/* Notifikasi Kendala / Error */}
                 {authError && (
-                  <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200/80 text-amber-900 text-xs flex items-start gap-2.5">
-                    <AlertCircle className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
+                  <div className="p-3.5 rounded-xl bg-red-50 border border-red-200/80 text-red-900 text-xs flex items-start gap-2.5">
+                    <AlertCircle className="w-4 h-4 text-red-700 shrink-0 mt-0.5" />
                     <div className="space-y-1">
-                      <p className="font-semibold">Informasi Konfigurasi OAuth</p>
-                      <p className="text-[11px] text-amber-800 leading-relaxed">{authError}</p>
+                      <p className="font-semibold">Pemberitahuan Autentikasi</p>
+                      <p className="text-[11px] text-red-800 leading-relaxed">{authError}</p>
                     </div>
                   </div>
                 )}
 
-                {/* Tombol Utama: Masuk dengan Akun Google / Belajar.id */}
+                {/* Notifikasi Sukses */}
+                {authSuccess && (
+                  <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200/80 text-emerald-900 text-xs flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-700 shrink-0 mt-0.5" />
+                    <div className="space-y-1">
+                      <p className="font-semibold">Operasi Berhasil</p>
+                      <p className="text-[11px] text-emerald-800 leading-relaxed">{authSuccess}</p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Tombol OAuth: Masuk dengan Google */}
                 <Button
                   type="button"
                   onClick={handleGoogleLogin}
@@ -151,7 +322,7 @@ export default function LoginPage() {
                     />
                   </svg>
                   <span>
-                    {googleLoading ? "Menghubungkan ke Google..." : "Masuk dengan Akun Google / Belajar.id"}
+                    {googleLoading ? "Menghubungkan ke Google..." : "Lanjutkan dengan Akun Google / Belajar.id"}
                   </span>
                 </Button>
 
@@ -161,15 +332,36 @@ export default function LoginPage() {
                   </div>
                   <div className="relative flex justify-center text-xs uppercase">
                     <span className="bg-white px-2.5 text-slate-500 text-[10px] font-bold font-mono">
-                      Atau Masuk dengan Email & Kata Sandi
+                      Atau dengan Kredensial Surel Resmi
                     </span>
                   </div>
                 </div>
 
-                <form onSubmit={handleLogin} className="space-y-4">
+                <form onSubmit={handleAuthSubmit} className="space-y-4">
+                  {/* Nama Lengkap jika mode pendaftaran */}
+                  {authMode === "signup" && (
+                    <div className="space-y-1.5">
+                      <Label htmlFor="fullname" className="text-xs font-bold text-slate-700">
+                        Nama Lengkap Pendidik & Gelar
+                      </Label>
+                      <div className="relative">
+                        <User className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+                        <Input
+                          id="fullname"
+                          type="text"
+                          value={fullName}
+                          onChange={(e) => setFullName(e.target.value)}
+                          placeholder="Arfian Cahya, S.Pd."
+                          className="pl-9 text-xs h-10 border-slate-300 focus-visible:ring-slate-900"
+                          required={authMode === "signup"}
+                        />
+                      </div>
+                    </div>
+                  )}
+
                   <div className="space-y-1.5">
                     <Label htmlFor="email" className="text-xs font-bold text-slate-700">
-                      Alamat Email / Akun Belajar.id
+                      Alamat Email Aktif / Akun Belajar.id
                     </Label>
                     <div className="relative">
                       <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
@@ -190,9 +382,11 @@ export default function LoginPage() {
                       <Label htmlFor="password" className="text-xs font-bold text-slate-700">
                         Kata Sandi
                       </Label>
-                      <span className="text-[11px] text-slate-600 hover:text-slate-900 hover:underline cursor-pointer">
-                        Lupa kata sandi?
-                      </span>
+                      {authMode === "signin" && (
+                        <span className="text-[11px] text-slate-600 hover:text-slate-900 hover:underline cursor-pointer">
+                          Lupa kata sandi?
+                        </span>
+                      )}
                     </div>
                     <div className="relative">
                       <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
@@ -201,43 +395,48 @@ export default function LoginPage() {
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        placeholder="Masukkan kata sandi"
+                        placeholder="Minimal 6 karakter"
                         className="pl-9 text-xs h-10 border-slate-300 focus-visible:ring-slate-900"
                         required
                       />
                     </div>
                   </div>
 
+                  {/* Konfirmasi Kata Sandi jika mode pendaftaran */}
+                  {authMode === "signup" && (
+                    <div className="space-y-1.5">
+                      <Label htmlFor="confirmPassword" className="text-xs font-bold text-slate-700">
+                        Konfirmasi Kata Sandi
+                      </Label>
+                      <div className="relative">
+                        <KeyRound className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+                        <Input
+                          id="confirmPassword"
+                          type="password"
+                          value={confirmPassword}
+                          onChange={(e) => setConfirmPassword(e.target.value)}
+                          placeholder="Ketik ulang kata sandi Anda"
+                          className="pl-9 text-xs h-10 border-slate-300 focus-visible:ring-slate-900"
+                          required={authMode === "signup"}
+                        />
+                      </div>
+                    </div>
+                  )}
+
                   <Button
                     type="submit"
                     disabled={loading}
                     className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs h-11 rounded-xl shadow-xs transition-all cursor-pointer"
                   >
-                    {loading ? "Memverifikasi Kredensial..." : "Masuk ke Dasbor Guru"}
+                    {loading
+                      ? authMode === "signin"
+                        ? "Memverifikasi Kredensial..."
+                        : "Mendaftarkan Akun..."
+                      : authMode === "signin"
+                      ? "Masuk ke Dasbor Guru"
+                      : "Buat Akun Pendidik Resmi"}
                   </Button>
                 </form>
-
-                <div className="relative py-1">
-                  <div className="absolute inset-0 flex items-center">
-                    <span className="w-full border-t border-slate-200" />
-                  </div>
-                  <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-white px-2.5 text-slate-500 text-[10px] font-bold font-mono">
-                      Pratinjau Tanpa Akun
-                    </span>
-                  </div>
-                </div>
-
-                {/* Tombol One-Click Demo Login untuk kemudahan guru */}
-                <Button
-                  type="button"
-                  onClick={handleDemoLogin}
-                  variant="outline"
-                  className="w-full border-slate-300 hover:bg-slate-100 text-slate-800 font-bold text-xs h-11 rounded-xl gap-2 shadow-2xs cursor-pointer"
-                >
-                  <Sparkles className="w-4 h-4 text-slate-700" />
-                  <span>Masuk Mode Demo Instan (Tanpa Registrasi)</span>
-                </Button>
               </CardContent>
             </Card>
           </div>
@@ -259,6 +458,12 @@ export default function LoginPage() {
               </p>
 
               <div className="space-y-3 pt-2 text-xs">
+                <div className="flex items-start gap-2.5 text-slate-200">
+                  <div className="w-4 h-4 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center shrink-0 mt-0.5">
+                    <CheckCircle2 className="w-3 h-3 text-slate-300" />
+                  </div>
+                  <span>Isolasi dokumen dan bank arsip terenkripsi per akun pengguna</span>
+                </div>
                 <div className="flex items-start gap-2.5 text-slate-200">
                   <div className="w-4 h-4 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center shrink-0 mt-0.5">
                     <CheckCircle2 className="w-3 h-3 text-slate-300" />

@@ -103,10 +103,34 @@ export default function SoalGeneratorPage() {
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
 
-  // Handler Unggah Berkas Dokumen / PDF Rujukan
+  // Handler Unggah Berkas Dokumen / PDF Rujukan dengan Validasi Keamanan Ketat
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+
+    // 1. Validasi Ukuran Berkas (Maksimal 5 MB)
+    const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
+    if (file.size > MAX_FILE_SIZE) {
+      toast.error("Ukuran berkas melebihi batas maksimal 5 MB. Silakan unggah dokumen yang lebih ringkas.");
+      e.target.value = "";
+      return;
+    }
+
+    // 2. Validasi Ekstensi dan Tipe Berkas
+    const allowedExtensions = [".pdf", ".txt", ".docx"];
+    const fileNameLower = file.name.toLowerCase();
+    const isExtensionValid = allowedExtensions.some((ext) => fileNameLower.endsWith(ext));
+    const isMimeValid =
+      file.type === "application/pdf" ||
+      file.type === "text/plain" ||
+      file.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
+      file.type === "";
+
+    if (!isExtensionValid && !isMimeValid) {
+      toast.error("Format berkas tidak didukung. Harap unggah dokumen berformat PDF, TXT, atau DOCX.");
+      e.target.value = "";
+      return;
+    }
 
     setIsExtractingPdf(true);
     setFormError(null);
@@ -115,34 +139,49 @@ export default function SoalGeneratorPage() {
     reader.onload = (event) => {
       try {
         const text = (event.target?.result as string) || "";
-        // Ekstraksi teks dan normalisasi
-        const cleanSnippet = text
+
+        // 3. Sanitasi Konten Teks (Keamanan terhadap Script Injection & Prompt Injection)
+        const sanitizedText = text
+          .replace(/\0/g, "")
+          .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+          .replace(/<[^>]*>/g, " ")
           .replace(/[^\x20-\x7E\n\r\t]/g, " ")
+          .replace(/\b(ignore previous instructions|lupakan perintah sebelumnya|system prompt)\b/gi, "[konten disaring]")
           .replace(/\s+/g, " ")
           .trim()
           .slice(0, 3000);
 
-        const snippetText =
-          cleanSnippet.slice(0, 800) ||
-          `Materi dan capaian pembelajaran diekstrak dari dokumen ${file.name}.`;
+        const safeSnippetText =
+          sanitizedText.slice(0, 800) ||
+          `Materi dan capaian pembelajaran diekstrak dari dokumen rujukan terlampir.`;
+
+        // 4. Sanitasi Nama Berkas
+        const safeFileName = file.name
+          .replace(/[/\\?%*:|"<>]/g, "_")
+          .replace(/\.\.+/g, ".")
+          .trim()
+          .slice(0, 80);
 
         setPdfFile({
-          name: file.name,
+          name: safeFileName,
           size: file.size,
-          snippet: snippetText,
+          snippet: safeSnippetText,
           extractedLinesCount: Math.max(1, Math.round(file.size / 1024)),
         });
 
-        // Auto-update judul bab dan TP/CP
-        const cleanName = file.name
+        // Auto-update judul bab dan TP/CP dengan nama bersih
+        const cleanName = safeFileName
           .replace(/\.[^/.]+$/, "")
-          .replace(/[_-]/g, " ");
+          .replace(/[_-]/g, " ")
+          .trim();
+
         setChapter(`Materi Rujukan: ${cleanName}`);
         setLearningObjectives(
-          `Peserta didik mampu menelaah konsep pokok materi ${cleanName} sesuai acuan berkas ${file.name} dan memecahkan permasalahan kontekstual.`
+          `Peserta didik mampu menelaah konsep pokok materi ${cleanName} sesuai acuan berkas rujukan dan memecahkan permasalahan kontekstual.`
         );
+        toast.success(`Dokumen "${safeFileName}" berhasil dipindai dan diverifikasi keamanannya.`, "Dokumen Valid");
       } catch {
-        toast.error("Gagal membaca berkas. Pastikan berkas berformat PDF atau teks.");
+        toast.error("Gagal membaca berkas rujukan. Pastikan berkas tidak rusak atau terenkripsi sandi.");
       } finally {
         setIsExtractingPdf(false);
       }
@@ -150,7 +189,7 @@ export default function SoalGeneratorPage() {
 
     reader.onerror = () => {
       setIsExtractingPdf(false);
-      toast.error("Terjadi kesalahan saat memproses berkas PDF.");
+      toast.error("Terjadi kesalahan saat memproses berkas dokumen rujukan.");
     };
 
     reader.readAsText(file.slice(0, 50000));

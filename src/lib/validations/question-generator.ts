@@ -17,10 +17,23 @@ export const questionGeneratorSchema = z
     semester: z.enum(["Ganjil", "Genap"]),
     academic_year: z.string().min(4, "Tahun ajaran wajib diisi"),
     curriculum: z.literal("Kurikulum Merdeka"),
-
     source_type: z.enum(["text", "pdf"]),
-    pdf_filename: z.string().optional(),
-    pdf_snippet: z.string().optional(),
+
+    pdf_filename: z
+      .string()
+      .trim()
+      .max(120, "Nama berkas maksimal 120 karakter")
+      .optional()
+      .or(z.literal("")),
+    pdf_snippet: z
+      .string()
+      .trim()
+      .max(3000, "Intisari berkas rujukan maksimal 3000 karakter")
+      .refine((val) => !/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi.test(val), {
+        message: "Karakter tidak aman terdeteksi dalam ringkasan dokumen",
+      })
+      .optional()
+      .or(z.literal("")),
     chapter_or_material: safeText.min(3, "Bab atau materi wajib diisi"),
     learning_objectives: safeText.min(5, "Tujuan atau capaian pembelajaran wajib diisi"),
 
