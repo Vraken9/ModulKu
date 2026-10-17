@@ -30,6 +30,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { DocumentPreviewModal } from "@/components/bank-dokumen/DocumentPreviewModal";
+import { SubscriptionCheckoutModal } from "@/components/payment/SubscriptionCheckoutModal";
 import {
   getStoredDocuments,
   getStorageUsageSummary,
@@ -65,6 +66,7 @@ export default function BankDokumenPage() {
   const [notification, setNotification] = useState<string | null>(null);
   const [previewDoc, setPreviewDoc] = useState<StoredDocument | null>(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
 
   const handleOpenPreview = (doc: StoredDocument) => {
     setPreviewDoc(doc);
@@ -303,11 +305,14 @@ export default function BankDokumenPage() {
                     <option value="school">Sekolah (25 GB)</option>
                   </select>
                 </div>
-                <Link href="/#harga">
-                  <Button variant="outline" size="sm" className="text-xs font-bold h-7 px-2.5 text-blue-700 border-blue-200 hover:bg-blue-50">
-                    Upgrade
-                  </Button>
-                </Link>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setIsCheckoutOpen(true)}
+                  className="text-xs font-bold h-7 px-2.5 text-blue-700 border-blue-200 hover:bg-blue-50 cursor-pointer"
+                >
+                  Upgrade Kuota
+                </Button>
               </div>
             </div>
           </CardHeader>
@@ -603,6 +608,13 @@ export default function BankDokumenPage() {
           isOpen={isPreviewOpen}
           onClose={() => setIsPreviewOpen(false)}
           onDownload={handleSimulateDownload}
+        />
+
+        {/* Modal Berlangganan / Upgrade Kuota */}
+        <SubscriptionCheckoutModal
+          isOpen={isCheckoutOpen}
+          onClose={() => setIsCheckoutOpen(false)}
+          defaultPlanId="profesional_annual"
         />
       </div>
     </DashboardShell>

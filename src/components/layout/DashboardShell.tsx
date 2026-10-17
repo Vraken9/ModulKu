@@ -36,6 +36,7 @@ import {
   DEFAULT_STORAGE_SUMMARY,
   setActiveUserId,
 } from "@/lib/document-vault";
+import { SubscriptionCheckoutModal } from "@/components/payment/SubscriptionCheckoutModal";
 
 interface MenuItem {
   name: string;
@@ -61,6 +62,7 @@ export function DashboardShell({ children, activeItem }: DashboardShellProps) {
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [vaultSummary, setVaultSummary] = useState(DEFAULT_STORAGE_SUMMARY);
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
 
   // Profil Guru & Sekolah dari localStorage
   const [school, setSchool] = useState<Partial<SchoolProfile>>({
@@ -349,9 +351,13 @@ export function DashboardShell({ children, activeItem }: DashboardShellProps) {
           </div>
           <div className="flex items-center justify-between text-[10px] text-slate-500 pt-1.5">
             <span>{formatBytes(vaultSummary.usedBytes)} / {TIER_CONFIGS[vaultSummary.tier].formattedLimit}</span>
-            <Link href="/#harga" className="text-blue-600 hover:underline font-bold">
+            <button
+              type="button"
+              onClick={() => setIsCheckoutOpen(true)}
+              className="text-blue-600 hover:underline font-bold cursor-pointer"
+            >
               Upgrade
-            </Link>
+            </button>
           </div>
         </div>
 
@@ -425,6 +431,13 @@ export function DashboardShell({ children, activeItem }: DashboardShellProps) {
           {children}
         </main>
       </div>
+
+      {/* Modal Checkout Pembayaran Langganan Multi-Metode */}
+      <SubscriptionCheckoutModal
+        isOpen={isCheckoutOpen}
+        onClose={() => setIsCheckoutOpen(false)}
+        defaultPlanId="profesional_annual"
+      />
     </div>
   );
 }

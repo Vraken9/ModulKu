@@ -13,6 +13,7 @@ import {
   User,
   AlertCircle,
   KeyRound,
+  FileText,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,6 +22,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { ModulKuLogo } from "@/components/ui/ModulKuLogo";
 import { supabase } from "@/lib/supabase/client";
 import { setActiveUserId } from "@/lib/document-vault";
+import { PrivacyPolicyModal } from "@/components/legal/PrivacyPolicyModal";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -29,6 +31,8 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [agreePrivacy, setAgreePrivacy] = useState(false);
+  const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
@@ -80,6 +84,11 @@ export default function LoginPage() {
         setLoading(false);
         return;
       }
+      if (!agreePrivacy) {
+        setAuthError("Anda wajib menyetujui Kebijakan Privasi & Perlindungan Data Kedinasan sesuai UU PDP No. 27/2022 untuk mendaftar.");
+        setLoading(false);
+        return;
+      }
 
       try {
         const { data, error } = await supabase.auth.signUp({
@@ -106,13 +115,13 @@ export default function LoginPage() {
             user_id: data.user.id,
           };
           localStorage.setItem("guru_teacher_profile", JSON.stringify(currentTeacher));
-          setAuthSuccess("Pendaftaran berhasil! Mengalihkan ke ruang kerja...");
+          setAuthSuccess("Pendaftaran berhasil! Mengalihkan ke pengaturan profil sekolah...");
           setTimeout(() => {
-            router.push("/dashboard");
+            router.push("/profil-sekolah?onboarding=true");
           }, 800);
         } else {
           setAuthSuccess(
-            "Pendaftaran berhasil! Tautan konfirmasi telah dikirimkan ke email Anda. Silakan verifikasi akun Anda atau masuk langsung."
+            "Pendaftaran akun pendidik berhasil! Silakan masuk dengan email dan kata sandi yang telah Anda daftarkan."
           );
           setAuthMode("signin");
           setPassword("");
@@ -136,9 +145,9 @@ export default function LoginPage() {
 
       if (error) {
         if (error.message.includes("Invalid login credentials")) {
-          setAuthError("Alamat email atau kata sandi yang Anda masukkan salah.");
+          setAuthError("Alamat email atau kata sandi yang Anda masukkan tidak sesuai.");
         } else if (error.message.includes("Email not confirmed")) {
-          setAuthError("Alamat email belum dikonfirmasi. Silakan periksa kotak masuk atau spam email Anda.");
+          setAuthError("Alamat email belum dikonfirmasi. Silakan periksa kotak masuk atau spam email Anda, atau hubungi admin.");
         } else {
           setAuthError(error.message || "Gagal masuk ke akun pendidik.");
         }
@@ -183,19 +192,11 @@ export default function LoginPage() {
     setGoogleLoading(true);
     setAuthError(null);
     try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: `${window.location.origin}/dashboard`,
-        },
-      });
-
-      if (error) {
-        // Fallback ke NextAuth jika OAuth Supabase belum terkonfigurasi di dashboard
-        signIn("google", { callbackUrl: "/dashboard" });
-      }
+      localStorage.setItem("guru_auth_token", "google_session_active");
+      await signIn("google", { callbackUrl: "/profil-sekolah?onboarding=true" });
     } catch {
-      signIn("google", { callbackUrl: "/dashboard" });
+      setAuthError("Gagal menghubungkan ke layanan Google OAuth. Silakan masuk menggunakan Email & Kata Sandi.");
+      setGoogleLoading(false);
     }
   }
 
@@ -423,6 +424,32 @@ export default function LoginPage() {
                     </div>
                   )}
 
+                  {/* Persetujuan Privasi Sesuai UU PDP No. 27/2022 */}
+                  {authMode === "signup" && (
+                    <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+                      <label className="flex items-start gap-2.5 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={agreePrivacy}
+                          onChange={(e) => setAgreePrivacy(e.target.checked)}
+                          className="mt-0.5 rounded border-slate-300 text-slate-900 focus:ring-slate-900 w-4 h-4"
+                          required
+                        />
+                        <span className="text-[11px] text-slate-600 leading-snug">
+                          Saya menyetujui{" "}
+                          <button
+                            type="button"
+                            onClick={() => setIsPrivacyModalOpen(true)}
+                            className="font-bold text-slate-900 underline hover:text-blue-700 inline"
+                          >
+                            Kebijakan Privasi & Perlindungan Data Kedinasan
+                          </button>{" "}
+                          sesuai regulasi UU Pelindungan Data Pribadi No. 27 Tahun 2022.
+                        </span>
+                      </label>
+                    </div>
+                  )}
+
                   <Button
                     type="submit"
                     disabled={loading}
@@ -486,7 +513,7 @@ export default function LoginPage() {
                   <div className="w-4 h-4 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center shrink-0 mt-0.5">
                     <CheckCircle2 className="w-3 h-3 text-slate-300" />
                   </div>
-                  <span>Keselarasan bukti dukung kinerja Platform Merdeka Mengajar (PMM)</span>
+                  <span>Kepatuhan UU PDP No. 27/2022 atas data NIP & NPSN sekolah</span>
                 </div>
               </div>
             </div>
@@ -502,6 +529,12 @@ export default function LoginPage() {
       <footer className="py-4 border-t border-slate-200 bg-white text-center text-xs text-slate-500 font-mono">
         ModulKu - Platform Otomasi Administrasi & Evaluasi Kurikulum Merdeka
       </footer>
+
+      {/* Modal Kebijakan Privasi */}
+      <PrivacyPolicyModal
+        isOpen={isPrivacyModalOpen}
+        onClose={() => setIsPrivacyModalOpen(false)}
+      />
     </div>
   );
 }

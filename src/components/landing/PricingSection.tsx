@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Check, Sparkles, ArrowRight, ShieldCheck, School, Zap, Award, HelpCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { SubscriptionCheckoutModal } from "@/components/payment/SubscriptionCheckoutModal";
 
 interface PricingTier {
   id: string;
@@ -95,6 +96,16 @@ const TIERS: PricingTier[] = [
 
 export function PricingSection() {
   const [isAnnual, setIsAnnual] = useState(false);
+  const [checkoutPlanId, setCheckoutPlanId] = useState<string | null>(null);
+
+  const handleOpenCheckout = (tierId: string) => {
+    if (tierId === "gratis") return;
+    if (tierId === "profesional") {
+      setCheckoutPlanId(isAnnual ? "profesional_annual" : "profesional_monthly");
+    } else if (tierId === "sekolah") {
+      setCheckoutPlanId(isAnnual ? "sekolah_annual" : "sekolah_semester");
+    }
+  };
 
   return (
     <div className="space-y-12">
@@ -232,11 +243,23 @@ export function PricingSection() {
 
               {/* Bottom Action CTA */}
               <div className="pt-8">
-                <Link href={tier.ctaHref} className="w-full block">
+                {tier.id === "gratis" ? (
+                  <Link href={tier.ctaHref} className="w-full block">
+                    <Button
+                      id={`btn-pricing-${tier.id}`}
+                      size="lg"
+                      className="w-full font-bold text-xs sm:text-sm h-11 sm:h-12 rounded-xl transition-all bg-slate-900 hover:bg-slate-800 text-white cursor-pointer"
+                    >
+                      <span>{tier.ctaText}</span>
+                      <ArrowRight className="w-4 h-4 ml-1.5" />
+                    </Button>
+                  </Link>
+                ) : (
                   <Button
                     id={`btn-pricing-${tier.id}`}
                     size="lg"
-                    className={`w-full font-bold text-xs sm:text-sm h-11 sm:h-12 rounded-xl transition-all ${
+                    onClick={() => handleOpenCheckout(tier.id)}
+                    className={`w-full font-bold text-xs sm:text-sm h-11 sm:h-12 rounded-xl transition-all cursor-pointer ${
                       isFeatured
                         ? "bg-white text-slate-950 hover:bg-slate-100 shadow-md border border-slate-200"
                         : "bg-slate-900 hover:bg-slate-800 text-white"
@@ -245,7 +268,7 @@ export function PricingSection() {
                     <span>{tier.ctaText}</span>
                     <ArrowRight className="w-4 h-4 ml-1.5" />
                   </Button>
-                </Link>
+                )}
               </div>
             </div>
           );
@@ -263,6 +286,13 @@ export function PricingSection() {
           <span>Faktur Kedinasan Resmi untuk SPJ Dana BOS</span>
         </div>
       </div>
+
+      {/* Modal Checkout Pembayaran Multi-Metode */}
+      <SubscriptionCheckoutModal
+        isOpen={Boolean(checkoutPlanId)}
+        onClose={() => setCheckoutPlanId(null)}
+        defaultPlanId={checkoutPlanId || "profesional_annual"}
+      />
     </div>
   );
 }

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
   Building2,
@@ -60,7 +61,9 @@ const DEFAULT_TEACHER: TeacherProfileFormValues = {
 };
 
 export default function ProfilSekolahPage() {
+  const router = useRouter();
   const { confirm, toast } = useNotification();
+  const [isOnboarding, setIsOnboarding] = useState(false);
   const [schoolData, setSchoolData] = useState<SchoolProfileFormValues>(DEFAULT_SCHOOL);
   const [teacherData, setTeacherData] = useState<TeacherProfileFormValues>(DEFAULT_TEACHER);
   const [activeTab, setActiveTab] = useState<string>("sekolah");
@@ -74,6 +77,11 @@ export default function ProfilSekolahPage() {
       const savedTeacher = localStorage.getItem("guru_teacher_profile");
       if (savedSchool) setSchoolData(JSON.parse(savedSchool));
       if (savedTeacher) setTeacherData(JSON.parse(savedTeacher));
+
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("onboarding") === "true") {
+        setIsOnboarding(true);
+      }
     } catch {
       // Abaikan jika localStorage tidak tersedia di server
     }
@@ -157,9 +165,64 @@ export default function ProfilSekolahPage() {
     window.print();
   };
 
+  const handleErasure = async () => {
+    const isConfirmed = await confirm({
+      title: "Hapus Permanen Data Profil Kedinasan",
+      message:
+        "Sesuai regulasi UU PDP No. 27/2022, tindakan ini akan menghapus seluruh data NIP, NPSN, dan identitas sekolah dari penyimpanan peramban Anda. Apakah Anda yakin?",
+      confirmText: "Hapus Permanen Data Saya",
+      cancelText: "Batal",
+      variant: "danger",
+    });
+    if (!isConfirmed) return;
+
+    localStorage.removeItem("guru_school_profile");
+    localStorage.removeItem("guru_teacher_profile");
+    setSchoolData(DEFAULT_SCHOOL);
+    setTeacherData(DEFAULT_TEACHER);
+    toast.success("Seluruh data identitas kedinasan berhasil dihapus secara permanen.", "Data Dihapus");
+  };
+
   return (
     <DashboardShell activeItem="profil-sekolah">
       <div className="space-y-6 max-w-6xl mx-auto pb-12">
+        {/* Banner Onboarding Terpandu jika Pengguna Baru */}
+        {isOnboarding && (
+          <div className="p-5 rounded-2xl bg-slate-900 text-white border border-slate-800 shadow-sm space-y-3 no-print">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="space-y-1">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-indigo-950 border border-indigo-700/60 text-indigo-300 text-[10px] font-bold">
+                  <span>Langkah Awal Pendidik (Opsional)</span>
+                </div>
+                <h3 className="text-base font-black tracking-tight text-white">
+                  Lengkapi Master Profil Sekolah & Kop Kedinasan
+                </h3>
+                <p className="text-xs text-slate-300 max-w-2xl leading-relaxed">
+                  Sesuai regulasi BKPDM Kemendikdasmen dan standar bukti dukung PMM, data Kop Sekolah, NIP Kepala Sekolah, dan Pengawas Pembina diperlukan agar dokumen Modul Ajar, Soal AKM, dan ATP terbit dengan identitas kedinasan resmi. Pengisian ini bersifat fleksibel dan dapat dilewati sekarang.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2 shrink-0">
+                <Button
+                  variant="outline"
+                  onClick={() => router.push("/dashboard")}
+                  className="text-xs font-semibold text-slate-300 hover:text-white border-slate-700 hover:bg-slate-800 bg-slate-900/60 h-9 rounded-xl cursor-pointer"
+                >
+                  Nanti Saja (Lewati ke Dasbor)
+                </Button>
+                <Button
+                  onClick={() => {
+                    handleSave();
+                    router.push("/dashboard");
+                  }}
+                  className="text-xs font-bold bg-white hover:bg-slate-100 text-slate-900 h-9 px-4 rounded-xl shadow-xs cursor-pointer"
+                >
+                  Simpan & Lanjut ke Dasbor
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
         {/* Breadcrumb & Header Title */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 no-print">
           <div>
@@ -489,6 +552,29 @@ export default function ProfilSekolahPage() {
                 academicYear="2026/2027"
               />
             </div>
+          </div>
+        </div>
+
+        {/* Seksi Kepatuhan UU PDP No. 27/2022: Hak Penghapusan Data Pribadi */}
+        <div className="p-4 rounded-xl border border-slate-200 bg-white space-y-2 no-print">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h4 className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                <span>Kepatuhan UU Pelindungan Data Pribadi (UU PDP No. 27/2022)</span>
+              </h4>
+              <p className="text-[11px] text-slate-500">
+                Sesuai hak asasi pemilik data (Right to Erasure), Anda berhak menghapus seluruh identitas NIP, NPSN, dan nama sekolah dari penyimpanan peramban Anda kapan saja.
+              </p>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleErasure}
+              className="text-[11px] text-rose-700 hover:bg-rose-50 border-rose-200 h-8 font-semibold shrink-0 cursor-pointer"
+            >
+              Hapus Data Profil Kedinasan
+            </Button>
           </div>
         </div>
       </div>
