@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import {
   LayoutDashboard,
   CreditCard,
@@ -38,6 +39,7 @@ interface AdminLayoutProps {
 export default function AdminLayout({ children }: AdminLayoutProps) {
   const pathname = usePathname();
   const router = useRouter();
+  const { data: nextAuthSession, status: nextAuthStatus } = useSession();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [pendingCount, setPendingCount] = useState(0);
   const [uiZoom, setUiZoomState] = useState<number>(1.05);
@@ -64,21 +66,35 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
     // 3. Verifikasi Otoritas Admin Ketat (Security by Design)
     const checkAdminAuthority = async () => {
+      if (nextAuthStatus === "loading") {
+        return;
+      }
+
       try {
         const { data: { session } } = await supabase.auth.getSession();
         const localToken = typeof window !== "undefined" ? localStorage.getItem("guru_auth_token") : null;
 
+        let email: string | null = null;
+
         if (session?.user?.email) {
-          setAdminUserEmail(session.user.email);
-          if (isEmailAdmin(session.user.email)) {
+          email = session.user.email;
+        } else if (nextAuthStatus === "authenticated" && nextAuthSession?.user?.email) {
+          email = nextAuthSession.user.email;
+        } else if (localToken === "guru_demo_token_aktif") {
+          setIsAuthorized(true);
+          setCheckingAuth(false);
+          return;
+        }
+
+        if (email) {
+          setAdminUserEmail(email);
+          if (isEmailAdmin(email)) {
             setIsAuthorized(true);
           } else {
             // Pengguna login tapi bukan email admin terdaftar
             router.replace("/dashboard");
             return;
           }
-        } else if (localToken === "guru_demo_token_aktif") {
-          setIsAuthorized(true);
         } else {
           // Belum login sama sekali -> lempar ke login
           router.replace(`/login?redirect=${encodeURIComponent("/admin")}`);
@@ -96,7 +112,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       window.removeEventListener("modulku-admin-zoom-changed" as any, handleZoomChanged);
       window.removeEventListener("modulku-subscription-changed", updatePending);
     };
-  }, [router]);
+  }, [router, nextAuthSession, nextAuthStatus]);
 
   const handleChangeZoom = (newZoom: number) => {
     setUiZoomState(newZoom);

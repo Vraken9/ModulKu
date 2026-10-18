@@ -28,6 +28,7 @@ import {
   getSchoolProfile,
   saveSchoolProfile,
 } from "@/lib/user-profile";
+import { isEmailAdmin } from "@/lib/subscription";
 import { PrivacyPolicyModal } from "@/components/legal/PrivacyPolicyModal";
 
 export default function LoginPage() {
@@ -80,6 +81,16 @@ export default function LoginPage() {
         const fallbackName = nextAuthSession.user.name || (nextAuthSession.user.email ? nextAuthSession.user.email.split("@")[0] : undefined);
         getTeacherProfile(uid, fallbackName);
         getSchoolProfile(uid);
+
+        // Pencegahan Loop: Hanya alihkan ke /admin jika akun memiliki otoritas admin
+        if (redirectUrl.startsWith("/admin")) {
+          const userEmail = nextAuthSession.user.email || "";
+          if (!isEmailAdmin(userEmail)) {
+            router.replace("/dashboard");
+            return;
+          }
+        }
+
         router.replace(redirectUrl);
         return;
       }
@@ -97,6 +108,16 @@ export default function LoginPage() {
             const fallbackName = session.user.user_metadata?.full_name || (session.user.email ? session.user.email.split("@")[0] : undefined);
             getTeacherProfile(session.user.id, fallbackName);
             getSchoolProfile(session.user.id);
+
+            // Pencegahan Loop: Hanya alihkan ke /admin jika akun memiliki otoritas admin
+            if (redirectUrl.startsWith("/admin")) {
+              const userEmail = session.user.email || "";
+              if (!isEmailAdmin(userEmail)) {
+                router.replace("/dashboard");
+                return;
+              }
+            }
+
             router.replace(redirectUrl);
             return;
           } else if (localToken === "guru_demo_token_aktif") {

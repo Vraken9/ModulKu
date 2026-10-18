@@ -60,10 +60,20 @@ export async function middleware(req: NextRequest) {
     // 2. Jika tidak ada di Supabase cookie, periksa sesi NextAuth (Google OAuth)
     if (!userEmail) {
       try {
-        const nextAuthToken = await getToken({
+        // Coba periksa cookie sesi NextAuth pada HTTPS (Vercel Production)
+        let nextAuthToken = await getToken({
           req,
           secret: process.env.NEXTAUTH_SECRET,
+          secureCookie: true,
         });
+        // Jika null, coba fallback cookie sesi pada HTTP (Localhost)
+        if (!nextAuthToken) {
+          nextAuthToken = await getToken({
+            req,
+            secret: process.env.NEXTAUTH_SECRET,
+            secureCookie: false,
+          });
+        }
         if (nextAuthToken?.email) {
           userEmail = nextAuthToken.email;
         }
