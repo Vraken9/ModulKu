@@ -14,11 +14,11 @@ import {
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { getApiLogs, getApiUsageMetrics, ApiHitLog } from "@/lib/api-tracker";
+import { getApiLogs, getApiUsageMetrics, DEFAULT_API_METRICS, ApiHitLog } from "@/lib/api-tracker";
 
 export default function AdminApiCostPage() {
   const [logs, setLogs] = useState<ApiHitLog[]>([]);
-  const [metrics, setMetrics] = useState(getApiUsageMetrics());
+  const [metrics, setMetrics] = useState(DEFAULT_API_METRICS);
 
   useEffect(() => {
     setLogs(getApiLogs());

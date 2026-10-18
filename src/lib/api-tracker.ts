@@ -111,7 +111,7 @@ export function recordApiHit(
   }
 }
 
-export function getApiUsageMetrics(): {
+export interface ApiUsageMetrics {
   todayHits: number;
   monthHits: number;
   totalTokensToday: number;
@@ -120,7 +120,9 @@ export function getApiUsageMetrics(): {
   estimatedCostMonthUsd: number;
   estimatedCostMonthIdr: number;
   hitsByRoute: Record<string, number>;
-} {
+}
+
+export function getApiUsageMetrics(): ApiUsageMetrics {
   const logs = getApiLogs();
   const now = new Date();
   const todayStr = now.toISOString().slice(0, 10);
@@ -188,3 +190,19 @@ export function getApiUsageMetrics(): {
     },
   };
 }
+
+export const DEFAULT_API_METRICS: ApiUsageMetrics = {
+  todayHits: 0,
+  monthHits: 0,
+  totalTokensToday: 0,
+  estimatedCostTodayUsd: 0,
+  estimatedCostTodayIdr: 0,
+  estimatedCostMonthUsd: 0,
+  estimatedCostMonthIdr: 0,
+  hitsByRoute: {
+    "generate-soal": 0,
+    "generate-modul": 0,
+    "generate-perangkat": 0,
+    "generate-presentation": 0,
+  },
+};

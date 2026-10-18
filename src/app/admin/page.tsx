@@ -25,6 +25,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
+  PAYMENT_CHANNELS,
   getSubscriptionRequests,
   approveSubscriptionRequest,
   rejectSubscriptionRequest,
@@ -32,15 +33,15 @@ import {
   generateAdminToUserWhatsAppLink,
   SubscriptionRequest,
 } from "@/lib/subscription";
-import { getApiUsageMetrics } from "@/lib/api-tracker";
+import { getApiUsageMetrics, DEFAULT_API_METRICS } from "@/lib/api-tracker";
 import { useNotification } from "@/components/providers/NotificationProvider";
 
 export default function AdminOverviewPage() {
   const { toast } = useNotification();
   const [requests, setRequests] = useState<SubscriptionRequest[]>([]);
   const [selectedProof, setSelectedProof] = useState<string | null>(null);
-  const [metrics, setMetrics] = useState(getApiUsageMetrics());
-  const [channels, setChannels] = useState(getPaymentChannels());
+  const [metrics, setMetrics] = useState(DEFAULT_API_METRICS);
+  const [channels, setChannels] = useState(PAYMENT_CHANNELS);
   const [feedbackList, setFeedbackList] = useState<
     Array<{
       id: string;
