@@ -90,6 +90,27 @@ const SEED_USERS: AdminUserItem[] = [
   },
 ];
 
+const getStoragePercent = (storageStr: string) => {
+  try {
+    const [used, total] = storageStr.split(" / ");
+    if (!used || !total) return "10%";
+    const parseVal = (s: string) => {
+      const num = parseFloat(s);
+      if (s.includes("GB")) return num * 1024;
+      if (s.includes("MB")) return num;
+      if (s.includes("KB")) return num / 1024;
+      return num;
+    };
+    const u = parseVal(used);
+    const t = parseVal(total);
+    if (!t || t === 0) return "10%";
+    const pct = Math.min(100, Math.max(5, Math.round((u / t) * 100)));
+    return `${pct}%`;
+  } catch {
+    return "10%";
+  }
+};
+
 export default function AdminUsersPage() {
   const { toast } = useNotification();
   const [users, setUsers] = useState<AdminUserItem[]>(SEED_USERS);
@@ -131,8 +152,8 @@ export default function AdminUsersPage() {
     <div className="space-y-6">
       {/* Header Halaman */}
       <div>
-        <h1 className="text-2xl font-black text-white tracking-tight flex items-center gap-2.5">
-          <Users className="w-6 h-6 text-indigo-400" />
+        <h1 className="text-2xl font-black text-slate-100 tracking-tight flex items-center gap-2.5">
+          <Users className="w-6 h-6 text-slate-300" />
           <span>Manajemen Akun Pendidik</span>
         </h1>
         <p className="text-xs text-slate-400 mt-1">
@@ -141,7 +162,7 @@ export default function AdminUsersPage() {
       </div>
 
       {/* Kontrol Pencarian & Filter */}
-      <Card className="bg-slate-950 border-slate-800 text-white shadow-xs">
+      <Card className="bg-slate-900 border border-slate-800 rounded-xl text-slate-100 shadow-xs">
         <CardContent className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="relative flex-1 max-w-sm">
             <Search className="w-4 h-4 text-slate-500 absolute left-3 top-2.5" />
@@ -150,7 +171,7 @@ export default function AdminUsersPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Cari nama guru, email, atau sekolah..."
-              className="pl-9 text-xs h-9 bg-slate-900 border-slate-700 text-white placeholder:text-slate-500"
+              className="pl-9 text-xs h-9 bg-slate-950/80 border border-slate-800 text-slate-100 placeholder:text-slate-500 rounded-lg focus:outline-none focus:border-slate-400 focus:ring-1 focus:ring-slate-400 transition-colors"
             />
           </div>
 
@@ -165,10 +186,10 @@ export default function AdminUsersPage() {
                 key={tab.id}
                 type="button"
                 onClick={() => setTierFilter(tab.id)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
+                className={`px-3.5 py-1.5 rounded-lg text-xs whitespace-nowrap transition-colors cursor-pointer ${
                   tierFilter === tab.id
-                    ? "bg-indigo-600 text-white font-bold"
-                    : "bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-850 border border-slate-800"
+                    ? "bg-slate-100 text-slate-950 font-semibold"
+                    : "bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800"
                 }`}
               >
                 {tab.label}
@@ -179,87 +200,94 @@ export default function AdminUsersPage() {
       </Card>
 
       {/* Tabel Pengguna */}
-      <Card className="bg-slate-950 border-slate-800 text-white shadow-xs">
+      <Card className="bg-slate-900 border border-slate-800 rounded-xl text-slate-100 shadow-xs">
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead>
-                <tr className="border-b border-slate-800 text-slate-400 text-[11px] uppercase bg-slate-900/40">
-                  <th className="py-3 px-4">Pendidik</th>
-                  <th className="py-3 px-4">Satuan Pendidikan</th>
-                  <th className="py-3 px-4">Paket Langganan</th>
-                  <th className="py-3 px-4">Penyimpanan Arsip</th>
-                  <th className="py-3 px-4">Keaktifan</th>
-                  <th className="py-3 px-4 text-right">Kontrol Manual</th>
+                <tr className="border-b border-slate-800 text-slate-400 text-[11px] uppercase bg-slate-950/40">
+                  <th className="py-3 px-4 font-semibold whitespace-nowrap">Pendidik</th>
+                  <th className="py-3 px-4 font-semibold whitespace-nowrap">Satuan Pendidikan</th>
+                  <th className="py-3 px-4 font-semibold whitespace-nowrap">Paket Langganan</th>
+                  <th className="py-3 px-4 font-semibold whitespace-nowrap">Penyimpanan Arsip</th>
+                  <th className="py-3 px-4 font-semibold whitespace-nowrap">Keaktifan</th>
+                  <th className="py-3 px-4 text-right font-semibold whitespace-nowrap">Kontrol Manual</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-800/60 font-medium">
                 {filteredUsers.map((u) => (
-                  <tr key={u.id} className="hover:bg-slate-900/50 transition-colors">
-                    <td className="py-3.5 px-4">
-                      <div className="font-bold text-white">{u.name}</div>
+                  <tr key={u.id} className="hover:bg-slate-800/40 transition-colors">
+                    <td className="py-3.5 px-4 whitespace-nowrap">
+                      <div className="font-bold text-slate-100">{u.name}</div>
                       <div className="text-[11px] text-slate-400 font-mono">{u.email}</div>
                     </td>
                     <td className="py-3.5 px-4">
-                      <div className="text-slate-300 font-semibold">{u.schoolName}</div>
+                      <div className="text-slate-200 font-semibold">{u.schoolName}</div>
                       <div className="text-[10px] text-slate-500 font-mono">NIP: {u.nip}</div>
                     </td>
-                    <td className="py-3.5 px-4">
+                    <td className="py-3.5 px-4 whitespace-nowrap">
                       {u.tier === "school" && (
-                        <Badge className="bg-purple-950 text-purple-300 border-purple-800 font-semibold text-[10px]">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 whitespace-nowrap">
                           Sekolah & MGMP
-                        </Badge>
+                        </span>
                       )}
                       {u.tier === "pro" && (
-                        <Badge className="bg-indigo-950 text-indigo-300 border-indigo-800 font-semibold text-[10px]">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-800 text-slate-100 border border-slate-700 whitespace-nowrap">
                           Guru Profesional
-                        </Badge>
+                        </span>
                       )}
                       {u.tier === "free" && (
-                        <Badge variant="outline" className="bg-slate-900 text-slate-400 border-slate-700 text-[10px]">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-900 text-slate-400 border border-slate-800 whitespace-nowrap">
                           Gratis (Mandiri)
-                        </Badge>
+                        </span>
                       )}
                     </td>
-                    <td className="py-3.5 px-4 text-slate-300 font-mono text-[11px]">
-                      {u.usedStorage}
+                    <td className="py-3.5 px-4">
+                      <div className="text-slate-300 font-mono text-xs font-medium whitespace-nowrap">
+                        {u.usedStorage}
+                      </div>
+                      <div className="w-28 h-1.5 bg-slate-800 rounded-full overflow-hidden mt-1.5">
+                        <div
+                          className="h-full bg-slate-300 rounded-full transition-all duration-300"
+                          style={{ width: getStoragePercent(u.usedStorage) }}
+                        />
+                      </div>
                     </td>
-                    <td className="py-3.5 px-4 text-slate-400 text-[11px]">
-                      <div>{u.lastActive}</div>
+                    <td className="py-3.5 px-4 text-slate-400 text-xs whitespace-nowrap">
+                      <div className="text-slate-300">{u.lastActive}</div>
                       <div className="text-[10px] text-slate-500">Bergabung: {u.joinedAt}</div>
                     </td>
-                    <td className="py-3.5 px-4 text-right space-x-1.5">
-                      {u.tier !== "pro" && (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => handleChangeTier(u.id, "pro")}
-                          className="border-indigo-700/60 text-indigo-300 hover:bg-indigo-950 text-[11px] h-7 px-2.5 rounded-lg cursor-pointer"
-                        >
-                          Jadikan Pro
-                        </Button>
-                      )}
-                      {u.tier !== "school" && (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => handleChangeTier(u.id, "school")}
-                          className="border-purple-700/60 text-purple-300 hover:bg-purple-950 text-[11px] h-7 px-2.5 rounded-lg cursor-pointer"
-                        >
-                          Jadikan Sekolah
-                        </Button>
-                      )}
-                      {u.tier !== "free" && (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => handleChangeTier(u.id, "free")}
-                          className="border-slate-700 text-slate-400 hover:bg-slate-800 text-[11px] h-7 px-2 rounded-lg cursor-pointer"
-                          title="Kembalikan ke Paket Gratis"
-                        >
-                          <RotateCcw className="w-3 h-3" />
-                        </Button>
-                      )}
+                    <td className="py-3.5 px-4 text-right">
+                      <div className="flex items-center justify-end gap-2 whitespace-nowrap">
+                        {u.tier !== "pro" && (
+                          <button
+                            type="button"
+                            onClick={() => handleChangeTier(u.id, "pro")}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-700 text-xs font-medium whitespace-nowrap transition-colors cursor-pointer"
+                          >
+                            Jadikan Pro
+                          </button>
+                        )}
+                        {u.tier !== "school" && (
+                          <button
+                            type="button"
+                            onClick={() => handleChangeTier(u.id, "school")}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-700 text-xs font-medium whitespace-nowrap transition-colors cursor-pointer"
+                          >
+                            Jadikan Sekolah
+                          </button>
+                        )}
+                        {u.tier !== "free" && (
+                          <button
+                            type="button"
+                            onClick={() => handleChangeTier(u.id, "free")}
+                            className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-colors shrink-0 cursor-pointer"
+                            title="Kembalikan ke Paket Gratis"
+                          >
+                            <RotateCcw className="w-3.5 h-3.5" />
+                          </button>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))}

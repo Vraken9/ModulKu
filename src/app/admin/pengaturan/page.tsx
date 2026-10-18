@@ -10,14 +10,8 @@ import {
   Save,
   CheckCircle2,
   Lock,
-  Database,
-  Key,
+  Landmark,
 } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { PAYMENT_CHANNELS } from "@/lib/subscription";
 import { useNotification } from "@/components/providers/NotificationProvider";
 
@@ -42,8 +36,8 @@ export default function AdminSettingsPage() {
     <div className="space-y-8">
       {/* Header Halaman */}
       <div>
-        <h1 className="text-2xl font-black text-white tracking-tight flex items-center gap-2.5">
-          <Settings className="w-6 h-6 text-indigo-400" />
+        <h1 className="text-2xl font-black text-slate-100 tracking-tight flex items-center gap-2.5">
+          <Settings className="w-6 h-6 text-slate-300" />
           <span>Pengaturan Sistem & Saluran Pembayaran</span>
         </h1>
         <p className="text-xs text-slate-400 mt-1">
@@ -52,151 +46,179 @@ export default function AdminSettingsPage() {
       </div>
 
       {isSaved && (
-        <div className="p-4 rounded-xl bg-emerald-950/80 border border-emerald-800 text-emerald-200 text-xs flex items-center justify-between">
-          <div className="flex items-center gap-2 font-bold">
-            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+        <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 text-xs flex items-center justify-between">
+          <div className="flex items-center gap-2 font-medium">
+            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
             <span>Seluruh perubahan konfigurasi berhasil disimpan dan aktif secara seketika.</span>
           </div>
-          <Badge className="bg-emerald-900 text-emerald-200">Tersinkronisasi</Badge>
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            Tersinkronisasi
+          </span>
         </div>
       )}
 
       <form onSubmit={handleSaveSettings} className="space-y-6">
         {/* Seksi 1: Saluran Pembayaran Resmi Guru */}
-        <Card className="bg-slate-950 border-slate-800 text-white shadow-xs">
-          <CardHeader className="border-b border-slate-800/80 pb-4">
-            <CardTitle className="text-base font-black tracking-tight flex items-center gap-2">
-              <Building2 className="w-5 h-5 text-indigo-400" />
+        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-5 shadow-xs">
+          <div className="border-b border-slate-800/80 pb-4">
+            <div className="text-base font-semibold text-slate-100 flex items-center gap-2">
+              <Building2 className="w-5 h-5 text-slate-200" />
               <span>Saluran Pembayaran Manual (Muncul di Modal Guru)</span>
-            </CardTitle>
-            <CardDescription className="text-xs text-slate-400">
+            </div>
+            <p className="text-xs text-slate-400 mt-1">
               Ubah nomor rekening atau nomor e-wallet yang ditampilkan kepada pendidik saat mereka ingin berlangganan.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="pt-5 space-y-4 text-xs">
+            </p>
+          </div>
+
+          <div className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-1.5">
-                <Label className="text-xs font-bold text-slate-300">Nomor Ponsel DANA Resmi</Label>
+              <div>
+                <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                  Nomor Ponsel DANA Resmi
+                </label>
                 <div className="relative">
-                  <Smartphone className="w-4 h-4 text-slate-500 absolute left-3 top-2.5" />
-                  <Input
+                  <Smartphone className="w-4 h-4 text-slate-400 absolute left-3 top-3 pointer-events-none" />
+                  <input
                     type="text"
                     value={danaNumber}
                     onChange={(e) => setDanaNumber(e.target.value)}
-                    className="pl-9 text-xs h-9 bg-slate-900 border-slate-700 text-white font-mono"
+                    className="w-full bg-slate-950/80 border border-slate-800 rounded-lg pl-9 pr-3.5 py-2 text-sm text-slate-100 placeholder:text-slate-500 font-mono focus:outline-none focus:border-slate-400 focus:ring-1 focus:ring-slate-400 transition-colors"
                     required
                   />
                 </div>
               </div>
 
-              <div className="space-y-1.5">
-                <Label className="text-xs font-bold text-slate-300">Nomor Ponsel ShopeePay Resmi</Label>
+              <div>
+                <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                  Nomor Ponsel ShopeePay Resmi
+                </label>
                 <div className="relative">
-                  <Smartphone className="w-4 h-4 text-slate-500 absolute left-3 top-2.5" />
-                  <Input
+                  <Smartphone className="w-4 h-4 text-slate-400 absolute left-3 top-3 pointer-events-none" />
+                  <input
                     type="text"
                     value={shopeePayNumber}
                     onChange={(e) => setShopeePayNumber(e.target.value)}
-                    className="pl-9 text-xs h-9 bg-slate-900 border-slate-700 text-white font-mono"
+                    className="w-full bg-slate-950/80 border border-slate-800 rounded-lg pl-9 pr-3.5 py-2 text-sm text-slate-100 placeholder:text-slate-500 font-mono focus:outline-none focus:border-slate-400 focus:ring-1 focus:ring-slate-400 transition-colors"
                     required
                   />
                 </div>
               </div>
 
-              <div className="space-y-1.5">
-                <Label className="text-xs font-bold text-slate-300">Nomor Rekening Bank BRI</Label>
+              <div>
+                <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                  Nomor Rekening Bank BRI
+                </label>
                 <div className="relative">
-                  <Building2 className="w-4 h-4 text-slate-500 absolute left-3 top-2.5" />
-                  <Input
+                  <Landmark className="w-4 h-4 text-slate-400 absolute left-3 top-3 pointer-events-none" />
+                  <input
                     type="text"
                     value={briNumber}
                     onChange={(e) => setBriNumber(e.target.value)}
-                    className="pl-9 text-xs h-9 bg-slate-900 border-slate-700 text-white font-mono"
+                    className="w-full bg-slate-950/80 border border-slate-800 rounded-lg pl-9 pr-3.5 py-2 text-sm text-slate-100 placeholder:text-slate-500 font-mono focus:outline-none focus:border-slate-400 focus:ring-1 focus:ring-slate-400 transition-colors"
                     required
                   />
                 </div>
               </div>
 
-              <div className="space-y-1.5">
-                <Label className="text-xs font-bold text-slate-300">Nama Pemilik Rekening Bank BRI</Label>
-                <Input
+              <div>
+                <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                  Nama Pemilik Rekening Bank BRI
+                </label>
+                <input
                   type="text"
                   value={briName}
                   onChange={(e) => setBriName(e.target.value)}
-                  className="text-xs h-9 bg-slate-900 border-slate-700 text-white"
+                  className="w-full bg-slate-950/80 border border-slate-800 rounded-lg px-3.5 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-slate-400 focus:ring-1 focus:ring-slate-400 transition-colors"
                   required
                 />
               </div>
             </div>
 
-            <div className="space-y-1.5 pt-2 border-t border-slate-800">
-              <Label className="text-xs font-bold text-slate-300">Nomor WhatsApp Bantuan Admin (Direct Chat)</Label>
+            <div className="pt-3 border-t border-slate-800">
+              <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                Nomor WhatsApp Bantuan Admin (Direct Chat)
+              </label>
               <div className="relative max-w-sm">
-                <MessageCircle className="w-4 h-4 text-slate-500 absolute left-3 top-2.5" />
-                <Input
+                <MessageCircle className="w-4 h-4 text-slate-400 absolute left-3 top-3 pointer-events-none" />
+                <input
                   type="text"
                   value={waNumber}
                   onChange={(e) => setWaNumber(e.target.value)}
-                  className="pl-9 text-xs h-9 bg-slate-900 border-slate-700 text-white font-mono"
+                  className="w-full bg-slate-950/80 border border-slate-800 rounded-lg pl-9 pr-3.5 py-2 text-sm text-slate-100 placeholder:text-slate-500 font-mono focus:outline-none focus:border-slate-400 focus:ring-1 focus:ring-slate-400 transition-colors"
                   required
                 />
               </div>
-              <p className="text-[11px] text-slate-500">
+              <p className="text-xs text-slate-500 mt-1.5">
                 Nomor ini akan otomatis dibuka saat guru menekan tombol bantuan WhatsApp di seluruh platform.
               </p>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
         {/* Seksi 2: Akses Keamanan & Whitelist Admin */}
-        <Card className="bg-slate-950 border-slate-800 text-white shadow-xs">
-          <CardHeader className="border-b border-slate-800/80 pb-4">
-            <CardTitle className="text-base font-black tracking-tight flex items-center gap-2">
+        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-5 shadow-xs">
+          <div className="border-b border-slate-800/80 pb-4">
+            <div className="text-base font-semibold text-slate-100 flex items-center gap-2">
               <ShieldCheck className="w-5 h-5 text-emerald-400" />
               <span>Otoritas Superuser (Security by Design)</span>
-            </CardTitle>
-            <CardDescription className="text-xs text-slate-400">
+            </div>
+            <p className="text-xs text-slate-400 mt-1">
               Daftar alamat surel yang berhak membuka rute /admin dan menyetujui transaksi pembayaran.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="pt-5 space-y-4 text-xs">
-            <div className="space-y-1.5">
-              <Label className="text-xs font-bold text-slate-300">Daftar Surel Administrator (Pisahkan dengan koma)</Label>
-              <Input
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            <div>
+              <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                Daftar Surel Administrator (Pisahkan dengan koma)
+              </label>
+              <input
                 type="text"
                 value={adminEmails}
                 onChange={(e) => setAdminEmails(e.target.value)}
-                className="text-xs h-9 bg-slate-900 border-slate-700 text-white font-mono"
+                className="w-full bg-slate-950/80 border border-slate-800 rounded-lg px-3.5 py-2 text-sm text-slate-100 placeholder:text-slate-500 font-mono focus:outline-none focus:border-slate-400 focus:ring-1 focus:ring-slate-400 transition-colors"
                 required
               />
-              <p className="text-[11px] text-slate-500">
+              <p className="text-xs text-slate-500 mt-1.5">
                 Pengguna dengan email di luar daftar ini akan otomatis dialihkan ke /dashboard jika mencoba mengakses panel admin.
               </p>
             </div>
 
-            <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-2 text-slate-400">
-              <div className="font-bold text-white flex items-center gap-2">
+            <div className="bg-slate-950/70 border border-slate-800/90 rounded-xl p-4">
+              <div className="text-xs font-semibold text-slate-200 flex items-center gap-2 mb-2.5">
                 <Lock className="w-4 h-4 text-emerald-400" />
                 <span>Status Kepatuhan Keamanan & Regulasi</span>
               </div>
-              <ul className="list-disc pl-5 space-y-1 text-[11px]">
-                <li><strong>Supabase PostgreSQL RLS:</strong> Aktif (Kebijakan isolasi `auth.uid() = user_id`)</li>
-                <li><strong>Enkripsi In-Transit:</strong> TLS 1.3 / HTTPS</li>
-                <li><strong>Kepatuhan UU PDP No. 27/2022:</strong> Aktif (Mode Perlindungan Data Kedinasan Pendidik)</li>
-                <li><strong>Google Cloud API Governance:</strong> Kunci API terisolasi di sisi server (Node.js runtime)</li>
+              <ul className="text-xs text-slate-400 space-y-1.5">
+                <li className="flex items-start gap-1.5">
+                  <span className="text-slate-600 select-none">•</span>
+                  <span><strong className="text-slate-200 font-medium">Supabase PostgreSQL RLS:</strong> Aktif (Kebijakan isolasi <code className="text-slate-300 font-mono text-[11px]">auth.uid() = user_id</code>)</span>
+                </li>
+                <li className="flex items-start gap-1.5">
+                  <span className="text-slate-600 select-none">•</span>
+                  <span><strong className="text-slate-200 font-medium">Enkripsi In-Transit:</strong> TLS 1.3 / HTTPS</span>
+                </li>
+                <li className="flex items-start gap-1.5">
+                  <span className="text-slate-600 select-none">•</span>
+                  <span><strong className="text-slate-200 font-medium">Kepatuhan UU PDP No. 27/2022:</strong> Aktif (Mode Perlindungan Data Kedinasan Pendidik)</span>
+                </li>
+                <li className="flex items-start gap-1.5">
+                  <span className="text-slate-600 select-none">•</span>
+                  <span><strong className="text-slate-200 font-medium">Google Cloud API Governance:</strong> Kunci API terisolasi di sisi server (Node.js runtime)</span>
+                </li>
               </ul>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
         <div className="flex justify-end">
-          <Button
+          <button
             type="submit"
-            className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs h-10 px-6 rounded-xl shadow-xs cursor-pointer gap-2"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-white text-slate-950 text-xs font-semibold shadow-sm transition-colors cursor-pointer"
           >
             <Save className="w-4 h-4" />
             <span>Simpan Seluruh Pengaturan Sistem</span>
-          </Button>
+          </button>
         </div>
       </form>
     </div>

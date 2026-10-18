@@ -82,12 +82,16 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-100 flex flex-col md:flex-row font-sans selection:bg-indigo-600 selection:text-white">
+    <div className="min-h-screen bg-slate-900 text-slate-100 flex flex-col md:flex-row font-sans selection:bg-slate-700 selection:text-white">
       {/* Topbar Mobile */}
       <header className="md:hidden bg-slate-950 border-b border-slate-800 px-4 h-14 flex items-center justify-between sticky top-0 z-40">
-        <div className="flex items-center gap-2">
-          <ModulKuLogo size="sm" showSubtitle subtitleText="Admin Console" />
-        </div>
+        <Link href="/admin" className="flex items-center gap-2">
+          <div className="w-7 h-7 rounded-lg bg-slate-100 text-slate-950 font-bold flex items-center justify-center text-xs shadow-xs">
+            M
+          </div>
+          <span className="text-sm text-slate-50 font-bold tracking-tight">ModulKu</span>
+          <span className="text-[10px] font-mono text-slate-400 pl-1">Admin</span>
+        </Link>
         <Button
           variant="ghost"
           size="sm"
@@ -108,12 +112,15 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         <div className="flex-1 flex flex-col overflow-y-auto">
           {/* Brand Header */}
           <div className="h-16 px-5 border-b border-slate-800 flex items-center justify-between bg-slate-950/80">
-            <div className="flex items-center gap-2.5">
-              <ModulKuLogo size="md" />
-            </div>
-            <Badge variant="outline" className="bg-indigo-950/80 border-indigo-700/60 text-indigo-300 font-mono text-[9px] px-1.5 py-0.5">
-              ADMIN
-            </Badge>
+            <Link href="/admin" className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-slate-100 text-slate-950 font-bold flex items-center justify-center text-sm shadow-xs">
+                M
+              </div>
+              <span className="text-base text-slate-50 font-bold tracking-tight">ModulKu</span>
+            </Link>
+            <span className="bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[9px] font-bold px-1.5 py-0.5 rounded">
+              CONTROL
+            </span>
           </div>
 
           {/* Tag Status Keamanan */}
@@ -145,18 +152,24 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                   key={item.id}
                   href={item.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+                  className={`flex items-center justify-between px-3 py-2.5 text-xs transition-all ${
                     isActive
-                      ? "bg-indigo-600 text-white font-bold shadow-xs"
-                      : "text-slate-400 hover:text-white hover:bg-slate-900"
+                      ? "bg-slate-100 text-slate-950 font-semibold rounded-xl shadow-xs"
+                      : "text-slate-400 hover:text-slate-100 hover:bg-slate-900 rounded-xl transition-colors"
                   }`}
                 >
                   <div className="flex items-center gap-3 truncate">
-                    <Icon className={`w-4 h-4 shrink-0 ${isActive ? "text-white" : "text-slate-400"}`} />
+                    <Icon className={`w-4 h-4 shrink-0 ${isActive ? "text-slate-950" : "text-slate-400"}`} />
                     <span className="truncate">{item.name}</span>
                   </div>
                   {item.badge && (
-                    <span className="text-[10px] font-mono font-bold bg-rose-600 text-white px-2 py-0.5 rounded-full shadow-2xs">
+                    <span
+                      className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-full ${
+                        isActive
+                          ? "bg-slate-900 text-slate-100"
+                          : "bg-slate-800 text-slate-200 border border-slate-700"
+                      }`}
+                    >
                       {item.badge}
                     </span>
                   )}
@@ -169,11 +182,11 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         {/* Footer Sidebar: Profil Admin & Navigasi Cepat */}
         <div className="p-4 border-t border-slate-800 bg-slate-950/60 space-y-3">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-full bg-indigo-950 border border-indigo-700/60 text-indigo-300 flex items-center justify-center font-bold text-xs shrink-0">
+            <div className="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 text-slate-200 flex items-center justify-center font-bold text-xs shrink-0">
               AD
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-bold text-white truncate">Administrator Pusat</p>
+              <p className="text-xs font-bold text-slate-100 truncate">Administrator Pusat</p>
               <p className="text-[10px] text-slate-400 font-mono truncate">admin@modulku.id</p>
             </div>
           </div>
@@ -215,7 +228,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           </div>
 
           <div className="flex items-center gap-3 text-xs">
-            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-950/60 border border-emerald-800/60 text-emerald-300 font-semibold text-[11px]">
+            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-200 font-semibold text-[11px]">
               <span className="w-2 h-2 rounded-full bg-emerald-400" />
               <span>Sistem Normal (99.98% Uptime)</span>
             </div>
@@ -223,7 +236,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         </header>
 
         {/* Area Halaman */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
+        <main className="flex-1 max-w-7xl mx-auto px-6 py-8 w-full">
           {children}
         </main>
       </div>

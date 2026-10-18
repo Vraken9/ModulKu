@@ -79,8 +79,8 @@ export default function AdminApprovalsPage() {
       {/* Header Halaman */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-black text-white tracking-tight flex items-center gap-2.5">
-            <CreditCard className="w-6 h-6 text-indigo-400" />
+          <h1 className="text-2xl font-bold text-slate-50 tracking-tight flex items-center gap-2.5">
+            <CreditCard className="w-6 h-6 text-slate-300" />
             <span>Persetujuan Langganan Manual</span>
           </h1>
           <p className="text-xs text-slate-400 mt-1">
@@ -90,7 +90,7 @@ export default function AdminApprovalsPage() {
       </div>
 
       {/* Kontrol Pencarian & Filter */}
-      <Card className="bg-slate-950 border-slate-800 text-white shadow-xs">
+      <Card className="bg-slate-900 border border-slate-800 text-white rounded-xl shadow-xs">
         <CardContent className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="relative flex-1 max-w-sm">
             <Search className="w-4 h-4 text-slate-500 absolute left-3 top-2.5" />
@@ -99,7 +99,7 @@ export default function AdminApprovalsPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Cari kode transaksi, nama guru, atau email..."
-              className="pl-9 text-xs h-9 bg-slate-900 border-slate-700 text-white placeholder:text-slate-500"
+              className="pl-9 text-xs h-9 bg-slate-950/80 border-slate-800 text-slate-100 placeholder:text-slate-500 rounded-lg focus:outline-none focus:border-slate-400 focus:ring-1 focus:ring-slate-400"
             />
           </div>
 
@@ -114,10 +114,10 @@ export default function AdminApprovalsPage() {
                 key={tab.id}
                 type="button"
                 onClick={() => setFilterStatus(tab.id)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
                   filterStatus === tab.id
-                    ? "bg-indigo-600 text-white font-bold"
-                    : "bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-850 border border-slate-800"
+                    ? "bg-slate-100 text-slate-950 font-semibold"
+                    : "bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800"
                 }`}
               >
                 {tab.label}
@@ -128,7 +128,7 @@ export default function AdminApprovalsPage() {
       </Card>
 
       {/* Tabel Permintaan */}
-      <Card className="bg-slate-950 border-slate-800 text-white shadow-xs">
+      <Card className="bg-slate-900 border border-slate-800 text-white rounded-xl shadow-xs">
         <CardContent className="p-0">
           {filteredRequests.length === 0 ? (
             <div className="text-center py-12 space-y-2">
@@ -141,107 +141,110 @@ export default function AdminApprovalsPage() {
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead>
-                  <tr className="border-b border-slate-800 text-slate-400 text-[11px] uppercase bg-slate-900/40">
-                    <th className="py-3 px-4">Kode Trx</th>
+                  <tr className="border-b border-slate-800 text-slate-400 text-[11px] uppercase bg-slate-950/40">
+                    <th className="py-3 px-4 whitespace-nowrap">Kode Trx</th>
                     <th className="py-3 px-4">Pendidik & Email</th>
                     <th className="py-3 px-4">Paket & Biaya</th>
                     <th className="py-3 px-4">Metode & Pengirim</th>
-                    <th className="py-3 px-4">Tanggal Masuk</th>
-                    <th className="py-3 px-4">Status</th>
-                    <th className="py-3 px-4">Bukti</th>
-                    <th className="py-3 px-4 text-right">Aksi</th>
+                    <th className="py-3 px-4 whitespace-nowrap">Tanggal Masuk</th>
+                    <th className="py-3 px-4 whitespace-nowrap">Status</th>
+                    <th className="py-3 px-4 whitespace-nowrap">Bukti</th>
+                    <th className="py-3 px-4 text-right whitespace-nowrap">Aksi</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-800/60 font-medium">
                   {filteredRequests.map((req) => (
-                    <tr key={req.id} className="hover:bg-slate-900/50 transition-colors">
-                      <td className="py-3.5 px-4 font-mono font-bold text-indigo-300">
-                        {req.id}
+                    <tr key={req.id} className="hover:bg-slate-850/50 transition-colors">
+                      <td className="py-3.5 px-4 whitespace-nowrap">
+                        <span className="inline-flex font-mono text-xs text-slate-200 bg-slate-800 border border-slate-700 px-2 py-0.5 rounded whitespace-nowrap">
+                          {req.id}
+                        </span>
                       </td>
                       <td className="py-3.5 px-4">
-                        <div className="font-bold text-white">{req.userName}</div>
+                        <div className="font-bold text-slate-100">{req.userName}</div>
                         <div className="text-[11px] text-slate-400 font-mono">{req.userEmail}</div>
                       </td>
                       <td className="py-3.5 px-4">
                         <div className="font-semibold text-slate-200">{req.planName}</div>
-                        <div className="text-emerald-400 font-mono font-bold text-[11px]">
+                        <div className="text-slate-100 font-mono font-bold text-[11px]">
                           {req.formattedAmount}
                         </div>
                       </td>
                       <td className="py-3.5 px-4">
-                        <Badge variant="outline" className="bg-slate-900 border-slate-700 text-slate-300 text-[10px] mb-0.5">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] bg-slate-800 border border-slate-700 text-slate-300 mb-0.5">
                           {req.paymentMethod}
-                        </Badge>
+                        </span>
                         <div className="text-[11px] text-slate-400 truncate max-w-[140px]">
                           a.n. {req.senderName}
                         </div>
                       </td>
-                      <td className="py-3.5 px-4 text-slate-400 text-[11px]">
+                      <td className="py-3.5 px-4 text-slate-400 text-[11px] whitespace-nowrap">
                         {new Date(req.createdAt).toLocaleString("id-ID", {
                           dateStyle: "medium",
                           timeStyle: "short",
                         })}
                       </td>
-                      <td className="py-3.5 px-4">
+                      <td className="py-3.5 px-4 whitespace-nowrap">
                         {req.status === "approved" && (
-                          <Badge className="bg-emerald-950 text-emerald-300 border-emerald-800 font-semibold text-[10px]">
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 whitespace-nowrap">
                             Disetujui
-                          </Badge>
+                          </span>
                         )}
                         {req.status === "pending" && (
-                          <Badge className="bg-amber-950 text-amber-300 border-amber-800 font-semibold text-[10px]">
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20 whitespace-nowrap">
                             Menunggu Verifikasi
-                          </Badge>
+                          </span>
                         )}
                         {req.status === "rejected" && (
-                          <Badge className="bg-rose-950 text-rose-300 border-rose-800 font-semibold text-[10px]">
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-rose-500/10 text-rose-400 border border-rose-500/20 whitespace-nowrap">
                             Ditolak
-                          </Badge>
+                          </span>
                         )}
                       </td>
-                      <td className="py-3.5 px-4">
+                      <td className="py-3.5 px-4 whitespace-nowrap">
                         <button
                           type="button"
                           onClick={() => setSelectedProof(req.proofImageUrl)}
-                          className="flex items-center gap-1.5 text-[11px] font-bold text-indigo-400 hover:text-indigo-300 underline cursor-pointer"
+                          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-medium whitespace-nowrap transition-colors cursor-pointer"
                         >
                           <Eye className="w-3.5 h-3.5" />
                           <span>Lihat Struk</span>
                         </button>
                       </td>
-                      <td className="py-3.5 px-4 text-right space-x-1.5">
-                        {req.status === "pending" ? (
-                          <>
-                            <Button
-                              size="sm"
-                              onClick={() => handleApprove(req)}
-                              className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[11px] h-8 px-3 rounded-lg shadow-2xs cursor-pointer"
+                      <td className="py-3.5 px-4 text-right whitespace-nowrap">
+                        <div className="flex items-center justify-end gap-2 whitespace-nowrap">
+                          {req.status === "pending" ? (
+                            <>
+                              <Button
+                                size="sm"
+                                onClick={() => handleApprove(req)}
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-medium transition-colors shadow-xs whitespace-nowrap cursor-pointer h-8"
+                              >
+                                <Check className="w-3.5 h-3.5" />
+                                <span>Approve</span>
+                              </Button>
+                              <button
+                                type="button"
+                                onClick={() => handleReject(req)}
+                                className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 transition-colors shrink-0 cursor-pointer"
+                                title="Tolak Transaksi"
+                              >
+                                <X className="w-3.5 h-3.5" />
+                              </button>
+                            </>
+                          ) : (
+                            <a
+                              href={generateWhatsAppLink(req.planName, req.formattedAmount, req.paymentMethod, req.id)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-emerald-400 border border-slate-700 text-xs font-medium whitespace-nowrap transition-colors"
+                              title="Hubungi Guru via WhatsApp"
                             >
-                              <Check className="w-3.5 h-3.5 mr-1" />
-                              <span>Approve</span>
-                            </Button>
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => handleReject(req)}
-                              className="border-slate-700 hover:bg-rose-950/60 text-rose-400 hover:border-rose-800 text-[11px] h-8 px-2 rounded-lg cursor-pointer"
-                              title="Tolak Transaksi"
-                            >
-                              <X className="w-3.5 h-3.5" />
-                            </Button>
-                          </>
-                        ) : (
-                          <a
-                            href={generateWhatsAppLink(req.planName, req.formattedAmount, req.paymentMethod, req.id)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-400 hover:text-emerald-400"
-                            title="Hubungi Guru via WhatsApp"
-                          >
-                            <MessageCircle className="w-3.5 h-3.5" />
-                            <span>Hubungi</span>
-                          </a>
-                        )}
+                              <MessageCircle className="w-3.5 h-3.5" />
+                              <span>Hubungi</span>
+                            </a>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   ))}
