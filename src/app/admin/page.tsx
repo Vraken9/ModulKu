@@ -444,7 +444,9 @@ export default function AdminOverviewPage() {
             <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
               <div>
                 <span className="font-bold text-slate-900 block">E-Wallet DANA & ShopeePay</span>
-                <span className="text-[11px] text-slate-500 font-mono tabular-nums">DANA: {channels.dana.accountNumber} | SPay: {channels.shopeepay.accountNumber}</span>
+                <span className="text-[11px] text-slate-500 font-mono tabular-nums">
+                  DANA: {channels?.dana?.accountNumber || "-"} | SPay: {channels?.shopeepay?.accountNumber || "-"}
+                </span>
               </div>
               <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-[#ECFDF5] text-[#065F46] border border-emerald-200">
                 Aktif
@@ -454,7 +456,9 @@ export default function AdminOverviewPage() {
             <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
               <div>
                 <span className="font-bold text-slate-900 block">Transfer Bank BRI</span>
-                <span className="text-[11px] text-slate-500 font-mono tabular-nums">No. Rekening: {channels.bri.accountNumber} (a.n. {channels.bri.accountName})</span>
+                <span className="text-[11px] text-slate-500 font-mono tabular-nums">
+                  No. Rekening: {channels?.bri?.accountNumber || "-"} (a.n. {channels?.bri?.accountName || "ModulKu"})
+                </span>
               </div>
               <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-[#ECFDF5] text-[#065F46] border border-emerald-200">
                 Aktif
@@ -464,7 +468,9 @@ export default function AdminOverviewPage() {
             <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
               <div>
                 <span className="font-bold text-slate-900 block">Narahubung WhatsApp Bantuan</span>
-                <span className="text-[11px] text-slate-500 font-mono tabular-nums">{channels.whatsapp.number} (Direct Chat)</span>
+                <span className="text-[11px] text-slate-500 font-mono tabular-nums">
+                  {channels?.whatsapp?.number || "089530123608"} (Direct Chat)
+                </span>
               </div>
               <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-[#ECFDF5] text-[#065F46] border border-emerald-200">
                 Online

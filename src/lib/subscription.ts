@@ -300,8 +300,10 @@ export function getPaymentChannels(): typeof PAYMENT_CHANNELS {
     if (!raw) return PAYMENT_CHANNELS;
     const parsed = JSON.parse(raw);
     return {
-      ...PAYMENT_CHANNELS,
-      ...parsed,
+      dana: { ...PAYMENT_CHANNELS.dana, ...(parsed?.dana || {}) },
+      shopeepay: { ...PAYMENT_CHANNELS.shopeepay, ...(parsed?.shopeepay || {}) },
+      bri: { ...PAYMENT_CHANNELS.bri, ...(parsed?.bri || {}) },
+      whatsapp: { ...PAYMENT_CHANNELS.whatsapp, ...(parsed?.whatsapp || {}) },
     };
   } catch {
     return PAYMENT_CHANNELS;
