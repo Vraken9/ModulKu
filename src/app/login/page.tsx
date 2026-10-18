@@ -40,22 +40,9 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      // Jika pengguna sudah login, langsung alihkan ke dashboard
-      const checkExistingSession = async () => {
-        try {
-          const { data: { session } } = await supabase.auth.getSession();
-          const localToken = localStorage.getItem("guru_auth_token");
-          if (session || localToken) {
-            router.replace("/dashboard");
-            return;
-          }
-        } catch {
-          // ignore
-        }
-      };
-      checkExistingSession();
-
       const params = new URLSearchParams(window.location.search);
+      const redirectUrl = params.get("redirect") || "/dashboard";
+
       if (params.get("demo") === "guru") {
         localStorage.setItem("guru_auth_token", "guru_demo_token_aktif");
         localStorage.setItem("guru_teacher_profile", JSON.stringify({
@@ -69,9 +56,25 @@ export default function LoginPage() {
           principal_nip: "196811201994031004"
         }));
         localStorage.setItem("modulku_vault_tier", "pro");
-        router.replace("/dashboard");
+        router.replace(redirectUrl);
         return;
       }
+
+      // Jika pengguna sudah login, langsung alihkan ke redirect target atau dashboard
+      const checkExistingSession = async () => {
+        try {
+          const { data: { session } } = await supabase.auth.getSession();
+          const localToken = localStorage.getItem("guru_auth_token");
+          if (session || localToken) {
+            router.replace(redirectUrl);
+            return;
+          }
+        } catch {
+          // ignore
+        }
+      };
+      checkExistingSession();
+
       const err = params.get("error");
       if (err) {
         if (err === "OAuthSignin" || err === "OAuthCallback" || err === "Configuration") {
@@ -207,9 +210,11 @@ export default function LoginPage() {
           }
         }
 
+        const params = new URLSearchParams(window.location.search);
+        const redirectUrl = params.get("redirect") || "/dashboard";
         setAuthSuccess("Kredensial terverifikasi. Mengalihkan ke ruang kerja...");
         setTimeout(() => {
-          router.push("/dashboard");
+          router.push(redirectUrl);
         }, 500);
       }
     } catch (err: unknown) {

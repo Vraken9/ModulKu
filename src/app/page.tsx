@@ -334,7 +334,7 @@ export default function LandingPage() {
       {/* 6. Section: Paket Berlangganan Guru & Satuan Pendidikan (3-Tier Pricing) */}
       <section id="harga" className="py-12 sm:py-16 lg:py-20 bg-white border-b border-slate-200/80">
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-          <PricingSection />
+          <PricingSection isLoggedIn={isLoggedIn} />
         </div>
       </section>
 
@@ -348,7 +348,7 @@ export default function LandingPage() {
       {/* 9. Bottom CTA Banner (Radial Mesh Glow Banner) */}
       <section className="py-12 sm:py-20 bg-slate-50/50 border-b border-slate-200/80">
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-          <RadialCtaBanner />
+          <RadialCtaBanner isLoggedIn={isLoggedIn} />
         </div>
       </section>
 

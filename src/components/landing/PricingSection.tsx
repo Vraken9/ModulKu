@@ -1,11 +1,16 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Check, Sparkles, ArrowRight, ShieldCheck, School, Zap, Award, HelpCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { supabase } from "@/lib/supabase/client";
+
+interface PricingSectionProps {
+  isLoggedIn?: boolean;
+}
 
 interface PricingTier {
   id: string;
@@ -94,19 +99,59 @@ const TIERS: PricingTier[] = [
   },
 ];
 
-export function PricingSection() {
+export function PricingSection({ isLoggedIn: propIsLoggedIn }: PricingSectionProps) {
   const router = useRouter();
   const [isAnnual, setIsAnnual] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(Boolean(propIsLoggedIn));
 
-  const handleOpenCheckout = (tierId: string) => {
-    if (tierId === "gratis") return;
-    let plan = "profesional_annual";
-    if (tierId === "profesional") {
-      plan = isAnnual ? "profesional_annual" : "profesional_monthly";
-    } else if (tierId === "sekolah") {
-      plan = isAnnual ? "sekolah_annual" : "sekolah_semester";
+  useEffect(() => {
+    if (propIsLoggedIn !== undefined) {
+      setIsLoggedIn(propIsLoggedIn);
+      return;
     }
-    router.push(`/pembayaran?plan=${plan}`);
+    async function checkAuth() {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        const localToken = localStorage.getItem("guru_auth_token");
+        if (session || localToken) {
+          setIsLoggedIn(true);
+        }
+      } catch {
+        // ignore
+      }
+    }
+    checkAuth();
+  }, [propIsLoggedIn]);
+
+  const handleTierAction = (tierId: string) => {
+    let targetPlan = "profesional_annual";
+    if (tierId === "profesional") {
+      targetPlan = isAnnual ? "profesional_annual" : "profesional_monthly";
+    } else if (tierId === "sekolah") {
+      targetPlan = isAnnual ? "sekolah_annual" : "sekolah_semester";
+    }
+
+    // Kasus 1: Pengguna BELUM LOGIN
+    if (!isLoggedIn) {
+      if (tierId === "pemula" || tierId === "gratis") {
+        // Paket guru gratis -> langsung diarahkan ke halaman login
+        router.push("/login");
+      } else {
+        // Paket profesional atau sekolah -> diarahkan ke halaman login dengan redirect ke pembayaran
+        const redirectPath = encodeURIComponent(`/pembayaran?plan=${targetPlan}`);
+        router.push(`/login?redirect=${redirectPath}`);
+      }
+      return;
+    }
+
+    // Kasus 2: Pengguna SUDAH LOGIN
+    if (tierId === "pemula" || tierId === "gratis") {
+      // Mengklik Mulai Gratis Sekarang di paket gratis -> langsung diarahkan ke halaman dashboard
+      router.push("/dashboard");
+    } else {
+      // Upgrade paket dari gratis ke profesional atau sekolah -> diarahkan ke halaman pembayaran
+      router.push(`/pembayaran?plan=${targetPlan}`);
+    }
   };
 
   return (
@@ -245,32 +290,19 @@ export function PricingSection() {
 
               {/* Bottom Action CTA */}
               <div className="pt-8">
-                {tier.id === "gratis" ? (
-                  <Link href={tier.ctaHref} className="w-full block">
-                    <Button
-                      id={`btn-pricing-${tier.id}`}
-                      size="lg"
-                      className="w-full font-bold text-xs sm:text-sm h-11 sm:h-12 rounded-xl transition-all bg-slate-900 hover:bg-slate-800 text-white cursor-pointer"
-                    >
-                      <span>{tier.ctaText}</span>
-                      <ArrowRight className="w-4 h-4 ml-1.5" />
-                    </Button>
-                  </Link>
-                ) : (
-                  <Button
-                    id={`btn-pricing-${tier.id}`}
-                    size="lg"
-                    onClick={() => handleOpenCheckout(tier.id)}
-                    className={`w-full font-bold text-xs sm:text-sm h-11 sm:h-12 rounded-xl transition-all cursor-pointer ${
-                      isFeatured
-                        ? "bg-white text-slate-950 hover:bg-slate-100 shadow-md border border-slate-200"
-                        : "bg-slate-900 hover:bg-slate-800 text-white"
-                    }`}
-                  >
-                    <span>{tier.ctaText}</span>
-                    <ArrowRight className="w-4 h-4 ml-1.5" />
-                  </Button>
-                )}
+                <Button
+                  id={`btn-pricing-${tier.id}`}
+                  size="lg"
+                  onClick={() => handleTierAction(tier.id)}
+                  className={`w-full font-bold text-xs sm:text-sm h-11 sm:h-12 rounded-xl transition-all cursor-pointer ${
+                    isFeatured
+                      ? "bg-white text-slate-950 hover:bg-slate-100 shadow-md border border-slate-200"
+                      : "bg-slate-900 hover:bg-slate-800 text-white"
+                  }`}
+                >
+                  <span>{tier.ctaText}</span>
+                  <ArrowRight className="w-4 h-4 ml-1.5" />
+                </Button>
               </div>
             </div>
           );

@@ -5,7 +5,11 @@ import Link from "next/link";
 import { ArrowRight, Sparkles, CheckCircle2, ShieldCheck, Download, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export function RadialCtaBanner() {
+interface RadialCtaBannerProps {
+  isLoggedIn?: boolean;
+}
+
+export function RadialCtaBanner({ isLoggedIn = false }: RadialCtaBannerProps) {
   return (
     <div className="relative overflow-hidden rounded-3xl bg-slate-950 border border-slate-800 text-white p-8 sm:p-12 lg:p-16 shadow-2xl">
       {/* Radial Gradient Aura & Background Grid */}
@@ -33,15 +37,15 @@ export function RadialCtaBanner() {
 
         {/* Buttons */}
         <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3.5">
-          <Link href="/login" className="w-full sm:w-auto">
+          <Link href={isLoggedIn ? "/dashboard" : "/login"} className="w-full sm:w-auto">
             <Button size="lg" className="w-full sm:w-auto bg-white hover:bg-slate-100 text-slate-950 font-extrabold text-sm h-11 sm:h-12 px-7 rounded-xl shadow-xl gap-2 border border-slate-200">
-              <span>Mulai Buat Perangkat Ajar</span>
+              <span>{isLoggedIn ? "Buka Ruang Kerja Dashboard" : "Mulai Buat Perangkat Ajar"}</span>
               <ArrowRight className="w-4 h-4 text-slate-950" />
             </Button>
           </Link>
-          <Link href="/login" className="w-full sm:w-auto">
-            <Button variant="outline" size="lg" className="w-full sm:w-auto text-slate-900 bg-white border-slate-700 hover:bg-blue-200 hover:text-slate-950 font-extrabold text-sm h-11 sm:h-12 px-6 rounded-xl">
-              Masuk ke Dashboard Guru
+          <Link href={isLoggedIn ? "/dashboard" : "/login"} className="w-full sm:w-auto">
+            <Button variant="outline" size="lg" className="w-full sm:w-auto text-slate-900 bg-white border-slate-700 hover:bg-slate-100 hover:text-slate-950 font-extrabold text-sm h-11 sm:h-12 px-6 rounded-xl">
+              {isLoggedIn ? "Kembali ke Dashboard Guru" : "Masuk ke Dashboard Guru"}
             </Button>
           </Link>
         </div>
