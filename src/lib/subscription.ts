@@ -321,26 +321,36 @@ export function savePaymentChannels(channels: typeof PAYMENT_CHANNELS): boolean 
   }
 }
 
-// Otoritas Multi-Admin: Whitelist Surel
+// Otoritas Multi-Admin: Whitelist Surel (Defense-in-Depth)
 const ADMIN_EMAILS_STORAGE_KEY = "modulku_admin_emails";
 export const DEFAULT_ADMIN_EMAILS = [
+  "akhyarmualif422006@gmail.com",
   "admin@modulku.id",
-  "akhyar@guru.id",
-  "pendidik@guru.belajar.id",
 ];
 
 export function getAdminEmails(): string[] {
-  if (typeof window === "undefined") return DEFAULT_ADMIN_EMAILS;
+  const envRaw =
+    (typeof process !== "undefined" && (process.env.ADMIN_EMAILS || process.env.NEXT_PUBLIC_ADMIN_EMAILS)) ||
+    "";
+  const envEmails = envRaw
+    ? envRaw.split(",").map((e) => e.trim().toLowerCase()).filter(Boolean)
+    : [];
+
+  const baseList = Array.from(new Set([...DEFAULT_ADMIN_EMAILS.map((e) => e.toLowerCase()), ...envEmails]));
+
+  if (typeof window === "undefined") return baseList;
+
   try {
     const raw = localStorage.getItem(ADMIN_EMAILS_STORAGE_KEY);
     if (!raw) {
-      localStorage.setItem(ADMIN_EMAILS_STORAGE_KEY, JSON.stringify(DEFAULT_ADMIN_EMAILS));
-      return DEFAULT_ADMIN_EMAILS;
+      localStorage.setItem(ADMIN_EMAILS_STORAGE_KEY, JSON.stringify(baseList));
+      return baseList;
     }
     const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) && parsed.length > 0 ? parsed : DEFAULT_ADMIN_EMAILS;
+    const customList = Array.isArray(parsed) && parsed.length > 0 ? parsed : [];
+    return Array.from(new Set([...baseList, ...customList.map((e: string) => e.toLowerCase())]));
   } catch {
-    return DEFAULT_ADMIN_EMAILS;
+    return baseList;
   }
 }
 

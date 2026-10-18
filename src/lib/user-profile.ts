@@ -176,6 +176,10 @@ export function clearCurrentSessionProfile(): void {
     localStorage.removeItem("guru_auth_token");
     setActiveUserId(null);
 
+    if (typeof document !== "undefined") {
+      document.cookie = "sb_access_token=; path=/; max-age=0; SameSite=Lax";
+    }
+
     window.dispatchEvent(new CustomEvent("modulku-profile-changed"));
     window.dispatchEvent(new CustomEvent("modulku-vault-changed"));
   } catch {

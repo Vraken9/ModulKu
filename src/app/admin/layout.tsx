@@ -276,7 +276,18 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => router.push("/login")}
+              onClick={async () => {
+                try {
+                  await supabase.auth.signOut();
+                } catch {
+                  // ignore
+                }
+                if (typeof document !== "undefined") {
+                  document.cookie = "sb_access_token=; path=/; max-age=0; SameSite=Lax";
+                }
+                localStorage.removeItem("guru_auth_token");
+                router.push("/login");
+              }}
               className="text-[11px] h-8 px-2.5 font-semibold text-slate-700 hover:text-rose-700 hover:bg-rose-50 hover:border-rose-200 border-slate-300 bg-white cursor-pointer"
               title="Keluar dari Admin"
             >

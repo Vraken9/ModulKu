@@ -52,6 +52,9 @@ export default function LoginPage() {
       if (params.get("demo") === "guru") {
         setActiveUserId("demo_guru");
         localStorage.setItem("guru_auth_token", "guru_demo_token_aktif");
+        if (typeof document !== "undefined") {
+          document.cookie = "sb_access_token=guru_demo_token_aktif; path=/; max-age=2592000; SameSite=Lax";
+        }
         saveTeacherProfile({
           teacher_name: "Dra. Siti Rahmawati, M.Pd.",
           teacher_nip: "198205142008012015",
@@ -75,6 +78,9 @@ export default function LoginPage() {
           const { data: { session } } = await supabase.auth.getSession();
           const localToken = localStorage.getItem("guru_auth_token");
           if (session?.user) {
+            if (session.access_token && typeof document !== "undefined") {
+              document.cookie = `sb_access_token=${session.access_token}; path=/; max-age=2592000; SameSite=Lax`;
+            }
             setActiveUserId(session.user.id);
             const fallbackName = session.user.user_metadata?.full_name || (session.user.email ? session.user.email.split("@")[0] : undefined);
             getTeacherProfile(session.user.id, fallbackName);
@@ -158,6 +164,9 @@ export default function LoginPage() {
         }
 
         if (data.session && data.user) {
+          if (data.session.access_token && typeof document !== "undefined") {
+            document.cookie = `sb_access_token=${data.session.access_token}; path=/; max-age=2592000; SameSite=Lax`;
+          }
           setActiveUserId(data.user.id);
           localStorage.setItem("guru_auth_token", data.session.access_token);
           saveTeacherProfile({
@@ -207,6 +216,9 @@ export default function LoginPage() {
       }
 
       if (data.session && data.user) {
+        if (data.session.access_token && typeof document !== "undefined") {
+          document.cookie = `sb_access_token=${data.session.access_token}; path=/; max-age=2592000; SameSite=Lax`;
+        }
         setActiveUserId(data.user.id);
         localStorage.setItem("guru_auth_token", data.session.access_token);
 
