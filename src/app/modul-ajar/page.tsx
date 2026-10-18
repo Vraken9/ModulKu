@@ -28,23 +28,22 @@ import { getOfficialCP } from "@/lib/data/capaian-pembelajaran";
 import { saveDocumentToVault } from "@/lib/document-vault";
 import { TeachingModule, SchoolProfile, TeacherProfile } from "@/types";
 import { useNotification } from "@/components/providers/NotificationProvider";
+import { getTeacherProfile, getSchoolProfile } from "@/lib/user-profile";
 
 export default function ModulAjarPage() {
   const { toast } = useNotification();
   const [isSavedToVault, setIsSavedToVault] = useState(false);
   const [school, setSchool] = useState<Partial<SchoolProfile>>({
-    school_name: "SMA NEGERI 1 PURWANTORO",
+    school_name: "SATUAN PENDIDIKAN INDONESIA",
   });
   const [teacher, setTeacher] = useState<Partial<TeacherProfile>>({
-    teacher_name: "Arfian Cahya, S.Pd.",
+    teacher_name: "Pendidik ModulKu",
   });
 
   useEffect(() => {
     try {
-      const savedSchool = localStorage.getItem("guru_school_profile");
-      const savedTeacher = localStorage.getItem("guru_teacher_profile");
-      if (savedSchool) setSchool(JSON.parse(savedSchool));
-      if (savedTeacher) setTeacher(JSON.parse(savedTeacher));
+      setSchool(getSchoolProfile());
+      setTeacher(getTeacherProfile());
     } catch {
       // Abaikan di server
     }

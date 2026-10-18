@@ -251,7 +251,7 @@ export default function LandingPage() {
                 {/* Standard Curriculum Emerald Badge */}
                 <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-[#ECFDF5] border border-emerald-200 text-xs sm:text-sm font-semibold text-[#065F46] shadow-2xs">
                   <Sparkles className="w-4 h-4 text-[#059669]" />
-                  <span>Platform Resmi Standar BKPDM Kemendikdasmen</span>
+                  <span>Platform Berstandar BKPDM Kemendikdasmen</span>
                 </div>
 
                 <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[54px] font-black text-slate-900 tracking-tight leading-[1.12]">

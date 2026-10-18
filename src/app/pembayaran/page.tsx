@@ -24,7 +24,6 @@ import {
   AlertTriangle,
   Info,
   UserCheck,
-  LogIn,
 } from "lucide-react";
 import { ModulKuLogo } from "@/components/ui/ModulKuLogo";
 import { Button } from "@/components/ui/button";
@@ -98,11 +97,21 @@ export default function PembayaranPage() {
       const verifyAuth = async () => {
         try {
           const { data: { session } } = await supabase.auth.getSession();
+          const localToken = typeof window !== "undefined" ? localStorage.getItem("guru_auth_token") : null;
           if (session?.user) {
             setSessionUser({
               id: session.user.id,
               email: session.user.email,
             });
+          } else if (localToken) {
+            setSessionUser({
+              id: "local_user",
+              email: "guru@modulku.id",
+            });
+          } else {
+            const redirectUrl = encodeURIComponent(window.location.pathname + window.location.search);
+            router.push(`/login?redirect=${redirectUrl}`);
+            return;
           }
         } catch {
           // ignore
@@ -663,24 +672,6 @@ export default function PembayaranPage() {
                     </h3>
                     <span className="text-[11px] text-slate-500">Wajib Diisi</span>
                   </div>
-
-                  {/* Banner Pengecekan Login Wajib (Security by Design) */}
-                  {authChecked && !sessionUser && (
-                    <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs">
-                      <div className="flex items-center gap-2">
-                        <AlertTriangle className="w-4 h-4 text-amber-700 shrink-0" />
-                        <span>
-                          <strong>Perhatian:</strong> Anda belum masuk ke akun guru. Masuk sekarang agar aktivasi lisensi langsung terhubung ke profil Anda.
-                        </span>
-                      </div>
-                      <Link href={`/login?redirect=${encodeURIComponent(`/pembayaran?plan=${selectedPlanId}`)}`}>
-                        <Button size="sm" className="bg-amber-800 hover:bg-amber-900 text-white font-bold text-xs h-8 px-3 rounded-xl shrink-0 gap-1.5 cursor-pointer">
-                          <LogIn className="w-3.5 h-3.5" />
-                          <span>Masuk Akun Sekarang</span>
-                        </Button>
-                      </Link>
-                    </div>
-                  )}
 
                   {sessionUser && (
                     <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700 flex items-center justify-between">

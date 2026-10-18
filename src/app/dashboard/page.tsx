@@ -26,25 +26,51 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { SchoolProfile, TeacherProfile } from "@/types";
+import { getTeacherProfile, getSchoolProfile } from "@/lib/user-profile";
+import { getActiveUserId } from "@/lib/document-vault";
+import { supabase } from "@/lib/supabase/client";
 
 export default function DashboardPage() {
   const [school, setSchool] = useState<Partial<SchoolProfile>>({
-    school_name: "SMA NEGERI 1 PURWANTORO",
-    government_agency: "PEMERINTAH PROVINSI JAWA TIMUR",
+    school_name: "SATUAN PENDIDIKAN INDONESIA",
+    government_agency: "PEMERINTAH PROVINSI",
   });
   const [teacher, setTeacher] = useState<Partial<TeacherProfile>>({
-    teacher_name: "Arfian Cahya, S.Pd.",
+    teacher_name: "Pendidik ModulKu",
   });
 
   useEffect(() => {
-    try {
-      const savedSchool = localStorage.getItem("guru_school_profile");
-      const savedTeacher = localStorage.getItem("guru_teacher_profile");
-      if (savedSchool) setSchool(JSON.parse(savedSchool));
-      if (savedTeacher) setTeacher(JSON.parse(savedTeacher));
-    } catch {
-      // ignore
+    async function loadActiveProfile() {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        let uid: string | undefined = undefined;
+        let displayName = "Pendidik ModulKu";
+
+        if (session?.user) {
+          uid = session.user.id;
+          displayName =
+            session.user.user_metadata?.full_name ||
+            session.user.email?.split("@")[0] ||
+            "Pendidik ModulKu";
+        } else {
+          const active = getActiveUserId();
+          if (active !== "guest") uid = active;
+        }
+
+        setTeacher(getTeacherProfile(uid, displayName));
+        setSchool(getSchoolProfile(uid));
+      } catch {
+        // ignore
+      }
     }
+
+    loadActiveProfile();
+
+    const handleProfileChange = () => {
+      loadActiveProfile();
+    };
+    window.addEventListener("modulku-profile-changed", handleProfileChange);
+    return () => window.removeEventListener("modulku-profile-changed", handleProfileChange);
   }, []);
 
   const featureCards = [

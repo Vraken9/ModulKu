@@ -32,6 +32,14 @@ import {
 } from "@/lib/validations/school-profile";
 import { SchoolProfile, TeacherProfile } from "@/types";
 import { useNotification } from "@/components/providers/NotificationProvider";
+import {
+  getTeacherProfile,
+  saveTeacherProfile,
+  getSchoolProfile,
+  saveSchoolProfile,
+} from "@/lib/user-profile";
+import { getActiveUserId } from "@/lib/document-vault";
+import { supabase } from "@/lib/supabase/client";
 
 const DEFAULT_SCHOOL: SchoolProfileFormValues = {
   government_agency: "PEMERINTAH PROVINSI JAWA TIMUR",
@@ -70,21 +78,46 @@ export default function ProfilSekolahPage() {
   const [isSaved, setIsSaved] = useState<boolean>(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  // Muat data dari localStorage saat komponen dibuka
+  // Muat data terisolasi per-user saat komponen dibuka
   useEffect(() => {
-    try {
-      const savedSchool = localStorage.getItem("guru_school_profile");
-      const savedTeacher = localStorage.getItem("guru_teacher_profile");
-      if (savedSchool) setSchoolData(JSON.parse(savedSchool));
-      if (savedTeacher) setTeacherData(JSON.parse(savedTeacher));
+    async function loadInitialProfiles() {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        let uid: string | undefined = session?.user?.id || getActiveUserId();
+        if (uid === "guest") uid = undefined;
 
-      const params = new URLSearchParams(window.location.search);
-      if (params.get("onboarding") === "true") {
-        setIsOnboarding(true);
+        const displayName =
+          session?.user?.user_metadata?.full_name ||
+          session?.user?.email?.split("@")[0] ||
+          "Pendidik ModulKu";
+
+        const t = getTeacherProfile(uid, displayName);
+        const s = getSchoolProfile(uid);
+
+        setTeacherData({
+          ...DEFAULT_TEACHER,
+          ...t,
+          teacher_name: t.teacher_name || displayName,
+          teacher_nip: t.teacher_nip || "-",
+        });
+
+        setSchoolData({
+          ...DEFAULT_SCHOOL,
+          ...s,
+          accreditation: (s.accreditation as SchoolProfileFormValues["accreditation"]) || DEFAULT_SCHOOL.accreditation,
+          left_logo_url: s.left_logo_url || "",
+          right_logo_url: s.right_logo_url || "",
+        });
+
+        const params = new URLSearchParams(window.location.search);
+        if (params.get("onboarding") === "true") {
+          setIsOnboarding(true);
+        }
+      } catch {
+        // Abaikan jika error
       }
-    } catch {
-      // Abaikan jika localStorage tidak tersedia di server
     }
+    loadInitialProfiles();
   }, []);
 
   const handleSchoolChange = (
@@ -129,9 +162,11 @@ export default function ProfilSekolahPage() {
       return;
     }
 
-    // Simpan ke localStorage
-    localStorage.setItem("guru_school_profile", JSON.stringify(schoolData));
-    localStorage.setItem("guru_teacher_profile", JSON.stringify(teacherData));
+    // Simpan ke storage terisolasi per user
+    const activeUid = getActiveUserId();
+    const uid = activeUid !== "guest" ? activeUid : undefined;
+    saveSchoolProfile(schoolData as any, uid);
+    saveTeacherProfile(teacherData as any, uid);
     setIsSaved(true);
     toast.success("Profil sekolah dan data guru kedinasan berhasil disimpan secara aman.", "Profil Disimpan");
 
@@ -151,10 +186,12 @@ export default function ProfilSekolahPage() {
     });
     if (!isConfirmed) return;
 
+    const activeUid = getActiveUserId();
+    const uid = activeUid !== "guest" ? activeUid : undefined;
     setSchoolData(DEFAULT_SCHOOL);
     setTeacherData(DEFAULT_TEACHER);
-    localStorage.setItem("guru_school_profile", JSON.stringify(DEFAULT_SCHOOL));
-    localStorage.setItem("guru_teacher_profile", JSON.stringify(DEFAULT_TEACHER));
+    saveSchoolProfile(DEFAULT_SCHOOL as any, uid);
+    saveTeacherProfile(DEFAULT_TEACHER as any, uid);
     setErrors({});
     setIsSaved(true);
     toast.success("Data profil sekolah dan guru berhasil dikembalikan ke format standar.", "Pengaturan Ulang Berhasil");

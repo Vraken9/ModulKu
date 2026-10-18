@@ -35,7 +35,13 @@ import {
   TIER_CONFIGS,
   DEFAULT_STORAGE_SUMMARY,
   setActiveUserId,
+  getActiveUserId,
 } from "@/lib/document-vault";
+import {
+  getTeacherProfile,
+  getSchoolProfile,
+  clearCurrentSessionProfile,
+} from "@/lib/user-profile";
 import { AdminChatWidget } from "@/components/chat/AdminChatWidget";
 
 interface MenuItem {
@@ -87,30 +93,29 @@ export function DashboardShell({ children, activeItem }: DashboardShellProps) {
           return;
         }
 
+        let currentUid: string | undefined = undefined;
+        let displayName = "Pendidik ModulKu";
+
         if (session?.user) {
-          setActiveUserId(session.user.id);
-          const userDisplayName =
+          currentUid = session.user.id;
+          displayName =
             session.user.user_metadata?.full_name ||
             session.user.email?.split("@")[0] ||
             "Pendidik ModulKu";
-
-          const savedTeacher = localStorage.getItem("guru_teacher_profile");
-          if (savedTeacher) {
-            const parsed = JSON.parse(savedTeacher);
-            if (isMounted) setTeacher(parsed);
-          } else {
-            const newProfile = { teacher_name: userDisplayName, teacher_nip: "-" };
-            if (isMounted) setTeacher(newProfile);
-          }
-        } else {
-          const savedTeacher = localStorage.getItem("guru_teacher_profile");
-          if (savedTeacher && isMounted) setTeacher(JSON.parse(savedTeacher));
+          setActiveUserId(currentUid);
+        } else if (localToken) {
+          const activeUid = getActiveUserId();
+          currentUid = activeUid !== "guest" ? activeUid : undefined;
         }
 
-        const savedSchool = localStorage.getItem("guru_school_profile");
-        if (savedSchool && isMounted) setSchool(JSON.parse(savedSchool));
+        const currentTeacher = getTeacherProfile(currentUid, displayName);
+        const currentSchool = getSchoolProfile(currentUid);
 
-        if (isMounted) setVaultSummary(getStorageUsageSummary());
+        if (isMounted) {
+          setTeacher(currentTeacher);
+          setSchool(currentSchool);
+          setVaultSummary(getStorageUsageSummary(currentUid));
+        }
       } catch {
         // Abaikan di server
       }
@@ -120,30 +125,45 @@ export function DashboardShell({ children, activeItem }: DashboardShellProps) {
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === "SIGNED_OUT") {
-        setActiveUserId(null);
+        clearCurrentSessionProfile();
         router.replace("/login");
       } else if (session?.user) {
         setActiveUserId(session.user.id);
-        setVaultSummary(getStorageUsageSummary());
+        const displayName =
+          session.user.user_metadata?.full_name ||
+          session.user.email?.split("@")[0] ||
+          "Pendidik ModulKu";
+        setTeacher(getTeacherProfile(session.user.id, displayName));
+        setSchool(getSchoolProfile(session.user.id));
+        setVaultSummary(getStorageUsageSummary(session.user.id));
       }
     });
 
     const handleVaultChange = () => {
-      setVaultSummary(getStorageUsageSummary());
+      const activeUid = getActiveUserId();
+      setVaultSummary(getStorageUsageSummary(activeUid !== "guest" ? activeUid : undefined));
     };
     window.addEventListener("modulku-vault-changed", handleVaultChange);
+
+    const handleProfileChange = () => {
+      const activeUid = getActiveUserId();
+      const uid = activeUid !== "guest" ? activeUid : undefined;
+      setTeacher(getTeacherProfile(uid));
+      setSchool(getSchoolProfile(uid));
+    };
+    window.addEventListener("modulku-profile-changed", handleProfileChange);
 
     return () => {
       isMounted = false;
       subscription.unsubscribe();
       window.removeEventListener("modulku-vault-changed", handleVaultChange);
+      window.removeEventListener("modulku-profile-changed", handleProfileChange);
     };
   }, [router]);
 
   async function handleLogout() {
     try {
-      localStorage.removeItem("guru_auth_token");
-      setActiveUserId(null);
+      clearCurrentSessionProfile();
       await supabase.auth.signOut();
     } catch {
       // ignore

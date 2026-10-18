@@ -22,6 +22,12 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { ModulKuLogo } from "@/components/ui/ModulKuLogo";
 import { supabase } from "@/lib/supabase/client";
 import { setActiveUserId } from "@/lib/document-vault";
+import {
+  getTeacherProfile,
+  saveTeacherProfile,
+  getSchoolProfile,
+  saveSchoolProfile,
+} from "@/lib/user-profile";
 import { PrivacyPolicyModal } from "@/components/legal/PrivacyPolicyModal";
 
 export default function LoginPage() {
@@ -44,17 +50,20 @@ export default function LoginPage() {
       const redirectUrl = params.get("redirect") || "/dashboard";
 
       if (params.get("demo") === "guru") {
+        setActiveUserId("demo_guru");
         localStorage.setItem("guru_auth_token", "guru_demo_token_aktif");
-        localStorage.setItem("guru_teacher_profile", JSON.stringify({
+        saveTeacherProfile({
           teacher_name: "Dra. Siti Rahmawati, M.Pd.",
-          teacher_nip: "198205142008012015"
-        }));
-        localStorage.setItem("guru_school_profile", JSON.stringify({
+          teacher_nip: "198205142008012015",
+          headmaster_name: "Drs. H. Mulyono, M.Pd.",
+          headmaster_nip: "196811201994031004",
+          user_id: "demo_guru",
+        }, "demo_guru");
+        saveSchoolProfile({
           school_name: "SMA Negeri 1 Purwantoro",
-          school_npsn: "20311234",
-          principal_name: "Drs. H. Mulyono, M.Pd.",
-          principal_nip: "196811201994031004"
-        }));
+          npsn: "20311234",
+          user_id: "demo_guru",
+        }, "demo_guru");
         localStorage.setItem("modulku_vault_tier", "pro");
         router.replace(redirectUrl);
         return;
@@ -65,7 +74,14 @@ export default function LoginPage() {
         try {
           const { data: { session } } = await supabase.auth.getSession();
           const localToken = localStorage.getItem("guru_auth_token");
-          if (session || localToken) {
+          if (session?.user) {
+            setActiveUserId(session.user.id);
+            const fallbackName = session.user.user_metadata?.full_name || (session.user.email ? session.user.email.split("@")[0] : undefined);
+            getTeacherProfile(session.user.id, fallbackName);
+            getSchoolProfile(session.user.id);
+            router.replace(redirectUrl);
+            return;
+          } else if (localToken) {
             router.replace(redirectUrl);
             return;
           }
@@ -144,11 +160,12 @@ export default function LoginPage() {
         if (data.session && data.user) {
           setActiveUserId(data.user.id);
           localStorage.setItem("guru_auth_token", data.session.access_token);
-          const currentTeacher = {
+          saveTeacherProfile({
             teacher_name: fullName.trim(),
+            teacher_nip: "-",
             user_id: data.user.id,
-          };
-          localStorage.setItem("guru_teacher_profile", JSON.stringify(currentTeacher));
+          }, data.user.id);
+          getSchoolProfile(data.user.id);
           setAuthSuccess("Pendaftaran berhasil! Mengalihkan ke pengaturan profil sekolah...");
           setTimeout(() => {
             router.push("/profil-sekolah?onboarding=true");
@@ -193,22 +210,23 @@ export default function LoginPage() {
         setActiveUserId(data.user.id);
         localStorage.setItem("guru_auth_token", data.session.access_token);
 
-        if (data.user.user_metadata?.full_name) {
-          try {
-            const raw = localStorage.getItem("guru_teacher_profile");
-            const existing = raw ? JSON.parse(raw) : {};
-            localStorage.setItem(
-              "guru_teacher_profile",
-              JSON.stringify({
-                ...existing,
-                teacher_name: data.user.user_metadata.full_name,
-                user_id: data.user.id,
-              })
-            );
-          } catch {
-            // ignore
-          }
+        const teacherDisplayName =
+          data.user.user_metadata?.full_name ||
+          (data.user.email ? data.user.email.split("@")[0] : "Pendidik ModulKu");
+
+        // Inisialisasi atau load profil terisolasi untuk akun ini
+        const profile = getTeacherProfile(data.user.id, teacherDisplayName);
+        if (
+          data.user.user_metadata?.full_name &&
+          profile.teacher_name !== data.user.user_metadata.full_name
+        ) {
+          saveTeacherProfile(
+            { teacher_name: data.user.user_metadata.full_name },
+            data.user.id
+          );
         }
+        // Inisialisasi profil sekolah terisolasi untuk akun ini
+        getSchoolProfile(data.user.id);
 
         const params = new URLSearchParams(window.location.search);
         const redirectUrl = params.get("redirect") || "/dashboard";

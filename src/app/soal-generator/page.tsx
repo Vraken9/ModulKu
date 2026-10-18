@@ -38,6 +38,7 @@ import { DashboardShell } from "@/components/layout/DashboardShell";
 import { saveDocumentToVault, formatBytes } from "@/lib/document-vault";
 import { QuestionPackage, QuestionItem, SchoolProfile, TeacherProfile } from "@/types";
 import { useNotification } from "@/components/providers/NotificationProvider";
+import { getSchoolProfile, getTeacherProfile } from "@/lib/user-profile";
 
 export default function SoalGeneratorPage() {
   const { toast } = useNotification();
@@ -53,10 +54,8 @@ export default function SoalGeneratorPage() {
 
   useEffect(() => {
     try {
-      const savedSchool = localStorage.getItem("guru_school_profile");
-      const savedTeacher = localStorage.getItem("guru_teacher_profile");
-      if (savedSchool) setSchool(JSON.parse(savedSchool));
-      if (savedTeacher) setTeacher(JSON.parse(savedTeacher));
+      setSchool(getSchoolProfile());
+      setTeacher(getTeacherProfile());
     } catch {
       // Abaikan di server
     }
