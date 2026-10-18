@@ -50,10 +50,10 @@ export default function AdminApiCostPage() {
             </div>
           </div>
           <div className="mt-3">
-            <div className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight font-mono">
+            <div className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight font-mono tabular-nums">
               {metrics.todayHits} Hits
             </div>
-            <p className="text-xs text-slate-500 font-mono mt-1">
+            <p className="text-xs text-slate-500 font-mono tabular-nums mt-1">
               ~{Math.round(metrics.totalTokensToday / 1000)}k token terpakai
             </p>
           </div>
@@ -69,10 +69,10 @@ export default function AdminApiCostPage() {
             </div>
           </div>
           <div className="mt-3">
-            <div className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight font-mono">
+            <div className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight font-mono tabular-nums">
               {metrics.monthHits} Hits
             </div>
-            <p className="text-xs text-slate-500 mt-1">
+            <p className="text-xs text-slate-500 font-mono tabular-nums mt-1">
               Rata-rata ~16 panggilan / hari
             </p>
           </div>
@@ -88,10 +88,10 @@ export default function AdminApiCostPage() {
             </div>
           </div>
           <div className="mt-3">
-            <div className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight font-mono">
+            <div className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight font-mono tabular-nums">
               Rp {metrics.estimatedCostTodayIdr.toLocaleString("id-ID")}
             </div>
-            <p className="text-xs text-slate-500 font-mono mt-1">
+            <p className="text-xs text-slate-500 font-mono tabular-nums mt-1">
               ${metrics.estimatedCostTodayUsd} USD
             </p>
           </div>
@@ -107,10 +107,10 @@ export default function AdminApiCostPage() {
             </div>
           </div>
           <div className="mt-3">
-            <div className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight font-mono">
+            <div className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight font-mono tabular-nums">
               Rp {metrics.estimatedCostMonthIdr.toLocaleString("id-ID")}
             </div>
-            <p className="text-xs text-slate-500 font-mono mt-1">
+            <p className="text-xs text-slate-500 font-mono tabular-nums mt-1">
               ${metrics.estimatedCostMonthUsd} USD (~Rp 25rb)
             </p>
           </div>

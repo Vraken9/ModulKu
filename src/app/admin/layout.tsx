@@ -18,11 +18,18 @@ import {
   ChevronRight,
   Database,
   Lock,
+  ZoomIn,
 } from "lucide-react";
 import { ModulKuLogo } from "@/components/ui/ModulKuLogo";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { getSubscriptionRequests } from "@/lib/subscription";
+import {
+  getSubscriptionRequests,
+  getAdminUiZoom,
+  setAdminUiZoom,
+  isEmailAdmin,
+} from "@/lib/subscription";
+import { supabase } from "@/lib/supabase/client";
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -33,18 +40,53 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [pendingCount, setPendingCount] = useState(0);
+  const [uiZoom, setUiZoomState] = useState<number>(1.05);
+  const [adminUserEmail, setAdminUserEmail] = useState<string>("admin@modulku.id");
 
   useEffect(() => {
+    // 1. Muat preferensi zoom UI admin
+    setUiZoomState(getAdminUiZoom());
+    const handleZoomChanged = (e: CustomEvent<number>) => {
+      setUiZoomState(e.detail || 1.05);
+    };
+    window.addEventListener("modulku-admin-zoom-changed" as any, handleZoomChanged);
+
+    // 2. Pantau tiket langganan pending
     const updatePending = () => {
       const requests = getSubscriptionRequests();
       const count = requests.filter((r) => r.status === "pending").length;
       setPendingCount(count);
     };
-
     updatePending();
     window.addEventListener("modulku-subscription-changed", updatePending);
-    return () => window.removeEventListener("modulku-subscription-changed", updatePending);
-  }, []);
+
+    // 3. Verifikasi Otoritas Admin (Security by Design)
+    const checkAdminAuthority = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session?.user?.email) {
+          setAdminUserEmail(session.user.email);
+          if (!isEmailAdmin(session.user.email)) {
+            // Pengguna bukan admin resmi yang terdaftar di whitelist
+            router.push("/dashboard");
+          }
+        }
+      } catch {
+        // fallback dev mode
+      }
+    };
+    checkAdminAuthority();
+
+    return () => {
+      window.removeEventListener("modulku-admin-zoom-changed" as any, handleZoomChanged);
+      window.removeEventListener("modulku-subscription-changed", updatePending);
+    };
+  }, [router]);
+
+  const handleChangeZoom = (newZoom: number) => {
+    setUiZoomState(newZoom);
+    setAdminUiZoom(newZoom);
+  };
 
   const navItems = [
     {
@@ -183,7 +225,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-xs font-bold text-slate-900 truncate">Administrator Pusat</p>
-              <p className="text-[10px] text-slate-500 font-mono truncate">admin@modulku.id</p>
+              <p className="text-[10px] text-slate-500 font-mono truncate">{adminUserEmail}</p>
             </div>
           </div>
 
@@ -211,19 +253,48 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         </div>
       </aside>
 
-      {/* Konten Utama di Sebelah Kanan */}
-      <div className="flex-1 flex flex-col min-w-0 bg-slate-50 overflow-y-auto">
+      {/* Konten Utama di Sebelah Kanan dengan Skala Zoom Proporsional */}
+      <div
+        className="flex-1 flex flex-col min-w-0 bg-slate-50 overflow-y-auto"
+        style={{ zoom: uiZoom }}
+      >
         {/* Topbar Desktop */}
         <header className="hidden md:flex h-16 bg-white border-b border-slate-200 px-8 items-center justify-between sticky top-0 z-20">
           <div className="flex items-center gap-3">
             <span className="text-xs font-semibold text-slate-500">ModulKu Control Center</span>
             <span className="text-slate-300">/</span>
-            <Badge variant="outline" className="text-[11px] font-mono bg-slate-50 text-slate-800 border-slate-200">
+            <Badge variant="outline" className="text-[11px] font-mono tabular-nums bg-slate-50 text-slate-800 border-slate-200">
               {pathname}
             </Badge>
           </div>
 
-          <div className="flex items-center gap-3 text-xs">
+          <div className="flex items-center gap-4 text-xs">
+            {/* Kontrol Pembesaran Rasio Tampilan (Zoom UI 5-10%) */}
+            <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200">
+              <span className="text-[10px] font-bold text-slate-500 px-1.5 flex items-center gap-1">
+                <ZoomIn className="w-3 h-3 text-slate-600" />
+                <span>Skala UI:</span>
+              </span>
+              {[
+                { label: "100%", val: 1.0 },
+                { label: "105%", val: 1.05 },
+                { label: "110%", val: 1.1 },
+              ].map((z) => (
+                <button
+                  key={z.label}
+                  type="button"
+                  onClick={() => handleChangeZoom(z.val)}
+                  className={`px-2 py-0.5 rounded-lg text-[10px] font-mono tabular-nums font-bold transition-all cursor-pointer ${
+                    uiZoom === z.val
+                      ? "bg-slate-900 text-white shadow-2xs"
+                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-200"
+                  }`}
+                >
+                  {z.label}
+                </button>
+              ))}
+            </div>
+
             <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ECFDF5] border border-emerald-200 text-[#065F46] font-semibold text-[11px]">
               <span className="w-2 h-2 rounded-full bg-[#059669]" />
               <span>Sistem Normal (99.98% Uptime)</span>

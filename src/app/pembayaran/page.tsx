@@ -16,12 +16,15 @@ import {
   FileCheck2,
   ChevronLeft,
   ArrowRight,
+  ArrowLeft,
   ExternalLink,
   Lock,
   RotateCcw,
   CheckCircle2,
   AlertTriangle,
   Info,
+  UserCheck,
+  LogIn,
 } from "lucide-react";
 import { ModulKuLogo } from "@/components/ui/ModulKuLogo";
 import { Button } from "@/components/ui/button";
@@ -32,6 +35,7 @@ import { Label } from "@/components/ui/label";
 import {
   SUBSCRIPTION_PLANS,
   PAYMENT_CHANNELS,
+  getPaymentChannels,
   ActivePaymentOrder,
   getActivePaymentOrder,
   createOrGetActiveOrder,
@@ -39,8 +43,10 @@ import {
   updateActiveOrderStatus,
   saveSubscriptionRequest,
   generateWhatsAppLink,
+  cleanIndonesianPhoneNumber,
   PaymentMethod,
 } from "@/lib/subscription";
+import { supabase } from "@/lib/supabase/client";
 
 export default function PembayaranPage() {
   const router = useRouter();
@@ -51,15 +57,23 @@ export default function PembayaranPage() {
   const [isExpired, setIsExpired] = useState(false);
   const [copiedField, setCopiedField] = useState<string | null>(null);
 
-  // Form Upload Bukti
+  // Status Autentikasi Pengguna
+  const [sessionUser, setSessionUser] = useState<{ id: string; email?: string } | null>(null);
+  const [authChecked, setAuthChecked] = useState(false);
+
+  // Form Upload Bukti & WhatsApp
   const [senderName, setSenderName] = useState("");
+  const [whatsappNumber, setWhatsappNumber] = useState("");
   const [proofFile, setProofFile] = useState<File | null>(null);
   const [proofPreview, setProofPreview] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // Inisialisasi order aktif & parameter URL
+  // Saluran Pembayaran Terpusat & Dinamis
+  const [channels, setChannels] = useState(getPaymentChannels());
+
+  // Inisialisasi order aktif, parameter URL, & verifikasi sesi Supabase
   useEffect(() => {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
@@ -72,8 +86,36 @@ export default function PembayaranPage() {
       setSelectedMethod(order.paymentMethod || "QRIS");
 
       if (order.senderName) setSenderName(order.senderName);
+      if (order.whatsappNumber) setWhatsappNumber(order.whatsappNumber);
       if (order.proofImageUrl) setProofPreview(order.proofImageUrl);
       if (order.status === "waiting_approval") setSubmitSuccess(true);
+
+      // Sinkronisasi saluran pembayaran terkonfigurasi
+      const updateChannels = () => setChannels(getPaymentChannels());
+      window.addEventListener("modulku-payment-channels-changed", updateChannels);
+
+      // Verifikasi Sesi Login Pendidik (Security by Design)
+      const verifyAuth = async () => {
+        try {
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session?.user) {
+            setSessionUser({
+              id: session.user.id,
+              email: session.user.email,
+            });
+          }
+        } catch {
+          // ignore
+        } finally {
+          setAuthChecked(true);
+        }
+      };
+
+      verifyAuth();
+
+      return () => {
+        window.removeEventListener("modulku-payment-channels-changed", updateChannels);
+      };
     }
   }, []);
 
@@ -127,24 +169,48 @@ export default function PembayaranPage() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Security check: MIME format & Size (< 2MB)
+    // Security check: MIME format & Size (< 3MB)
     const validTypes = ["image/jpeg", "image/png", "image/webp"];
     if (!validTypes.includes(file.type)) {
       setErrorMessage("Format berkas harus berupa gambar (JPG, PNG, atau WEBP).");
       return;
     }
 
-    if (file.size > 2 * 1024 * 1024) {
-      setErrorMessage("Ukuran gambar bukti transfer maksimal 2 MB.");
+    if (file.size > 3 * 1024 * 1024) {
+      setErrorMessage("Ukuran gambar bukti transfer maksimal 3 MB.");
       return;
     }
 
     setErrorMessage(null);
     setProofFile(file);
 
+    // Kompresi Gambar Client-Side via HTML5 Canvas (Hemat penyimpanan dan memory)
     const reader = new FileReader();
     reader.onload = (event) => {
-      setProofPreview(event.target?.result as string);
+      const dataUrl = event.target?.result as string;
+      const img = new window.Image();
+      img.onload = () => {
+        const maxWidth = 1000;
+        let width = img.width;
+        let height = img.height;
+        if (width > maxWidth) {
+          height = Math.round((height * maxWidth) / width);
+          width = maxWidth;
+        }
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        if (ctx) {
+          ctx.drawImage(img, 0, 0, width, height);
+          const compressed = canvas.toDataURL("image/webp", 0.82);
+          setProofPreview(compressed);
+        } else {
+          setProofPreview(dataUrl);
+        }
+      };
+      img.onerror = () => setProofPreview(dataUrl);
+      img.src = dataUrl;
     };
     reader.readAsDataURL(file);
   };
@@ -153,8 +219,20 @@ export default function PembayaranPage() {
     e.preventDefault();
     if (!activeOrder) return;
 
+    // Verifikasi Keharusan Login
+    if (!sessionUser) {
+      setErrorMessage("Anda wajib masuk/login ke akun guru terlebih dahulu sebelum mengonfirmasi pembayaran agar paket otomatis terhubung ke profil Anda.");
+      return;
+    }
+
     if (!senderName.trim()) {
       setErrorMessage("Silakan isi nama pengirim atau nama pemilik rekening.");
+      return;
+    }
+
+    const cleanPhone = whatsappNumber.replace(/[^0-9]/g, "");
+    if (!cleanPhone || cleanPhone.length < 9) {
+      setErrorMessage("Silakan isi nomor WhatsApp aktif yang valid (minimal 9 digit) untuk keperluan konfirmasi personal.");
       return;
     }
 
@@ -167,26 +245,26 @@ export default function PembayaranPage() {
     setErrorMessage(null);
 
     // Dapatkan data profil guru
-    let userEmail = "pendidik@guru.belajar.id";
+    let userEmail = sessionUser.email || "pendidik@guru.belajar.id";
     let userName = senderName.trim();
-    let userId = "user-local";
+    const userId = sessionUser.id;
 
     try {
       const rawTeacher = localStorage.getItem("guru_teacher_profile");
       if (rawTeacher) {
         const parsed = JSON.parse(rawTeacher);
         if (parsed.teacher_name) userName = parsed.teacher_name;
-        if (parsed.user_id) userId = parsed.user_id;
       }
     } catch {
       // ignore
     }
 
-    // Simpan permohonan ke admin
+    // Simpan permohonan ke admin secara persisten
     saveSubscriptionRequest({
       userId,
       userEmail,
       userName,
+      whatsappNumber: whatsappNumber.trim(),
       planId: activeOrder.planId,
       planName: activeOrder.planName,
       tier: activeOrder.tier,
@@ -195,17 +273,17 @@ export default function PembayaranPage() {
       paymentMethod: selectedMethod,
       senderName: senderName.trim(),
       proofImageUrl: proofPreview,
-      notes: `Pembayaran ${selectedMethod} oleh ${senderName.trim()} untuk pesanan ${activeOrder.orderId}.`,
+      notes: `Pembayaran ${selectedMethod} oleh ${senderName.trim()} (${whatsappNumber.trim()}) untuk pesanan ${activeOrder.orderId}.`,
     });
 
-    updateActiveOrderStatus("waiting_approval", senderName.trim(), proofPreview);
+    updateActiveOrderStatus("waiting_approval", senderName.trim(), proofPreview, whatsappNumber.trim());
     setIsSubmitting(false);
     setSubmitSuccess(true);
   };
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans selection:bg-slate-200 selection:text-slate-900">
-      {/* Top Header Navigasi Resmi */}
+      {/* Top Header Navigasi Resmi dengan Navigasi Ganda */}
       <header className="bg-white border-b border-slate-200 sticky top-0 z-30">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
@@ -217,10 +295,28 @@ export default function PembayaranPage() {
               <Lock className="w-3.5 h-3.5 text-slate-700" />
               <span>Koneksi Enkripsi 256-Bit SSL</span>
             </div>
+
+            {/* Tombol Kembali ke Halaman Utama (Landing Page) */}
+            <Link href="/">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-xs font-semibold text-slate-700 hover:text-slate-900 gap-1.5 h-8 cursor-pointer"
+              >
+                <ArrowLeft className="w-3.5 h-3.5" />
+                <span>Halaman Utama</span>
+              </Button>
+            </Link>
+
+            {/* Tombol Menuju Ruang Kerja (Dashboard Guru) */}
             <Link href="/dashboard">
-              <Button variant="ghost" size="sm" className="text-xs font-semibold text-slate-700 hover:text-slate-900 gap-1.5 h-8">
+              <Button
+                variant="outline"
+                size="sm"
+                className="text-xs font-semibold text-slate-700 hover:text-slate-900 gap-1.5 h-8 border-slate-300 bg-white cursor-pointer"
+              >
                 <ChevronLeft className="w-3.5 h-3.5" />
-                <span>Kembali ke Ruang Kerja</span>
+                <span>Ruang Kerja</span>
               </Button>
             </Link>
           </div>
@@ -488,17 +584,17 @@ export default function PembayaranPage() {
                     <div className="p-4 rounded-xl border border-slate-200 bg-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="font-bold text-sm text-slate-900">{PAYMENT_CHANNELS.dana.name}</span>
+                          <span className="font-bold text-sm text-slate-900">{channels.dana.name}</span>
                           <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-800 font-bold border border-slate-200">Resmi</span>
                         </div>
-                        <p className="text-xs text-slate-600 mt-0.5">a.n. {PAYMENT_CHANNELS.dana.accountName}</p>
-                        <p className="font-mono font-bold text-base text-slate-900 mt-1">{PAYMENT_CHANNELS.dana.accountNumber}</p>
+                        <p className="text-xs text-slate-600 mt-0.5">a.n. {channels.dana.accountName}</p>
+                        <p className="font-mono font-bold text-base text-slate-900 mt-1">{channels.dana.accountNumber}</p>
                       </div>
                       <Button
                         type="button"
                         variant="outline"
                         size="sm"
-                        onClick={() => handleCopy(PAYMENT_CHANNELS.dana.accountNumber, "dana")}
+                        onClick={() => handleCopy(channels.dana.accountNumber, "dana")}
                         className="text-xs font-semibold text-slate-800 border-slate-300 hover:bg-white bg-white h-9 shrink-0 gap-1.5 cursor-pointer"
                       >
                         {copiedField === "dana" ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
@@ -510,17 +606,17 @@ export default function PembayaranPage() {
                     <div className="p-4 rounded-xl border border-slate-200 bg-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="font-bold text-sm text-slate-900">{PAYMENT_CHANNELS.shopeepay.name}</span>
+                          <span className="font-bold text-sm text-slate-900">{channels.shopeepay.name}</span>
                           <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 font-bold">Resmi</span>
                         </div>
-                        <p className="text-xs text-slate-600 mt-0.5">a.n. {PAYMENT_CHANNELS.shopeepay.accountName}</p>
-                        <p className="font-mono font-bold text-base text-slate-900 mt-1">{PAYMENT_CHANNELS.shopeepay.accountNumber}</p>
+                        <p className="text-xs text-slate-600 mt-0.5">a.n. {channels.shopeepay.accountName}</p>
+                        <p className="font-mono font-bold text-base text-slate-900 mt-1">{channels.shopeepay.accountNumber}</p>
                       </div>
                       <Button
                         type="button"
                         variant="outline"
                         size="sm"
-                        onClick={() => handleCopy(PAYMENT_CHANNELS.shopeepay.accountNumber, "shopee")}
+                        onClick={() => handleCopy(channels.shopeepay.accountNumber, "shopee")}
                         className="text-xs font-semibold text-slate-800 border-slate-300 hover:bg-white bg-white h-9 shrink-0 gap-1.5 cursor-pointer"
                       >
                         {copiedField === "shopee" ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
@@ -536,17 +632,17 @@ export default function PembayaranPage() {
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="font-bold text-sm text-slate-900">{PAYMENT_CHANNELS.bri.bankName}</span>
+                          <span className="font-bold text-sm text-slate-900">{channels.bri.bankName}</span>
                           <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-800 font-bold border border-slate-200">BOS / BOSP Ready</span>
                         </div>
-                        <p className="text-xs text-slate-600 mt-0.5">a.n. {PAYMENT_CHANNELS.bri.accountName}</p>
-                        <p className="font-mono font-bold text-lg text-slate-900 mt-1">{PAYMENT_CHANNELS.bri.accountNumber}</p>
+                        <p className="text-xs text-slate-600 mt-0.5">a.n. {channels.bri.accountName}</p>
+                        <p className="font-mono font-bold text-lg text-slate-900 mt-1">{channels.bri.accountNumber}</p>
                       </div>
                       <Button
                         type="button"
                         variant="outline"
                         size="sm"
-                        onClick={() => handleCopy(PAYMENT_CHANNELS.bri.accountNumber, "bri")}
+                        onClick={() => handleCopy(channels.bri.accountNumber, "bri")}
                         className="text-xs font-semibold text-slate-800 border-slate-300 hover:bg-white bg-white h-9 shrink-0 gap-1.5 cursor-pointer"
                       >
                         {copiedField === "bri" ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
@@ -567,6 +663,36 @@ export default function PembayaranPage() {
                     </h3>
                     <span className="text-[11px] text-slate-500">Wajib Diisi</span>
                   </div>
+
+                  {/* Banner Pengecekan Login Wajib (Security by Design) */}
+                  {authChecked && !sessionUser && (
+                    <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs">
+                      <div className="flex items-center gap-2">
+                        <AlertTriangle className="w-4 h-4 text-amber-700 shrink-0" />
+                        <span>
+                          <strong>Perhatian:</strong> Anda belum masuk ke akun guru. Masuk sekarang agar aktivasi lisensi langsung terhubung ke profil Anda.
+                        </span>
+                      </div>
+                      <Link href={`/login?redirect=${encodeURIComponent(`/pembayaran?plan=${selectedPlanId}`)}`}>
+                        <Button size="sm" className="bg-amber-800 hover:bg-amber-900 text-white font-bold text-xs h-8 px-3 rounded-xl shrink-0 gap-1.5 cursor-pointer">
+                          <LogIn className="w-3.5 h-3.5" />
+                          <span>Masuk Akun Sekarang</span>
+                        </Button>
+                      </Link>
+                    </div>
+                  )}
+
+                  {sessionUser && (
+                    <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700 flex items-center justify-between">
+                      <div className="flex items-center gap-2 truncate">
+                        <UserCheck className="w-4 h-4 text-[#059669] shrink-0" />
+                        <span className="truncate">Terhubung ke Akun: <strong className="font-mono text-slate-900">{sessionUser.email}</strong></span>
+                      </div>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 font-bold border border-emerald-200 shrink-0">
+                        Akun Terverifikasi
+                      </span>
+                    </div>
+                  )}
 
                   {errorMessage && (
                     <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-800 flex items-center gap-2">
@@ -625,6 +751,28 @@ export default function PembayaranPage() {
                           required
                           className="text-xs h-9 rounded-xl"
                         />
+                      </div>
+
+                      {/* Input Nomor WhatsApp Pemesan */}
+                      <div className="space-y-1.5">
+                        <div className="flex items-center justify-between">
+                          <Label htmlFor="whatsappNumber" className="text-xs font-semibold">
+                            Nomor WhatsApp Aktif Pendidik / Pemesan
+                          </Label>
+                          <span className="text-[10px] text-slate-500 font-mono">Wajib untuk Konfirmasi</span>
+                        </div>
+                        <Input
+                          id="whatsappNumber"
+                          type="tel"
+                          value={whatsappNumber}
+                          onChange={(e) => setWhatsappNumber(e.target.value)}
+                          placeholder="Contoh: 089530123608 atau 08123456789"
+                          required
+                          className="text-xs h-9 rounded-xl font-mono"
+                        />
+                        <p className="text-[11px] text-slate-500">
+                          Nomor ini digunakan admin untuk konfirmasi cepat jika ada kendala struk dan mengirim pemberitahuan aktivasi paket.
+                        </p>
                       </div>
 
                       <div className="space-y-1.5">

@@ -13,6 +13,7 @@ import {
   AlertCircle,
   Search,
   MessageCircle,
+  Trash2,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -22,9 +23,10 @@ import {
   getSubscriptionRequests,
   approveSubscriptionRequest,
   rejectSubscriptionRequest,
+  deleteReceiptImage,
+  generateAdminToUserWhatsAppLink,
   SubscriptionRequest,
   SubscriptionStatus,
-  generateWhatsAppLink,
 } from "@/lib/subscription";
 import { useNotification } from "@/components/providers/NotificationProvider";
 
@@ -51,7 +53,8 @@ export default function AdminApprovalsPage() {
       req.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
       req.userName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       req.userEmail.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      req.senderName.toLowerCase().includes(searchQuery.toLowerCase());
+      req.senderName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (req.whatsappNumber && req.whatsappNumber.includes(searchQuery));
     return matchesStatus && matchesSearch;
   });
 
@@ -71,6 +74,15 @@ export default function AdminApprovalsPage() {
     const success = rejectSubscriptionRequest(req.id, reason);
     if (success) {
       toast.warning(`Transaksi ${req.id} ditolak dengan catatan: ${reason}`, "Transaksi Ditolak");
+    }
+  };
+
+  const handleDeleteProof = (req: SubscriptionRequest) => {
+    if (confirm(`Apakah Anda yakin ingin membersihkan file foto struk untuk transaksi ${req.id}? Data rekapan keuangan tetap tersimpan utuh.`)) {
+      const success = deleteReceiptImage(req.id);
+      if (success) {
+        toast.success(`Foto struk ${req.id} berhasil dihapus dari penyimpanan.`, "Struk Dibersihkan");
+      }
     }
   };
 
@@ -156,17 +168,23 @@ export default function AdminApprovalsPage() {
                   {filteredRequests.map((req) => (
                     <tr key={req.id} className="hover:bg-slate-50/60 transition-colors">
                       <td className="py-3.5 px-4 whitespace-nowrap">
-                        <span className="inline-flex font-mono text-xs text-slate-800 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded whitespace-nowrap font-semibold">
+                        <span className="inline-flex font-mono tabular-nums text-xs text-slate-800 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded whitespace-nowrap font-bold">
                           {req.id}
                         </span>
                       </td>
                       <td className="py-3.5 px-4">
                         <div className="font-bold text-slate-900">{req.userName}</div>
                         <div className="text-[11px] text-slate-500 font-mono">{req.userEmail}</div>
+                        {req.whatsappNumber && (
+                          <div className="text-[11px] text-[#065F46] font-mono tabular-nums font-semibold flex items-center gap-1 mt-0.5">
+                            <MessageCircle className="w-3 h-3 text-[#059669] shrink-0" />
+                            <span>{req.whatsappNumber}</span>
+                          </div>
+                        )}
                       </td>
                       <td className="py-3.5 px-4">
                         <div className="font-semibold text-slate-900">{req.planName}</div>
-                        <div className="text-slate-900 font-mono font-bold text-[11px]">
+                        <div className="text-slate-900 font-mono tabular-nums font-bold text-xs">
                           {req.formattedAmount}
                         </div>
                       </td>
@@ -178,7 +196,7 @@ export default function AdminApprovalsPage() {
                           a.n. {req.senderName}
                         </div>
                       </td>
-                      <td className="py-3.5 px-4 text-slate-500 text-[11px] whitespace-nowrap">
+                      <td className="py-3.5 px-4 text-slate-500 text-[11px] whitespace-nowrap font-mono tabular-nums">
                         {new Date(req.createdAt).toLocaleString("id-ID", {
                           dateStyle: "medium",
                           timeStyle: "short",
@@ -202,47 +220,74 @@ export default function AdminApprovalsPage() {
                         )}
                       </td>
                       <td className="py-3.5 px-4 whitespace-nowrap">
-                        <button
-                          type="button"
-                          onClick={() => setSelectedProof(req.proofImageUrl)}
-                          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200 text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer"
-                        >
-                          <Eye className="w-3.5 h-3.5" />
-                          <span>Lihat Struk</span>
-                        </button>
+                        {req.proofImageUrl ? (
+                          <div className="flex items-center gap-1.5">
+                            <button
+                              type="button"
+                              onClick={() => setSelectedProof(req.proofImageUrl)}
+                              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200 text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer"
+                            >
+                              <Eye className="w-3.5 h-3.5" />
+                              <span>Lihat</span>
+                            </button>
+                            {req.status === "approved" && (
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteProof(req)}
+                                className="inline-flex items-center p-1.5 rounded-lg bg-white hover:bg-rose-50 text-slate-400 hover:text-rose-600 border border-slate-200 hover:border-rose-200 transition-colors cursor-pointer"
+                                title="Hapus foto struk dari basis data untuk efisiensi penyimpanan"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            )}
+                          </div>
+                        ) : (
+                          <span className="text-[11px] font-mono text-slate-400 italic">
+                            Struk dibersihkan
+                          </span>
+                        )}
                       </td>
                       <td className="py-3.5 px-4 text-right whitespace-nowrap">
-                        <div className="flex items-center justify-end gap-2 whitespace-nowrap">
-                          {req.status === "pending" ? (
+                        <div className="flex items-center justify-end gap-1.5 whitespace-nowrap">
+                          {/* Tombol Hubungi WhatsApp Pengguna Langsung - Tersedia di Semua Status */}
+                          <a
+                            href={generateAdminToUserWhatsAppLink(
+                              req.whatsappNumber || "089530123608",
+                              req.userName,
+                              req.planName,
+                              req.formattedAmount,
+                              req.id,
+                              req.status,
+                              req.adminNotes
+                            )}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-[#065F46] border border-emerald-200 text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer"
+                            title={`Kirim WhatsApp ke ${req.userName} (${req.whatsappNumber || "Nomor tidak tertera"})`}
+                          >
+                            <MessageCircle className="w-3.5 h-3.5 text-[#059669]" />
+                            <span>Hubungi</span>
+                          </a>
+
+                          {req.status === "pending" && (
                             <>
                               <Button
                                 size="sm"
                                 onClick={() => handleApprove(req)}
-                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#059669] hover:bg-[#047857] text-white text-xs font-bold transition-colors shadow-xs whitespace-nowrap cursor-pointer h-8"
+                                className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-[#059669] hover:bg-[#047857] text-white text-xs font-bold transition-colors shadow-xs whitespace-nowrap cursor-pointer h-7"
                               >
                                 <Check className="w-3.5 h-3.5" />
-                                <span>Approve</span>
+                                <span>Setujui</span>
                               </Button>
                               <button
                                 type="button"
                                 onClick={() => handleReject(req)}
-                                className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 transition-colors shrink-0 cursor-pointer"
+                                className="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 transition-colors shrink-0 cursor-pointer"
                                 title="Tolak Transaksi"
                               >
                                 <X className="w-3.5 h-3.5" />
                               </button>
                             </>
-                          ) : (
-                            <a
-                              href={generateWhatsAppLink(req.planName, req.formattedAmount, req.paymentMethod, req.id)}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white hover:bg-slate-100 text-slate-700 hover:text-[#059669] border border-slate-300 text-xs font-semibold whitespace-nowrap transition-colors"
-                              title="Hubungi Guru via WhatsApp"
-                            >
-                              <MessageCircle className="w-3.5 h-3.5" />
-                              <span>Hubungi</span>
-                            </a>
                           )}
                         </div>
                       </td>

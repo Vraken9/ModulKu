@@ -19,6 +19,7 @@ import {
   Sparkles,
   ShieldCheck,
   TrendingUp,
+  MessageCircle,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -27,6 +28,8 @@ import {
   getSubscriptionRequests,
   approveSubscriptionRequest,
   rejectSubscriptionRequest,
+  getPaymentChannels,
+  generateAdminToUserWhatsAppLink,
   SubscriptionRequest,
 } from "@/lib/subscription";
 import { getApiUsageMetrics } from "@/lib/api-tracker";
@@ -37,6 +40,7 @@ export default function AdminOverviewPage() {
   const [requests, setRequests] = useState<SubscriptionRequest[]>([]);
   const [selectedProof, setSelectedProof] = useState<string | null>(null);
   const [metrics, setMetrics] = useState(getApiUsageMetrics());
+  const [channels, setChannels] = useState(getPaymentChannels());
   const [feedbackList, setFeedbackList] = useState<
     Array<{
       id: string;
@@ -52,6 +56,7 @@ export default function AdminOverviewPage() {
   const loadData = () => {
     setRequests(getSubscriptionRequests());
     setMetrics(getApiUsageMetrics());
+    setChannels(getPaymentChannels());
     try {
       const raw = localStorage.getItem("modulku_admin_feedback_inbox");
       if (raw) setFeedbackList(JSON.parse(raw));
@@ -65,10 +70,12 @@ export default function AdminOverviewPage() {
     window.addEventListener("modulku-subscription-changed", loadData);
     window.addEventListener("modulku-api-logs-changed", loadData);
     window.addEventListener("modulku-feedback-received", loadData);
+    window.addEventListener("modulku-payment-channels-changed", loadData);
     return () => {
       window.removeEventListener("modulku-subscription-changed", loadData);
       window.removeEventListener("modulku-api-logs-changed", loadData);
       window.removeEventListener("modulku-feedback-received", loadData);
+      window.removeEventListener("modulku-payment-channels-changed", loadData);
     };
   }, []);
 
@@ -274,7 +281,7 @@ export default function AdminOverviewPage() {
                   {pendingRequests.map((req) => (
                     <tr key={req.id} className="hover:bg-slate-50/60 transition-colors">
                       <td className="py-3.5 px-4 whitespace-nowrap">
-                        <span className="inline-flex font-mono text-xs text-slate-800 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded whitespace-nowrap font-semibold">
+                        <span className="inline-flex font-mono tabular-nums text-xs text-slate-800 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded whitespace-nowrap font-bold">
                           {req.id}
                         </span>
                       </td>
@@ -283,6 +290,12 @@ export default function AdminOverviewPage() {
                         <div className="text-[11px] text-slate-500 font-mono truncate max-w-[180px]">
                           {req.userEmail}
                         </div>
+                        {req.whatsappNumber && (
+                          <div className="text-[11px] text-[#065F46] font-mono tabular-nums font-semibold flex items-center gap-1 mt-0.5">
+                            <MessageCircle className="w-3 h-3 text-[#059669]" />
+                            <span>{req.whatsappNumber}</span>
+                          </div>
+                        )}
                       </td>
                       <td className="py-3.5 px-4 whitespace-nowrap">
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-900 text-white whitespace-nowrap">
@@ -290,7 +303,7 @@ export default function AdminOverviewPage() {
                         </span>
                       </td>
                       <td className="py-3.5 px-4">
-                        <div className="font-mono font-bold text-slate-900">{req.formattedAmount}</div>
+                        <div className="font-mono tabular-nums font-bold text-slate-900">{req.formattedAmount}</div>
                         <div className="text-[10px] text-slate-500">Metode: {req.paymentMethod}</div>
                       </td>
                       <td className="py-3.5 px-4 whitespace-nowrap">
@@ -304,11 +317,29 @@ export default function AdminOverviewPage() {
                         </button>
                       </td>
                       <td className="py-3.5 px-4 text-right whitespace-nowrap">
-                        <div className="flex items-center justify-end gap-2 whitespace-nowrap">
+                        <div className="flex items-center justify-end gap-1.5 whitespace-nowrap">
+                          <a
+                            href={generateAdminToUserWhatsAppLink(
+                              req.whatsappNumber || "089530123608",
+                              req.userName,
+                              req.planName,
+                              req.formattedAmount,
+                              req.id,
+                              req.status
+                            )}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-[#065F46] border border-emerald-200 text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer"
+                            title={`Kirim pesan WhatsApp ke ${req.userName}`}
+                          >
+                            <MessageCircle className="w-3.5 h-3.5 text-[#059669]" />
+                            <span>Hubungi</span>
+                          </a>
+
                           <Button
                             size="sm"
                             onClick={() => handleApprove(req)}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#059669] hover:bg-[#047857] text-white text-xs font-bold transition-colors shadow-xs whitespace-nowrap cursor-pointer h-8"
+                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-[#059669] hover:bg-[#047857] text-white text-xs font-bold transition-colors shadow-xs whitespace-nowrap cursor-pointer h-7"
                           >
                             <Check className="w-3.5 h-3.5" />
                             <span>Setujui</span>
@@ -316,7 +347,7 @@ export default function AdminOverviewPage() {
                           <button
                             type="button"
                             onClick={() => handleReject(req)}
-                            className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 transition-colors shrink-0 cursor-pointer"
+                            className="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 transition-colors shrink-0 cursor-pointer"
                             title="Tolak Transaksi"
                           >
                             <X className="w-3.5 h-3.5" />
@@ -412,7 +443,7 @@ export default function AdminOverviewPage() {
             <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
               <div>
                 <span className="font-bold text-slate-900 block">E-Wallet DANA & ShopeePay</span>
-                <span className="text-[11px] text-slate-500 font-mono">DANA: 089530123608 | SPay: 0895301235608</span>
+                <span className="text-[11px] text-slate-500 font-mono tabular-nums">DANA: {channels.dana.accountNumber} | SPay: {channels.shopeepay.accountNumber}</span>
               </div>
               <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-[#ECFDF5] text-[#065F46] border border-emerald-200">
                 Aktif
@@ -422,7 +453,7 @@ export default function AdminOverviewPage() {
             <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
               <div>
                 <span className="font-bold text-slate-900 block">Transfer Bank BRI</span>
-                <span className="text-[11px] text-slate-500 font-mono">No. Rekening: 662501037567538</span>
+                <span className="text-[11px] text-slate-500 font-mono tabular-nums">No. Rekening: {channels.bri.accountNumber} (a.n. {channels.bri.accountName})</span>
               </div>
               <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-[#ECFDF5] text-[#065F46] border border-emerald-200">
                 Aktif
@@ -432,7 +463,7 @@ export default function AdminOverviewPage() {
             <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
               <div>
                 <span className="font-bold text-slate-900 block">Narahubung WhatsApp Bantuan</span>
-                <span className="text-[11px] text-slate-500 font-mono">089530123608 (Direct Chat)</span>
+                <span className="text-[11px] text-slate-500 font-mono tabular-nums">{channels.whatsapp.number} (Direct Chat)</span>
               </div>
               <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-[#ECFDF5] text-[#065F46] border border-emerald-200">
                 Online

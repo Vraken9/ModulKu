@@ -25,6 +25,7 @@ import { Badge } from "@/components/ui/badge";
 import {
   SUBSCRIPTION_PLANS,
   PAYMENT_CHANNELS,
+  getPaymentChannels,
   PaymentMethod,
   saveSubscriptionRequest,
   generateWhatsAppLink,
@@ -45,9 +46,11 @@ export function SubscriptionCheckoutModal({
   defaultPlanId = "profesional_annual",
 }: SubscriptionCheckoutModalProps) {
   const { toast } = useNotification();
+  const [channels, setChannels] = useState(getPaymentChannels());
   const [selectedPlanId, setSelectedPlanId] = useState<string>(defaultPlanId);
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("QRIS");
   const [senderName, setSenderName] = useState("");
+  const [whatsappNumber, setWhatsappNumber] = useState("");
   const [notes, setNotes] = useState("");
   const [proofFile, setProofFile] = useState<{ name: string; url: string; size: number } | null>(
     null
@@ -58,6 +61,13 @@ export function SubscriptionCheckoutModal({
 
   // Timer 60 Menit
   const [timeLeft, setTimeLeft] = useState(60 * 60);
+
+  useEffect(() => {
+    setChannels(getPaymentChannels());
+    const handleChannelsChanged = () => setChannels(getPaymentChannels());
+    window.addEventListener("modulku-payment-channels-changed", handleChannelsChanged);
+    return () => window.removeEventListener("modulku-payment-channels-changed", handleChannelsChanged);
+  }, []);
 
   useEffect(() => {
     if (defaultPlanId && SUBSCRIPTION_PLANS[defaultPlanId]) {
@@ -159,6 +169,7 @@ export function SubscriptionCheckoutModal({
       userId: activeUserId,
       userEmail,
       userName,
+      whatsappNumber: whatsappNumber.trim() || undefined,
       planId: currentPlan.id,
       planName: currentPlan.name,
       tier: currentPlan.tier,
@@ -511,6 +522,24 @@ export function SubscriptionCheckoutModal({
                     onChange={(e) => setSenderName(e.target.value)}
                     placeholder="Contoh: Dra. Sri Wahyuni / Bendahara SMAN 1"
                     className="text-xs h-10 border-slate-300"
+                    required
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="modalWhatsapp" className="text-xs font-bold text-slate-800">
+                      Nomor WhatsApp Aktif (Wajib)
+                    </Label>
+                    <span className="text-[10px] text-slate-500 font-mono">Untuk Konfirmasi</span>
+                  </div>
+                  <Input
+                    id="modalWhatsapp"
+                    type="tel"
+                    value={whatsappNumber}
+                    onChange={(e) => setWhatsappNumber(e.target.value)}
+                    placeholder="Contoh: 089530123608 atau 08123456789"
+                    className="text-xs h-10 border-slate-300 font-mono"
                     required
                   />
                 </div>

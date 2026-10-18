@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Settings,
   ShieldCheck,
@@ -11,25 +11,95 @@ import {
   CheckCircle2,
   Lock,
   Landmark,
+  Database,
 } from "lucide-react";
-import { PAYMENT_CHANNELS } from "@/lib/subscription";
+import { Button } from "@/components/ui/button";
+import {
+  PAYMENT_CHANNELS,
+  getPaymentChannels,
+  savePaymentChannels,
+  getAdminEmails,
+  saveAdminEmails,
+  getSubscriptionRequests,
+  deleteReceiptImage,
+} from "@/lib/subscription";
 import { useNotification } from "@/components/providers/NotificationProvider";
 
 export default function AdminSettingsPage() {
   const { toast } = useNotification();
-  const [adminEmails, setAdminEmails] = useState("admin@modulku.id, akhyar@guru.id");
-  const [danaNumber, setDanaNumber] = useState(PAYMENT_CHANNELS.dana.accountNumber);
-  const [shopeePayNumber, setShopeePayNumber] = useState(PAYMENT_CHANNELS.shopeepay.accountNumber);
-  const [briNumber, setBriNumber] = useState(PAYMENT_CHANNELS.bri.accountNumber);
-  const [briName, setBriName] = useState(PAYMENT_CHANNELS.bri.accountName);
-  const [waNumber, setWaNumber] = useState(PAYMENT_CHANNELS.whatsapp.number);
+  const [adminEmails, setAdminEmails] = useState("");
+  const [danaNumber, setDanaNumber] = useState("");
+  const [shopeePayNumber, setShopeePayNumber] = useState("");
+  const [briNumber, setBriNumber] = useState("");
+  const [briName, setBriName] = useState("");
+  const [waNumber, setWaNumber] = useState("");
   const [isSaved, setIsSaved] = useState(false);
+
+  // Inisialisasi dari penyimpanan persisten
+  useEffect(() => {
+    const channels = getPaymentChannels();
+    setDanaNumber(channels.dana.accountNumber);
+    setShopeePayNumber(channels.shopeepay.accountNumber);
+    setBriNumber(channels.bri.accountNumber);
+    setBriName(channels.bri.accountName);
+    setWaNumber(channels.whatsapp.number);
+
+    const emails = getAdminEmails();
+    setAdminEmails(emails.join(", "));
+  }, []);
 
   const handleSaveSettings = (e: React.FormEvent) => {
     e.preventDefault();
+
+    // 1. Simpan Saluran Pembayaran Persisten
+    const updatedChannels = {
+      dana: {
+        name: "DANA",
+        accountNumber: danaNumber.trim(),
+        accountName: "ModulKu Official (Admin)",
+        notes: "Buka aplikasi DANA -> Kirim -> Masukkan nomor ponsel tujuan.",
+      },
+      shopeepay: {
+        name: "ShopeePay",
+        accountNumber: shopeePayNumber.trim(),
+        accountName: "ModulKu Official (Admin)",
+        notes: "Buka aplikasi Shopee -> ShopeePay -> Transfer -> Masukkan nomor ponsel.",
+      },
+      bri: {
+        name: "Bank BRI",
+        bankName: "PT Bank Rakyat Indonesia (Persero) Tbk",
+        accountNumber: briNumber.trim(),
+        accountName: briName.trim(),
+        notes: "Transfer antar-bank atau via BRImo, ATM, dan Internet Banking.",
+      },
+      whatsapp: {
+        number: waNumber.trim(),
+        formattedNumber: waNumber.trim(),
+      },
+    };
+    savePaymentChannels(updatedChannels);
+
+    // 2. Simpan Whitelist Email Admin Persisten
+    const emailList = adminEmails.split(",").map((s) => s.trim().toLowerCase()).filter(Boolean);
+    saveAdminEmails(emailList);
+
     setIsSaved(true);
-    toast.success("Konfigurasi sistem dan saluran pembayaran berhasil disimpan.", "Pengaturan Disimpan");
+    toast.success("Konfigurasi nomor rekening dan whitelist email admin berhasil disimpan.", "Pengaturan Disimpan");
     setTimeout(() => setIsSaved(false), 3000);
+  };
+
+  const handlePurgeAllApprovedReceipts = () => {
+    if (confirm("Apakah Anda yakin ingin membersihkan seluruh foto struk yang telah disetujui untuk menghemat penyimpanan? Data rekap finansial tetap utuh.")) {
+      const requests = getSubscriptionRequests();
+      let count = 0;
+      requests.forEach((r) => {
+        if (r.status === "approved" && r.proofImageUrl) {
+          deleteReceiptImage(r.id);
+          count++;
+        }
+      });
+      toast.success(`Sebanyak ${count} foto struk berhasil dibersihkan dari penyimpanan.`, "Pembersihan Selesai");
+    }
   };
 
   return (
@@ -208,6 +278,36 @@ export default function AdminSettingsPage() {
                 </li>
               </ul>
             </div>
+          </div>
+        </div>
+
+        {/* Seksi 3: Pemeliharaan Basis Data & Efisiensi Storage */}
+        <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-4 shadow-xs">
+          <div className="border-b border-slate-100 pb-3">
+            <div className="text-base font-black text-slate-900 tracking-tight flex items-center gap-2">
+              <Database className="w-5 h-5 text-slate-700" />
+              <span>Efisiensi & Pembersihan Arsip Struk Transaksi</span>
+            </div>
+            <p className="text-xs text-slate-500 mt-1">
+              Bersihkan berkas visual struk pembayaran yang sudah disetujui untuk mencegah pemborosan memori dan penyimpanan, tanpa menghapus rekapitulasi nominal dan identitas transaksi.
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <div>
+              <p className="text-xs font-bold text-slate-800">Bersihkan Foto Struk yang Telah Disetujui</p>
+              <p className="text-[11px] text-slate-500 mt-0.5">
+                Mengosongkan data gambar struk pada transaksi berstatus Disetujui. Rekapan finansial, nama pengirim, kode transaksi, dan nominal tetap tersimpan untuk audit.
+              </p>
+            </div>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handlePurgeAllApprovedReceipts}
+              className="text-xs font-semibold text-rose-700 border-rose-300 hover:bg-rose-50 h-9 shrink-0 gap-1.5 cursor-pointer"
+            >
+              <span>Bersihkan Arsip Struk Sekarang</span>
+            </Button>
           </div>
         </div>
 

@@ -89,6 +89,7 @@ export interface SubscriptionRequest {
   userId: string;
   userEmail: string;
   userName: string;
+  whatsappNumber?: string;
   planId: string;
   planName: string;
   tier: SubscriptionTier;
@@ -113,6 +114,7 @@ const INITIAL_REQUESTS: SubscriptionRequest[] = [
     userId: "seed-user-1",
     userEmail: "sri.wahyuni@guru.sma.belajar.id",
     userName: "Dra. Sri Wahyuni, M.Pd.",
+    whatsappNumber: "081226549812",
     planId: "profesional_annual",
     planName: "Guru Profesional (Tahunan)",
     tier: "pro",
@@ -130,6 +132,7 @@ const INITIAL_REQUESTS: SubscriptionRequest[] = [
     userId: "seed-user-2",
     userEmail: "bambang.sudiro@guru.smp.belajar.id",
     userName: "Bambang Sudiro, S.Pd.",
+    whatsappNumber: "085741892301",
     planId: "profesional_monthly",
     planName: "Guru Profesional (Bulanan)",
     tier: "pro",
@@ -147,6 +150,7 @@ const INITIAL_REQUESTS: SubscriptionRequest[] = [
     userId: "seed-user-3",
     userEmail: "kurikulum.sman1purwantoro@sch.id",
     userName: "SMAN 1 Purwantoro (Tim Kurikulum)",
+    whatsappNumber: "081393847562",
     planId: "sekolah_annual",
     planName: "Sekolah & MGMP (Tahunan)",
     tier: "school",
@@ -261,17 +265,175 @@ export function rejectSubscriptionRequest(
   }
 }
 
+export function deleteReceiptImage(requestId: string): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    const current = getSubscriptionRequests();
+    const updated = current.map((r) => {
+      if (r.id === requestId) {
+        return {
+          ...r,
+          proofImageUrl: "", // Hapus berkas visual untuk efisiensi basis data
+          adminNotes: r.adminNotes
+            ? `${r.adminNotes} (Foto struk telah dibersihkan oleh admin).`
+            : "Foto struk telah dibersihkan oleh admin untuk efisiensi penyimpanan.",
+        };
+      }
+      return r;
+    });
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+    window.dispatchEvent(new CustomEvent("modulku-subscription-changed"));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+// Konfigurasi Saluran Pembayaran Persisten
+const PAYMENT_CHANNELS_STORAGE_KEY = "modulku_custom_payment_channels";
+
+export function getPaymentChannels(): typeof PAYMENT_CHANNELS {
+  if (typeof window === "undefined") return PAYMENT_CHANNELS;
+  try {
+    const raw = localStorage.getItem(PAYMENT_CHANNELS_STORAGE_KEY);
+    if (!raw) return PAYMENT_CHANNELS;
+    const parsed = JSON.parse(raw);
+    return {
+      ...PAYMENT_CHANNELS,
+      ...parsed,
+    };
+  } catch {
+    return PAYMENT_CHANNELS;
+  }
+}
+
+export function savePaymentChannels(channels: typeof PAYMENT_CHANNELS): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    localStorage.setItem(PAYMENT_CHANNELS_STORAGE_KEY, JSON.stringify(channels));
+    window.dispatchEvent(new CustomEvent("modulku-payment-channels-changed"));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+// Otoritas Multi-Admin: Whitelist Surel
+const ADMIN_EMAILS_STORAGE_KEY = "modulku_admin_emails";
+export const DEFAULT_ADMIN_EMAILS = [
+  "admin@modulku.id",
+  "akhyar@guru.id",
+  "pendidik@guru.belajar.id",
+];
+
+export function getAdminEmails(): string[] {
+  if (typeof window === "undefined") return DEFAULT_ADMIN_EMAILS;
+  try {
+    const raw = localStorage.getItem(ADMIN_EMAILS_STORAGE_KEY);
+    if (!raw) {
+      localStorage.setItem(ADMIN_EMAILS_STORAGE_KEY, JSON.stringify(DEFAULT_ADMIN_EMAILS));
+      return DEFAULT_ADMIN_EMAILS;
+    }
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) && parsed.length > 0 ? parsed : DEFAULT_ADMIN_EMAILS;
+  } catch {
+    return DEFAULT_ADMIN_EMAILS;
+  }
+}
+
+export function saveAdminEmails(emails: string[]): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    const cleaned = emails.map((e) => e.trim().toLowerCase()).filter(Boolean);
+    localStorage.setItem(ADMIN_EMAILS_STORAGE_KEY, JSON.stringify(cleaned));
+    window.dispatchEvent(new CustomEvent("modulku-admin-emails-changed"));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export function isEmailAdmin(email?: string | null): boolean {
+  if (!email) return false;
+  const whitelist = getAdminEmails();
+  const normalized = email.trim().toLowerCase();
+  return whitelist.some((w) => w.trim().toLowerCase() === normalized);
+}
+
+// Skala Tampilan (Zoom UI Admin)
+const ADMIN_UI_ZOOM_KEY = "modulku_admin_ui_zoom";
+
+export function getAdminUiZoom(): number {
+  if (typeof window === "undefined") return 1.05; // Default nyaman 105%
+  try {
+    const raw = localStorage.getItem(ADMIN_UI_ZOOM_KEY);
+    if (!raw) return 1.05;
+    const val = parseFloat(raw);
+    return isNaN(val) ? 1.05 : val;
+  } catch {
+    return 1.05;
+  }
+}
+
+export function setAdminUiZoom(zoom: number): void {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(ADMIN_UI_ZOOM_KEY, String(zoom));
+    window.dispatchEvent(new CustomEvent("modulku-admin-zoom-changed", { detail: zoom }));
+  } catch {
+    // ignore
+  }
+}
+
+// Pembersih Nomor Telepon Indonesia
+export function cleanIndonesianPhoneNumber(phone: string): string {
+  let cleaned = phone.replace(/[^0-9]/g, "");
+  if (cleaned.startsWith("0")) {
+    cleaned = "62" + cleaned.slice(1);
+  } else if (!cleaned.startsWith("62")) {
+    cleaned = "62" + cleaned;
+  }
+  return cleaned;
+}
+
+// Tautan WhatsApp dari User ke Admin (saat konfirmasi pembayaran)
 export function generateWhatsAppLink(
   planName: string,
   amount: string,
   method: string,
   transactionId: string
 ): string {
-  const phone = "6289530123608";
+  const channels = getPaymentChannels();
+  const phone = cleanIndonesianPhoneNumber(channels.whatsapp.number || "089530123608");
   const message = encodeURIComponent(
     `Halo Admin ModulKu, saya telah melakukan transfer untuk paket ${planName} sebesar ${amount} melalui metode ${method} dengan Kode Transaksi: ${transactionId}. Mohon bantuannya untuk verifikasi akun. Terima kasih.`
   );
   return `https://wa.me/${phone}?text=${message}`;
+}
+
+// Tautan WhatsApp Langsung dari Admin ke User Pemohon (dari halaman persetujuan admin)
+export function generateAdminToUserWhatsAppLink(
+  userPhone: string,
+  userName: string,
+  planName: string,
+  amount: string,
+  transactionId: string,
+  status: SubscriptionStatus,
+  adminNotes?: string
+): string {
+  const cleanedPhone = cleanIndonesianPhoneNumber(userPhone || "089530123608");
+  let messageText = "";
+
+  if (status === "pending") {
+    messageText = `Halo Bapak/Ibu ${userName}, kami dari Tim Layanan ModulKu Official. Menghubungi Anda terkait transaksi paket ${planName} (${amount}) dengan Kode: ${transactionId}. Kami ingin memastikan konfirmasi bukti transfer Anda agar akun dapat segera diaktifkan. Apakah ada kendala yang dialami saat transfer?`;
+  } else if (status === "approved") {
+    messageText = `Halo Bapak/Ibu ${userName}, selamat! Transaksi paket ${planName} Anda dengan Kode: ${transactionId} telah BERHASIL diverifikasi oleh Administrator ModulKu. Akun Anda telah aktif dengan akses penuh. Selamat menyusun perangkat ajar BKPDM dan bank soal!`;
+  } else {
+    messageText = `Halo Bapak/Ibu ${userName}, kami dari Tim Layanan ModulKu Official menginformasikan bahwa pengajuan transaksi ${transactionId} (${planName}) saat ini belum dapat disetujui${adminNotes ? ` dengan catatan: ${adminNotes}` : ""}. Mohon konfirmasi atau kirimkan foto bukti transfer yang jelas melalui pesan ini agar kami bantu proses kembali.`;
+  }
+
+  return `https://wa.me/${cleanedPhone}?text=${encodeURIComponent(messageText)}`;
 }
 
 export interface ActivePaymentOrder {
@@ -286,6 +448,7 @@ export interface ActivePaymentOrder {
   status: "waiting_transfer" | "waiting_approval" | "approved" | "expired";
   paymentMethod: PaymentMethod;
   senderName?: string;
+  whatsappNumber?: string;
   proofImageUrl?: string;
 }
 
@@ -370,7 +533,8 @@ export function resetActiveOrder(planId = "profesional_annual"): ActivePaymentOr
 export function updateActiveOrderStatus(
   status: ActivePaymentOrder["status"],
   senderName?: string,
-  proofImageUrl?: string
+  proofImageUrl?: string,
+  whatsappNumber?: string
 ): void {
   const existing = getActivePaymentOrder();
   if (!existing) return;
@@ -379,6 +543,7 @@ export function updateActiveOrderStatus(
     status,
     senderName: senderName || existing.senderName,
     proofImageUrl: proofImageUrl || existing.proofImageUrl,
+    whatsappNumber: whatsappNumber || existing.whatsappNumber,
   };
   try {
     localStorage.setItem(ACTIVE_ORDER_KEY, JSON.stringify(updated));
@@ -386,4 +551,5 @@ export function updateActiveOrderStatus(
     // ignore
   }
 }
+
 

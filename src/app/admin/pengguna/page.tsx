@@ -117,6 +117,20 @@ export default function AdminUsersPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [tierFilter, setTierFilter] = useState<string>("all");
 
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("modulku_admin_users");
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setUsers(parsed);
+        }
+      }
+    } catch {
+      // ignore
+    }
+  }, []);
+
   const filteredUsers = users.filter((u) => {
     const matchesTier = tierFilter === "all" || u.tier === tierFilter;
     const matchesSearch =
@@ -128,20 +142,26 @@ export default function AdminUsersPage() {
 
   const handleChangeTier = (userId: string, newTier: SubscriptionTier) => {
     setUserTier(newTier, userId);
-    setUsers((prev) =>
-      prev.map((u) => {
-        if (u.id === userId) {
-          const newStorageLimit =
-            newTier === "free" ? "50 MB" : newTier === "pro" ? "2 GB" : "25 GB";
-          return {
-            ...u,
-            tier: newTier,
-            usedStorage: `${u.usedStorage.split(" / ")[0]} / ${newStorageLimit}`,
-          };
-        }
-        return u;
-      })
-    );
+    const updated = users.map((u) => {
+      if (u.id === userId) {
+        const newStorageLimit =
+          newTier === "free" ? "50 MB" : newTier === "pro" ? "2 GB" : "25 GB";
+        return {
+          ...u,
+          tier: newTier,
+          usedStorage: `${u.usedStorage.split(" / ")[0]} / ${newStorageLimit}`,
+        };
+      }
+      return u;
+    });
+
+    setUsers(updated);
+    try {
+      localStorage.setItem("modulku_admin_users", JSON.stringify(updated));
+    } catch {
+      // ignore
+    }
+
     toast.success(
       `Paket langganan pengguna berhasil diubah menjadi ${newTier.toUpperCase()}.`,
       "Paket Diperbarui"
