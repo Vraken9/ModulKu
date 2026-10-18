@@ -56,6 +56,22 @@ export default function LoginPage() {
       checkExistingSession();
 
       const params = new URLSearchParams(window.location.search);
+      if (params.get("demo") === "guru") {
+        localStorage.setItem("guru_auth_token", "guru_demo_token_aktif");
+        localStorage.setItem("guru_teacher_profile", JSON.stringify({
+          teacher_name: "Dra. Siti Rahmawati, M.Pd.",
+          teacher_nip: "198205142008012015"
+        }));
+        localStorage.setItem("guru_school_profile", JSON.stringify({
+          school_name: "SMA Negeri 1 Purwantoro",
+          school_npsn: "20311234",
+          principal_name: "Drs. H. Mulyono, M.Pd.",
+          principal_nip: "196811201994031004"
+        }));
+        localStorage.setItem("modulku_vault_tier", "pro");
+        router.replace("/dashboard");
+        return;
+      }
       const err = params.get("error");
       if (err) {
         if (err === "OAuthSignin" || err === "OAuthCallback" || err === "Configuration") {
