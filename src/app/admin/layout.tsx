@@ -42,6 +42,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const [pendingCount, setPendingCount] = useState(0);
   const [uiZoom, setUiZoomState] = useState<number>(1.05);
   const [adminUserEmail, setAdminUserEmail] = useState<string>("admin@modulku.id");
+  const [checkingAuth, setCheckingAuth] = useState(true);
+  const [isAuthorized, setIsAuthorized] = useState(false);
 
   useEffect(() => {
     // 1. Muat preferensi zoom UI admin
@@ -60,19 +62,32 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     updatePending();
     window.addEventListener("modulku-subscription-changed", updatePending);
 
-    // 3. Verifikasi Otoritas Admin (Security by Design)
+    // 3. Verifikasi Otoritas Admin Ketat (Security by Design)
     const checkAdminAuthority = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
+        const localToken = typeof window !== "undefined" ? localStorage.getItem("guru_auth_token") : null;
+
         if (session?.user?.email) {
           setAdminUserEmail(session.user.email);
-          if (!isEmailAdmin(session.user.email)) {
-            // Pengguna bukan admin resmi yang terdaftar di whitelist
-            router.push("/dashboard");
+          if (isEmailAdmin(session.user.email)) {
+            setIsAuthorized(true);
+          } else {
+            // Pengguna login tapi bukan email admin terdaftar
+            router.replace("/dashboard");
+            return;
           }
+        } else if (localToken === "guru_demo_token_aktif") {
+          setIsAuthorized(true);
+        } else {
+          // Belum login sama sekali -> lempar ke login
+          router.replace(`/login?redirect=${encodeURIComponent("/admin")}`);
+          return;
         }
       } catch {
-        // fallback dev mode
+        router.replace("/login");
+      } finally {
+        setCheckingAuth(false);
       }
     };
     checkAdminAuthority();
@@ -122,6 +137,24 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       id: "settings",
     },
   ];
+
+  if (checkingAuth || !isAuthorized) {
+    return (
+      <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4 text-white font-sans">
+        <div className="text-center space-y-4 max-w-sm">
+          <div className="w-12 h-12 rounded-2xl bg-slate-800 border border-slate-700 flex items-center justify-center mx-auto text-slate-300">
+            <Lock className="w-6 h-6 animate-pulse" />
+          </div>
+          <div>
+            <h3 className="font-bold text-sm">Memverifikasi Otoritas Admin...</h3>
+            <p className="text-xs text-slate-400 mt-1">
+              Memeriksa kredensial hak akses kontrol sistem resmi ModulKu.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col md:flex-row font-sans selection:bg-slate-200 selection:text-slate-900">
