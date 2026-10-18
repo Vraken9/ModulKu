@@ -96,130 +96,161 @@ export default function AdminOverviewPage() {
 
   return (
     <div className="space-y-8">
-      {/* Header Halaman */}
-      <div>
-        <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-          Ikhtisar Operasional & Metrik Bisnis
-        </h1>
-        <p className="text-xs text-slate-400 mt-1">
-          Pantau aktivitas guru, verifikasi transaksi pembayaran manual, dan kontrol pengeluaran token AI secara presisi.
-        </p>
-      </div>
+      {/* Greeting Banner Header - Bersih, Elegan, dengan Architectural Dot Pattern */}
+      <section className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-xs relative overflow-hidden">
+        <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(#94a3b8_1px,transparent_1px)] [background-size:24px_24px] opacity-25" />
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
+          <div className="space-y-2 max-w-2xl">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-700">
+              <Sparkles className="w-3.5 h-3.5 text-slate-800" />
+              <span>Pusat Kendali Operasional Platform</span>
+            </div>
 
-      {/* Kartu Metrik Utama */}
+            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight leading-snug">
+              Selamat Datang di ModulKu Control Center
+            </h1>
+
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              Pantau aktivitas akun pendidik, persetujuan transaksi langganan manual, dan efisiensi konsumsi token AI secara terpusat dan presisi.
+            </p>
+          </div>
+
+          <div className="flex flex-wrap lg:flex-col gap-3 shrink-0">
+            <Link href="/admin/persetujuan">
+              <Button className="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs h-10 px-5 rounded-xl shadow-xs gap-2 cursor-pointer">
+                <span>Verifikasi Tiket ({pendingRequests.length})</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Button>
+            </Link>
+            <Link href="/admin/pengaturan">
+              <Button
+                variant="outline"
+                className="w-full sm:w-auto bg-white hover:bg-slate-100 text-slate-800 border-slate-300 font-semibold text-xs h-10 px-5 rounded-xl gap-2 cursor-pointer"
+              >
+                <ShieldCheck className="w-3.5 h-3.5 text-slate-700" />
+                <span>Pengaturan Sistem</span>
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* 4 Kartu Metrik Utama - Bento Metric Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Metrik 1: Total Pengguna */}
-        <Card className="bg-slate-900 border border-slate-800 text-white rounded-xl p-5 shadow-xs">
-          <CardHeader className="p-0 pb-2 flex flex-row items-center justify-between space-y-0">
-            <CardTitle className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-              Total Pendidik Terdaftar
-            </CardTitle>
-            <div className="w-8 h-8 rounded-lg bg-slate-800/80 border border-slate-700/70 flex items-center justify-center text-slate-300">
-              <Users className="w-4 h-4" />
+        <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs hover:border-slate-300 transition-all flex flex-col justify-between">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-mono font-bold text-slate-500 uppercase tracking-wider">
+              TOTAL PENDIDIK
+            </span>
+            <div className="w-10 h-10 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-800">
+              <Users className="w-5 h-5 text-slate-700" />
             </div>
-          </CardHeader>
-          <CardContent className="p-0 space-y-1">
-            <div className="text-2xl font-bold text-slate-50 tracking-tight">148 Guru</div>
-            <p className="text-xs text-emerald-400 flex items-center gap-1 font-semibold">
-              <TrendingUp className="w-3.5 h-3.5" />
-              <span>+12 guru mendaftar minggu ini</span>
+          </div>
+          <div className="mt-3">
+            <div className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight font-mono">
+              148 Guru
+            </div>
+            <p className="text-xs text-slate-500 mt-1 flex items-center gap-1.5 font-medium">
+              <span className="text-[#059669] font-bold">+12 guru</span>
+              <span>mendaftar minggu ini</span>
             </p>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
         {/* Metrik 2: Permintaan Menunggu Persetujuan */}
-        <Card className="bg-slate-900 border border-slate-800 text-white rounded-xl p-5 shadow-xs">
-          <CardHeader className="p-0 pb-2 flex flex-row items-center justify-between space-y-0">
-            <CardTitle className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-              Verifikasi Langganan
-            </CardTitle>
-            <div className="w-8 h-8 rounded-lg bg-slate-800/80 border border-slate-700/70 flex items-center justify-center text-slate-300">
-              <CreditCard className="w-4 h-4" />
+        <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs hover:border-slate-300 transition-all flex flex-col justify-between">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-mono font-bold text-slate-500 uppercase tracking-wider">
+              VERIFIKASI LANGGANAN
+            </span>
+            <div className="w-10 h-10 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-800">
+              <CreditCard className="w-5 h-5 text-slate-700" />
             </div>
-          </CardHeader>
-          <CardContent className="p-0 space-y-1">
-            <div className="text-2xl font-bold text-slate-50 tracking-tight">
+          </div>
+          <div className="mt-3">
+            <div className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight font-mono">
               {pendingRequests.length} Pending
             </div>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-500 mt-1">
               {approvedRequests.length} pembayaran telah aktif
             </p>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
         {/* Metrik 3: Hit API Hari Ini */}
-        <Card className="bg-slate-900 border border-slate-800 text-white rounded-xl p-5 shadow-xs">
-          <CardHeader className="p-0 pb-2 flex flex-row items-center justify-between space-y-0">
-            <CardTitle className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-              Panggilan AI Hari Ini
-            </CardTitle>
-            <div className="w-8 h-8 rounded-lg bg-slate-800/80 border border-slate-700/70 flex items-center justify-center text-slate-300">
-              <Activity className="w-4 h-4" />
+        <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs hover:border-slate-300 transition-all flex flex-col justify-between">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-mono font-bold text-slate-500 uppercase tracking-wider">
+              PANGGILAN AI HARI INI
+            </span>
+            <div className="w-10 h-10 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-800">
+              <Activity className="w-5 h-5 text-slate-700" />
             </div>
-          </CardHeader>
-          <CardContent className="p-0 space-y-1">
-            <div className="text-2xl font-bold text-slate-50 tracking-tight">
+          </div>
+          <div className="mt-3">
+            <div className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight font-mono">
               {metrics.todayHits} Panggilan
             </div>
-            <p className="text-xs text-slate-400 font-mono">
+            <p className="text-xs text-slate-500 font-mono mt-1">
               ~{Math.round(metrics.totalTokensToday / 1000)}k token diproses hari ini
             </p>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
         {/* Metrik 4: Estimasi Biaya Gemini Bulan Ini */}
-        <Card className="bg-slate-900 border border-slate-800 text-white rounded-xl p-5 shadow-xs">
-          <CardHeader className="p-0 pb-2 flex flex-row items-center justify-between space-y-0">
-            <CardTitle className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-              Estimasi Biaya AI Bulan Ini
-            </CardTitle>
-            <div className="w-8 h-8 rounded-lg bg-slate-800/80 border border-slate-700/70 flex items-center justify-center text-slate-300">
-              <DollarSign className="w-4 h-4" />
+        <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs hover:border-slate-300 transition-all flex flex-col justify-between">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-mono font-bold text-slate-500 uppercase tracking-wider">
+              ESTIMASI BIAYA BULAN INI
+            </span>
+            <div className="w-10 h-10 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-800">
+              <DollarSign className="w-5 h-5 text-slate-700" />
             </div>
-          </CardHeader>
-          <CardContent className="p-0 space-y-1">
-            <div className="text-2xl font-bold text-slate-50 tracking-tight font-mono">
+          </div>
+          <div className="mt-3">
+            <div className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight font-mono">
               Rp {metrics.estimatedCostMonthIdr.toLocaleString("id-ID")}
             </div>
-            <p className="text-xs text-slate-400 font-mono">
+            <p className="text-xs text-slate-500 font-mono mt-1">
               ${metrics.estimatedCostMonthUsd} USD (Gemini 1.5 Flash)
             </p>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
 
       {/* Bagian 1: Antrean Verifikasi Langganan Manual Cepat */}
-      <Card className="bg-slate-900 border border-slate-800 text-white rounded-xl shadow-xs">
-        <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800/80 pb-4">
+      <Card className="bg-white border-slate-200 rounded-2xl shadow-xs overflow-hidden">
+        <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
           <div>
             <div className="flex items-center gap-2">
-              <CardTitle className="text-base font-semibold text-slate-100">
+              <CardTitle className="text-base font-black text-slate-900 tracking-tight">
                 Permintaan Langganan Menunggu Persetujuan
               </CardTitle>
               {pendingRequests.length > 0 && (
-                <span className="inline-flex font-mono text-xs text-slate-200 bg-slate-800 border border-slate-700 px-2 py-0.5 rounded whitespace-nowrap">
+                <span className="inline-flex font-mono text-[11px] font-bold text-amber-800 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full whitespace-nowrap">
                   {pendingRequests.length} Baru
                 </span>
               )}
             </div>
-            <CardDescription className="text-xs text-slate-400 mt-0.5">
+            <CardDescription className="text-xs text-slate-500 mt-1 leading-relaxed">
               Tinjau bukti struk QRIS, DANA, ShopeePay, atau Bank BRI sebelum menaikkan hak akses paket guru.
             </CardDescription>
           </div>
 
           <Link href="/admin/persetujuan">
-            <Button variant="outline" size="sm" className="text-xs font-medium border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-200 gap-1.5 h-8 rounded-lg">
+            <Button variant="outline" size="sm" className="text-xs font-semibold border-slate-300 text-slate-800 hover:bg-slate-100 bg-white gap-1.5 h-8 rounded-xl cursor-pointer">
               <span>Kelola Semua Transaksi</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Button>
           </Link>
         </CardHeader>
 
-        <CardContent className="pt-4">
+        <CardContent className="p-0">
           {pendingRequests.length === 0 ? (
-            <div className="text-center py-8 space-y-2">
-              <CheckCircle2 className="w-10 h-10 text-emerald-500 mx-auto opacity-70" />
-              <p className="text-xs font-semibold text-slate-300">
+            <div className="text-center py-10 space-y-2">
+              <CheckCircle2 className="w-10 h-10 text-[#059669] mx-auto opacity-70" />
+              <p className="text-xs font-bold text-slate-800">
                 Seluruh pengajuan transaksi pembayaran telah selesai diproses!
               </p>
               <p className="text-[11px] text-slate-500">
@@ -230,54 +261,54 @@ export default function AdminOverviewPage() {
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead>
-                  <tr className="border-b border-slate-800 text-slate-400 text-[11px] uppercase">
-                    <th className="py-2.5 px-3 whitespace-nowrap">Kode Trx</th>
-                    <th className="py-2.5 px-3">Pendidik / Pemesan</th>
-                    <th className="py-2.5 px-3">Paket Langganan</th>
-                    <th className="py-2.5 px-3">Nominal & Metode</th>
-                    <th className="py-2.5 px-3 whitespace-nowrap">Bukti Bayar</th>
-                    <th className="py-2.5 px-3 text-right whitespace-nowrap">Aksi Persetujuan</th>
+                  <tr className="border-b border-slate-200 bg-slate-50/80 text-slate-500 text-[11px] uppercase font-bold tracking-wider">
+                    <th className="py-3 px-4 whitespace-nowrap">Kode Trx</th>
+                    <th className="py-3 px-4">Pendidik / Pemesan</th>
+                    <th className="py-3 px-4">Paket Langganan</th>
+                    <th className="py-3 px-4">Nominal & Metode</th>
+                    <th className="py-3 px-4 whitespace-nowrap">Bukti Bayar</th>
+                    <th className="py-3 px-4 text-right whitespace-nowrap">Aksi Persetujuan</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800/60 font-medium">
+                <tbody className="divide-y divide-slate-100 font-medium">
                   {pendingRequests.map((req) => (
-                    <tr key={req.id} className="hover:bg-slate-850/40 transition-colors">
-                      <td className="py-3 px-3 whitespace-nowrap">
-                        <span className="inline-flex font-mono text-xs text-slate-200 bg-slate-800 border border-slate-700 px-2 py-0.5 rounded whitespace-nowrap">
+                    <tr key={req.id} className="hover:bg-slate-50/60 transition-colors">
+                      <td className="py-3.5 px-4 whitespace-nowrap">
+                        <span className="inline-flex font-mono text-xs text-slate-800 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded whitespace-nowrap font-semibold">
                           {req.id}
                         </span>
                       </td>
-                      <td className="py-3 px-3">
-                        <div className="font-bold text-slate-100">{req.userName}</div>
-                        <div className="text-[11px] text-slate-400 font-mono truncate max-w-[180px]">
+                      <td className="py-3.5 px-4">
+                        <div className="font-bold text-slate-900">{req.userName}</div>
+                        <div className="text-[11px] text-slate-500 font-mono truncate max-w-[180px]">
                           {req.userEmail}
                         </div>
                       </td>
-                      <td className="py-3 px-3">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-800 text-slate-100 border border-slate-700 whitespace-nowrap">
+                      <td className="py-3.5 px-4 whitespace-nowrap">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-900 text-white whitespace-nowrap">
                           {req.planName}
                         </span>
                       </td>
-                      <td className="py-3 px-3">
-                        <div className="font-mono font-bold text-slate-100">{req.formattedAmount}</div>
-                        <div className="text-[10px] text-slate-400">Metode: {req.paymentMethod}</div>
+                      <td className="py-3.5 px-4">
+                        <div className="font-mono font-bold text-slate-900">{req.formattedAmount}</div>
+                        <div className="text-[10px] text-slate-500">Metode: {req.paymentMethod}</div>
                       </td>
-                      <td className="py-3 px-3 whitespace-nowrap">
+                      <td className="py-3.5 px-4 whitespace-nowrap">
                         <button
                           type="button"
                           onClick={() => setSelectedProof(req.proofImageUrl)}
-                          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-medium whitespace-nowrap transition-colors cursor-pointer"
+                          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200 text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer"
                         >
                           <Eye className="w-3.5 h-3.5" />
                           <span>Periksa Struk</span>
                         </button>
                       </td>
-                      <td className="py-3 px-3 text-right whitespace-nowrap">
+                      <td className="py-3.5 px-4 text-right whitespace-nowrap">
                         <div className="flex items-center justify-end gap-2 whitespace-nowrap">
                           <Button
                             size="sm"
                             onClick={() => handleApprove(req)}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-medium transition-colors shadow-xs whitespace-nowrap cursor-pointer h-8"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#059669] hover:bg-[#047857] text-white text-xs font-bold transition-colors shadow-xs whitespace-nowrap cursor-pointer h-8"
                           >
                             <Check className="w-3.5 h-3.5" />
                             <span>Setujui</span>
@@ -285,7 +316,7 @@ export default function AdminOverviewPage() {
                           <button
                             type="button"
                             onClick={() => handleReject(req)}
-                            className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 transition-colors shrink-0 cursor-pointer"
+                            className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 transition-colors shrink-0 cursor-pointer"
                             title="Tolak Transaksi"
                           >
                             <X className="w-3.5 h-3.5" />
@@ -301,132 +332,135 @@ export default function AdminOverviewPage() {
         </CardContent>
       </Card>
 
-      {/* Bagian 2: Distribusi Hit Fitur AI Hari Ini */}
+      {/* Bagian 2: Distribusi Hit Fitur AI Hari Ini & Saluran Pembayaran */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="bg-slate-900 border border-slate-800 text-white rounded-xl shadow-xs">
-          <CardHeader className="pb-3 border-b border-slate-800/80">
-            <CardTitle className="text-base font-semibold text-slate-100">
+        <Card className="bg-white border-slate-200 rounded-2xl p-6 shadow-xs space-y-4">
+          <div className="border-b border-slate-100 pb-3">
+            <h2 className="text-base font-black text-slate-900 tracking-tight">
               Aktivitas Panggilan Generator AI Bulan Ini
-            </CardTitle>
-            <CardDescription className="text-xs text-slate-400">
+            </h2>
+            <p className="text-xs text-slate-500 mt-1">
               Rincian beban pemrosesan fitur kurikulum dan evaluasi berbasis model Gemini Flash.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="pt-4 space-y-4 text-xs">
+            </p>
+          </div>
+
+          <div className="space-y-4 text-xs">
             <div className="space-y-1.5">
               <div className="flex justify-between font-semibold">
-                <span className="text-slate-300">Soal Generator (AKM / HOTS)</span>
-                <span className="font-mono text-xs text-slate-300 whitespace-nowrap">{metrics.hitsByRoute["generate-soal"]} kali</span>
+                <span className="text-slate-700">Soal Generator (AKM / HOTS)</span>
+                <span className="font-mono text-xs text-slate-600 whitespace-nowrap font-bold">{metrics.hitsByRoute["generate-soal"]} kali</span>
               </div>
-              <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
-                <div className="bg-slate-100 h-full rounded-full" style={{ width: "55%" }} />
+              <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                <div className="bg-slate-900 h-full rounded-full transition-all" style={{ width: "55%" }} />
               </div>
             </div>
 
             <div className="space-y-1.5">
               <div className="flex justify-between font-semibold">
-                <span className="text-slate-300">Modul Ajar BKPDM Deep Learning</span>
-                <span className="font-mono text-xs text-slate-300 whitespace-nowrap">{metrics.hitsByRoute["generate-modul"]} kali</span>
+                <span className="text-slate-700">Modul Ajar BKPDM Deep Learning</span>
+                <span className="font-mono text-xs text-slate-600 whitespace-nowrap font-bold">{metrics.hitsByRoute["generate-modul"]} kali</span>
               </div>
-              <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
-                <div className="bg-slate-400 h-full rounded-full" style={{ width: "30%" }} />
-              </div>
-            </div>
-
-            <div className="space-y-1.5">
-              <div className="flex justify-between font-semibold">
-                <span className="text-slate-300">ATP, Prota, & Promes Mingguan</span>
-                <span className="font-mono text-xs text-slate-300 whitespace-nowrap">{metrics.hitsByRoute["generate-perangkat"]} kali</span>
-              </div>
-              <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
-                <div className="bg-slate-400 h-full rounded-full" style={{ width: "10%" }} />
+              <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                <div className="bg-slate-400 h-full rounded-full transition-all" style={{ width: "30%" }} />
               </div>
             </div>
 
             <div className="space-y-1.5">
               <div className="flex justify-between font-semibold">
-                <span className="text-slate-300">Slide Tayang PPTX & LKPD</span>
-                <span className="font-mono text-xs text-slate-300 whitespace-nowrap">{metrics.hitsByRoute["generate-presentation"]} kali</span>
+                <span className="text-slate-700">ATP, Prota, & Promes Mingguan</span>
+                <span className="font-mono text-xs text-slate-600 whitespace-nowrap font-bold">{metrics.hitsByRoute["generate-perangkat"]} kali</span>
               </div>
-              <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
-                <div className="bg-slate-400 h-full rounded-full" style={{ width: "5%" }} />
+              <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                <div className="bg-slate-400 h-full rounded-full transition-all" style={{ width: "10%" }} />
               </div>
             </div>
-          </CardContent>
+
+            <div className="space-y-1.5">
+              <div className="flex justify-between font-semibold">
+                <span className="text-slate-700">Slide Tayang PPTX & LKPD</span>
+                <span className="font-mono text-xs text-slate-600 whitespace-nowrap font-bold">{metrics.hitsByRoute["generate-presentation"]} kali</span>
+              </div>
+              <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                <div className="bg-slate-400 h-full rounded-full transition-all" style={{ width: "5%" }} />
+              </div>
+            </div>
+          </div>
         </Card>
 
         {/* Info Rekening Pembayaran Aktif yang Ditampilkan ke Guru */}
-        <Card className="bg-slate-900 border border-slate-800 text-white rounded-xl shadow-xs">
-          <CardHeader className="pb-3 border-b border-slate-800/80">
-            <CardTitle className="text-base font-semibold text-slate-100">
+        <Card className="bg-white border-slate-200 rounded-2xl p-6 shadow-xs space-y-4">
+          <div className="border-b border-slate-100 pb-3">
+            <h2 className="text-base font-black text-slate-900 tracking-tight">
               Rekening & Saluran Pembayaran Aktif
-            </CardTitle>
-            <CardDescription className="text-xs text-slate-400">
+            </h2>
+            <p className="text-xs text-slate-500 mt-1">
               Informasi yang saat ini muncul pada modal checkout guru saat ingin berlangganan.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="pt-4 space-y-3 text-xs">
-            <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800 flex items-center justify-between">
+            </p>
+          </div>
+
+          <div className="space-y-3 text-xs">
+            <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
               <div>
-                <span className="font-bold text-slate-100 block">QRIS Dinamis 4 Paket</span>
-                <span className="text-[11px] text-slate-400">Preset Rp 39k, Rp 299k, Rp 799k, Rp 1.490k</span>
+                <span className="font-bold text-slate-900 block">QRIS Dinamis 4 Paket</span>
+                <span className="text-[11px] text-slate-500">Preset Rp 39k, Rp 299k, Rp 799k, Rp 1.490k</span>
               </div>
-              <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-[#ECFDF5] text-[#065F46] border border-emerald-200">
                 Aktif
               </span>
             </div>
 
-            <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800 flex items-center justify-between">
+            <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
               <div>
-                <span className="font-bold text-slate-100 block">E-Wallet DANA & ShopeePay</span>
-                <span className="text-[11px] text-slate-400 font-mono">DANA: 089530123608 | SPay: 0895301235608</span>
+                <span className="font-bold text-slate-900 block">E-Wallet DANA & ShopeePay</span>
+                <span className="text-[11px] text-slate-500 font-mono">DANA: 089530123608 | SPay: 0895301235608</span>
               </div>
-              <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-[#ECFDF5] text-[#065F46] border border-emerald-200">
                 Aktif
               </span>
             </div>
 
-            <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800 flex items-center justify-between">
+            <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
               <div>
-                <span className="font-bold text-slate-100 block">Transfer Bank BRI</span>
-                <span className="text-[11px] text-slate-400 font-mono">No. Rekening: 662501037567538</span>
+                <span className="font-bold text-slate-900 block">Transfer Bank BRI</span>
+                <span className="text-[11px] text-slate-500 font-mono">No. Rekening: 662501037567538</span>
               </div>
-              <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-[#ECFDF5] text-[#065F46] border border-emerald-200">
                 Aktif
               </span>
             </div>
 
-            <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800 flex items-center justify-between">
+            <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
               <div>
-                <span className="font-bold text-slate-100 block">Narahubung WhatsApp Bantuan</span>
-                <span className="text-[11px] text-slate-400 font-mono">089530123608 (Direct Chat)</span>
+                <span className="font-bold text-slate-900 block">Narahubung WhatsApp Bantuan</span>
+                <span className="text-[11px] text-slate-500 font-mono">089530123608 (Direct Chat)</span>
               </div>
-              <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-[#ECFDF5] text-[#065F46] border border-emerald-200">
                 Online
               </span>
             </div>
-          </CardContent>
+          </div>
         </Card>
       </div>
 
       {/* Kotak Masuk Feedback & Keluh Kesah Pendidik */}
-      <Card className="bg-slate-900 border border-slate-800 text-white rounded-xl shadow-xs">
-        <CardHeader className="pb-3 border-b border-slate-800 flex flex-row items-center justify-between">
+      <Card className="bg-white border-slate-200 rounded-2xl p-6 shadow-xs space-y-4">
+        <div className="flex flex-row items-center justify-between border-b border-slate-100 pb-3">
           <div>
-            <CardTitle className="text-base font-semibold text-slate-100">
+            <h2 className="text-base font-black text-slate-900 tracking-tight">
               Kotak Masuk Masukan & Keluh Kesah Pendidik
-            </CardTitle>
-            <CardDescription className="text-xs text-slate-400">
+            </h2>
+            <p className="text-xs text-slate-500 mt-1">
               Umpan balik langsung yang dikirimkan oleh guru dari widget Chat Admin di ruang kerja dasbor.
-            </CardDescription>
+            </p>
           </div>
-          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-mono font-medium bg-slate-800 text-slate-300 border border-slate-700">
-            {feedbackList.length} Pesan Masuk
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded text-[11px] font-mono font-bold bg-slate-100 text-slate-700 border border-slate-200">
+            {feedbackList.length} Pesan
           </span>
-        </CardHeader>
-        <CardContent className="pt-4">
+        </div>
+
+        <div>
           {feedbackList.length === 0 ? (
-            <div className="text-center py-8 text-xs text-slate-500 font-mono">
+            <div className="text-center py-8 text-xs text-slate-400 font-mono">
               Belum ada keluhan atau pesan feedback baru dari guru.
             </div>
           ) : (
@@ -434,47 +468,47 @@ export default function AdminOverviewPage() {
               {feedbackList.slice(0, 5).map((item) => (
                 <div
                   key={item.id}
-                  className="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800 space-y-2"
+                  className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2"
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                     <div className="flex items-center gap-2">
-                      <span className="font-bold text-xs text-slate-100">{item.senderName}</span>
-                      <span className="text-[11px] text-slate-400 font-mono">({item.senderSchool})</span>
+                      <span className="font-bold text-xs text-slate-900">{item.senderName}</span>
+                      <span className="text-[11px] text-slate-500 font-mono">({item.senderSchool})</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 uppercase">
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-white border border-slate-200 text-slate-700 uppercase">
                         {item.category.replace(/_/g, " ")}
                       </span>
-                      <span className="text-[10px] text-slate-500 font-mono">
+                      <span className="text-[10px] text-slate-400 font-mono">
                         {new Date(item.timestamp).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" })}
                       </span>
                     </div>
                   </div>
-                  <p className="text-xs text-slate-300 leading-relaxed bg-slate-900/60 p-2.5 rounded-lg border border-slate-800/80">
+                  <p className="text-xs text-slate-700 leading-relaxed bg-white p-2.5 rounded-lg border border-slate-200">
                     {item.text}
                   </p>
                 </div>
               ))}
             </div>
           )}
-        </CardContent>
+        </div>
       </Card>
 
       {/* Modal Zoom Bukti Pembayaran */}
       {selectedProof && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs">
-          <div className="relative max-w-lg w-full bg-slate-900 rounded-2xl border border-slate-700 p-4 space-y-3">
-            <div className="flex items-center justify-between pb-2 border-b border-slate-800">
-              <span className="font-bold text-xs text-white">Pratinjau Struk / Bukti Transfer</span>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+          <div className="relative max-w-lg w-full bg-white rounded-2xl border border-slate-200 p-4 space-y-3 shadow-xl">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+              <span className="font-bold text-xs text-slate-900">Pratinjau Struk / Bukti Transfer</span>
               <button
                 type="button"
                 onClick={() => setSelectedProof(null)}
-                className="text-slate-400 hover:text-white"
+                className="text-slate-400 hover:text-slate-700 cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <div className="relative w-full aspect-3/4 rounded-xl overflow-hidden bg-slate-950 flex items-center justify-center border border-slate-800">
+            <div className="relative w-full aspect-3/4 rounded-xl overflow-hidden bg-slate-50 flex items-center justify-center border border-slate-200">
               <Image
                 src={selectedProof}
                 alt="Bukti Transfer"
@@ -485,7 +519,7 @@ export default function AdminOverviewPage() {
             </div>
             <Button
               onClick={() => setSelectedProof(null)}
-              className="w-full text-xs font-bold bg-slate-800 hover:bg-slate-700 text-white h-9"
+              className="w-full text-xs font-bold bg-slate-900 hover:bg-slate-800 text-white h-9 rounded-xl cursor-pointer"
             >
               Tutup Pratinjau
             </Button>

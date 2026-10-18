@@ -152,26 +152,26 @@ export default function AdminUsersPage() {
     <div className="space-y-6">
       {/* Header Halaman */}
       <div>
-        <h1 className="text-2xl font-black text-slate-100 tracking-tight flex items-center gap-2.5">
-          <Users className="w-6 h-6 text-slate-300" />
+        <h1 className="text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2.5">
+          <Users className="w-6 h-6 text-slate-700" />
           <span>Manajemen Akun Pendidik</span>
         </h1>
-        <p className="text-xs text-slate-400 mt-1">
+        <p className="text-xs text-slate-500 mt-1">
           Kontrol hak akses paket langganan guru, pemantauan kapasitas penyimpanan arsip, dan status keaktifan akun.
         </p>
       </div>
 
       {/* Kontrol Pencarian & Filter */}
-      <Card className="bg-slate-900 border border-slate-800 rounded-xl text-slate-100 shadow-xs">
+      <Card className="bg-white border border-slate-200 rounded-2xl shadow-xs">
         <CardContent className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="relative flex-1 max-w-sm">
-            <Search className="w-4 h-4 text-slate-500 absolute left-3 top-2.5" />
+            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
             <Input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Cari nama guru, email, atau sekolah..."
-              className="pl-9 text-xs h-9 bg-slate-950/80 border border-slate-800 text-slate-100 placeholder:text-slate-500 rounded-lg focus:outline-none focus:border-slate-400 focus:ring-1 focus:ring-slate-400 transition-colors"
+              className="pl-9 text-xs h-9 bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-400 rounded-xl focus:bg-white focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition-all"
             />
           </div>
 
@@ -186,10 +186,10 @@ export default function AdminUsersPage() {
                 key={tab.id}
                 type="button"
                 onClick={() => setTierFilter(tab.id)}
-                className={`px-3.5 py-1.5 rounded-lg text-xs whitespace-nowrap transition-colors cursor-pointer ${
+                className={`px-3.5 py-1.5 rounded-lg text-xs whitespace-nowrap transition-all cursor-pointer ${
                   tierFilter === tab.id
-                    ? "bg-slate-100 text-slate-950 font-semibold"
-                    : "bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800"
+                    ? "bg-slate-900 text-white font-bold shadow-xs"
+                    : "bg-slate-100 text-slate-600 hover:text-slate-900 hover:bg-slate-200 border border-slate-200 font-semibold"
                 }`}
               >
                 {tab.label}
@@ -200,62 +200,62 @@ export default function AdminUsersPage() {
       </Card>
 
       {/* Tabel Pengguna */}
-      <Card className="bg-slate-900 border border-slate-800 rounded-xl text-slate-100 shadow-xs">
+      <Card className="bg-white border border-slate-200 rounded-2xl shadow-xs overflow-hidden">
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead>
-                <tr className="border-b border-slate-800 text-slate-400 text-[11px] uppercase bg-slate-950/40">
-                  <th className="py-3 px-4 font-semibold whitespace-nowrap">Pendidik</th>
-                  <th className="py-3 px-4 font-semibold whitespace-nowrap">Satuan Pendidikan</th>
-                  <th className="py-3 px-4 font-semibold whitespace-nowrap">Paket Langganan</th>
-                  <th className="py-3 px-4 font-semibold whitespace-nowrap">Penyimpanan Arsip</th>
-                  <th className="py-3 px-4 font-semibold whitespace-nowrap">Keaktifan</th>
-                  <th className="py-3 px-4 text-right font-semibold whitespace-nowrap">Kontrol Manual</th>
+                <tr className="border-b border-slate-200 bg-slate-50/80 text-slate-500 text-[11px] uppercase font-bold tracking-wider">
+                  <th className="py-3 px-4 font-bold whitespace-nowrap">Pendidik</th>
+                  <th className="py-3 px-4 font-bold whitespace-nowrap">Satuan Pendidikan</th>
+                  <th className="py-3 px-4 font-bold whitespace-nowrap">Paket Langganan</th>
+                  <th className="py-3 px-4 font-bold whitespace-nowrap">Penyimpanan Arsip</th>
+                  <th className="py-3 px-4 font-bold whitespace-nowrap">Keaktifan</th>
+                  <th className="py-3 px-4 text-right font-bold whitespace-nowrap">Kontrol Manual</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/60 font-medium">
+              <tbody className="divide-y divide-slate-100 font-medium">
                 {filteredUsers.map((u) => (
-                  <tr key={u.id} className="hover:bg-slate-800/40 transition-colors">
+                  <tr key={u.id} className="hover:bg-slate-50/60 transition-colors">
                     <td className="py-3.5 px-4 whitespace-nowrap">
-                      <div className="font-bold text-slate-100">{u.name}</div>
-                      <div className="text-[11px] text-slate-400 font-mono">{u.email}</div>
+                      <div className="font-bold text-slate-900">{u.name}</div>
+                      <div className="text-[11px] text-slate-500 font-mono">{u.email}</div>
                     </td>
                     <td className="py-3.5 px-4">
-                      <div className="text-slate-200 font-semibold">{u.schoolName}</div>
+                      <div className="text-slate-800 font-semibold">{u.schoolName}</div>
                       <div className="text-[10px] text-slate-500 font-mono">NIP: {u.nip}</div>
                     </td>
                     <td className="py-3.5 px-4 whitespace-nowrap">
                       {u.tier === "school" && (
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 whitespace-nowrap">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#ECFDF5] text-[#065F46] border border-emerald-200 whitespace-nowrap">
                           Sekolah & MGMP
                         </span>
                       )}
                       {u.tier === "pro" && (
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-800 text-slate-100 border border-slate-700 whitespace-nowrap">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-900 text-white whitespace-nowrap">
                           Guru Profesional
                         </span>
                       )}
                       {u.tier === "free" && (
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-900 text-slate-400 border border-slate-800 whitespace-nowrap">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200 whitespace-nowrap">
                           Gratis (Mandiri)
                         </span>
                       )}
                     </td>
                     <td className="py-3.5 px-4">
-                      <div className="text-slate-300 font-mono text-xs font-medium whitespace-nowrap">
+                      <div className="text-slate-800 font-mono text-xs font-semibold whitespace-nowrap">
                         {u.usedStorage}
                       </div>
-                      <div className="w-28 h-1.5 bg-slate-800 rounded-full overflow-hidden mt-1.5">
+                      <div className="w-28 h-1.5 bg-slate-100 rounded-full overflow-hidden mt-1.5">
                         <div
-                          className="h-full bg-slate-300 rounded-full transition-all duration-300"
+                          className="h-full bg-slate-900 rounded-full transition-all duration-300"
                           style={{ width: getStoragePercent(u.usedStorage) }}
                         />
                       </div>
                     </td>
-                    <td className="py-3.5 px-4 text-slate-400 text-xs whitespace-nowrap">
-                      <div className="text-slate-300">{u.lastActive}</div>
-                      <div className="text-[10px] text-slate-500">Bergabung: {u.joinedAt}</div>
+                    <td className="py-3.5 px-4 text-slate-500 text-xs whitespace-nowrap">
+                      <div className="text-slate-800 font-semibold">{u.lastActive}</div>
+                      <div className="text-[10px] text-slate-400">Bergabung: {u.joinedAt}</div>
                     </td>
                     <td className="py-3.5 px-4 text-right">
                       <div className="flex items-center justify-end gap-2 whitespace-nowrap">
@@ -263,7 +263,7 @@ export default function AdminUsersPage() {
                           <button
                             type="button"
                             onClick={() => handleChangeTier(u.id, "pro")}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-700 text-xs font-medium whitespace-nowrap transition-colors cursor-pointer"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer shadow-2xs"
                           >
                             Jadikan Pro
                           </button>
@@ -272,7 +272,7 @@ export default function AdminUsersPage() {
                           <button
                             type="button"
                             onClick={() => handleChangeTier(u.id, "school")}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-700 text-xs font-medium whitespace-nowrap transition-colors cursor-pointer"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer shadow-2xs"
                           >
                             Jadikan Sekolah
                           </button>
@@ -281,7 +281,7 @@ export default function AdminUsersPage() {
                           <button
                             type="button"
                             onClick={() => handleChangeTier(u.id, "free")}
-                            className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-colors shrink-0 cursor-pointer"
+                            className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-white hover:bg-slate-100 text-slate-600 border border-slate-300 transition-colors shrink-0 cursor-pointer"
                             title="Kembalikan ke Paket Gratis"
                           >
                             <RotateCcw className="w-3.5 h-3.5" />
