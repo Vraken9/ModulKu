@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import {
   ArrowLeft,
   ShieldCheck,
@@ -32,6 +32,7 @@ import { PrivacyPolicyModal } from "@/components/legal/PrivacyPolicyModal";
 
 export default function LoginPage() {
   const router = useRouter();
+  const { data: nextAuthSession, status: nextAuthStatus } = useSession();
   const [authMode, setAuthMode] = useState<"signin" | "signup">("signin");
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -72,7 +73,18 @@ export default function LoginPage() {
         return;
       }
 
-      // Jika pengguna sudah login, langsung alihkan ke redirect target atau dashboard
+      // Jika terotentikasi secara valid via Google OAuth (NextAuth)
+      if (nextAuthStatus === "authenticated" && nextAuthSession?.user) {
+        const uid = (nextAuthSession.user as { id?: string }).id || nextAuthSession.user.email || "google_user";
+        setActiveUserId(uid);
+        const fallbackName = nextAuthSession.user.name || (nextAuthSession.user.email ? nextAuthSession.user.email.split("@")[0] : undefined);
+        getTeacherProfile(uid, fallbackName);
+        getSchoolProfile(uid);
+        router.replace(redirectUrl);
+        return;
+      }
+
+      // Jika pengguna sudah login di Supabase atau mode demo lokal, langsung alihkan ke redirect target
       const checkExistingSession = async () => {
         try {
           const { data: { session } } = await supabase.auth.getSession();
@@ -87,9 +99,12 @@ export default function LoginPage() {
             getSchoolProfile(session.user.id);
             router.replace(redirectUrl);
             return;
-          } else if (localToken) {
+          } else if (localToken === "guru_demo_token_aktif") {
             router.replace(redirectUrl);
             return;
+          } else if (localToken) {
+            // Bersihkan token lokal palsu atau yang tersisa dari kegagalan autentikasi
+            localStorage.removeItem("guru_auth_token");
           }
         } catch {
           // ignore
@@ -108,7 +123,7 @@ export default function LoginPage() {
         }
       }
     }
-  }, [router]);
+  }, [router, nextAuthSession, nextAuthStatus]);
 
   async function handleAuthSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -258,8 +273,7 @@ export default function LoginPage() {
     setGoogleLoading(true);
     setAuthError(null);
     try {
-      localStorage.setItem("guru_auth_token", "google_session_active");
-      await signIn("google", { callbackUrl: "/profil-sekolah?onboarding=true" });
+      await signIn("google", { callbackUrl: "/dashboard" });
     } catch {
       setAuthError("Gagal menghubungkan ke layanan Google OAuth. Silakan masuk menggunakan Email & Kata Sandi.");
       setGoogleLoading(false);

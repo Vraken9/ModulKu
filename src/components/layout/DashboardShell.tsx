@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import {
   LayoutDashboard,
   FileCheck2,
@@ -66,6 +66,7 @@ interface DashboardShellProps {
 export function DashboardShell({ children, activeItem }: DashboardShellProps) {
   const pathname = usePathname();
   const router = useRouter();
+  const { data: nextAuthSession, status: nextAuthStatus } = useSession();
   const mainScrollRef = useRef<HTMLDivElement>(null);
   const [currentHash, setCurrentHash] = useState<string>("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -107,13 +108,23 @@ export function DashboardShell({ children, activeItem }: DashboardShellProps) {
   useEffect(() => {
     let isMounted = true;
 
+    // Tunggu jika status sesi NextAuth masih dalam proses pengecekan
+    if (nextAuthStatus === "loading") {
+      return;
+    }
+
     async function checkAuthAndLoad() {
       try {
         const { data: { session } } = await supabase.auth.getSession();
         const localToken = localStorage.getItem("guru_auth_token");
 
-        // Auth guard: Jika tidak ada session maupun token lokal, arahkan ke login
-        if (!session && !localToken) {
+        const hasSupabaseSession = Boolean(session?.user);
+        const hasNextAuthSession = nextAuthStatus === "authenticated" && Boolean(nextAuthSession?.user);
+        const isDemoGuru = localToken === "guru_demo_token_aktif";
+
+        // Auth guard: Jika tidak ada session resmi Supabase/Google atau mode demo terdaftar
+        if (!hasSupabaseSession && !hasNextAuthSession && !isDemoGuru) {
+          clearCurrentSessionProfile();
           router.replace("/login");
           return;
         }
@@ -128,9 +139,14 @@ export function DashboardShell({ children, activeItem }: DashboardShellProps) {
             session.user.email?.split("@")[0] ||
             "Pendidik ModulKu";
           setActiveUserId(currentUid);
-        } else if (localToken) {
-          const activeUid = getActiveUserId();
-          currentUid = activeUid !== "guest" ? activeUid : undefined;
+        } else if (hasNextAuthSession && nextAuthSession?.user) {
+          currentUid = (nextAuthSession.user as { id?: string }).id || nextAuthSession.user.email || "google_user";
+          displayName = nextAuthSession.user.name || nextAuthSession.user.email?.split("@")[0] || "Pendidik ModulKu";
+          setActiveUserId(currentUid);
+        } else if (isDemoGuru) {
+          currentUid = "demo_guru";
+          displayName = "Dra. Siti Rahmawati, M.Pd.";
+          setActiveUserId(currentUid);
         }
 
         const currentTeacher = getTeacherProfile(currentUid, displayName);
@@ -184,7 +200,7 @@ export function DashboardShell({ children, activeItem }: DashboardShellProps) {
       window.removeEventListener("modulku-vault-changed", handleVaultChange);
       window.removeEventListener("modulku-profile-changed", handleProfileChange);
     };
-  }, [router]);
+  }, [router, nextAuthSession, nextAuthStatus]);
 
   async function handleLogout() {
     try {
