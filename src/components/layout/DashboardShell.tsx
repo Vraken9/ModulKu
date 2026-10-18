@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
@@ -66,6 +66,8 @@ interface DashboardShellProps {
 export function DashboardShell({ children, activeItem }: DashboardShellProps) {
   const pathname = usePathname();
   const router = useRouter();
+  const mainScrollRef = useRef<HTMLDivElement>(null);
+  const [currentHash, setCurrentHash] = useState<string>("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [vaultSummary, setVaultSummary] = useState(DEFAULT_STORAGE_SUMMARY);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
@@ -78,6 +80,29 @@ export function DashboardShell({ children, activeItem }: DashboardShellProps) {
     teacher_name: "Pendidik ModulKu",
     teacher_nip: "-",
   });
+
+  // Pelacakan dan navigasi otomatis ke anchor / hash (seperti #panduan-pmm)
+  useEffect(() => {
+    const handleScrollToHash = () => {
+      if (typeof window === "undefined") return;
+      const hash = window.location.hash.replace("#", "");
+      if (hash) {
+        setCurrentHash(`#${hash}`);
+        setTimeout(() => {
+          const el = document.getElementById(hash);
+          if (el) {
+            el.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        }, 120);
+      } else {
+        setCurrentHash("");
+      }
+    };
+
+    handleScrollToHash();
+    window.addEventListener("hashchange", handleScrollToHash);
+    return () => window.removeEventListener("hashchange", handleScrollToHash);
+  }, [pathname]);
 
   useEffect(() => {
     let isMounted = true;
@@ -302,20 +327,52 @@ export function DashboardShell({ children, activeItem }: DashboardShellProps) {
 
                 <div className="space-y-1">
                   {sec.items.map((item) => {
-                    const isActive =
-                      Boolean(activeItem && activeItem === item.id) ||
-                      Boolean(
-                        pathname &&
-                          (pathname === item.href ||
-                            (item.href !== "/dashboard" && pathname.startsWith(item.href)))
-                      );
+                    const isHashItem = item.href.includes("#");
+                    const isHashActive = isHashItem && currentHash === `#${item.href.split("#")[1]}`;
+                    const isNormalActive =
+                      !currentHash &&
+                      (Boolean(activeItem && activeItem === item.id) ||
+                        Boolean(
+                          pathname &&
+                            (pathname === item.href ||
+                              (item.href !== "/dashboard" && pathname.startsWith(item.href)))
+                        ));
+                    const isActive = isHashActive || isNormalActive;
                     const Icon = item.icon;
 
                     return (
                       <Link
                         key={item.id}
                         href={item.href}
-                        onClick={() => setMobileMenuOpen(false)}
+                        onClick={(e) => {
+                          setMobileMenuOpen(false);
+                          if (item.href.includes("#")) {
+                            const [targetPath, hash] = item.href.split("#");
+                            const isCurrentPage =
+                              pathname === targetPath ||
+                              (!targetPath && pathname === "/dashboard") ||
+                              (targetPath === "/dashboard" && pathname === "/dashboard");
+
+                            if (isCurrentPage) {
+                              e.preventDefault();
+                              const targetElement = document.getElementById(hash);
+                              if (targetElement) {
+                                targetElement.scrollIntoView({ behavior: "smooth", block: "start" });
+                                window.history.pushState(null, "", item.href);
+                                setCurrentHash(`#${hash}`);
+                              }
+                            }
+                          } else if (item.href === "/dashboard" && pathname === "/dashboard") {
+                            if (window.location.hash) {
+                              e.preventDefault();
+                              mainScrollRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+                              window.history.pushState(null, "", "/dashboard");
+                              setCurrentHash("");
+                            }
+                          } else {
+                            setCurrentHash("");
+                          }
+                        }}
                         className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all ${
                           isActive
                             ? "bg-slate-900 text-white font-bold shadow-xs"
@@ -421,7 +478,11 @@ export function DashboardShell({ children, activeItem }: DashboardShellProps) {
       </aside>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-y-auto print:overflow-visible print:block print:w-full">
+      <div
+        ref={mainScrollRef}
+        id="main-scroll-container"
+        className="flex-1 flex flex-col min-w-0 overflow-y-auto print:overflow-visible print:block print:w-full"
+      >
         {/* Topbar Desktop */}
         <header className="hidden md:flex h-16 bg-white border-b border-slate-200 px-8 items-center justify-between sticky top-0 z-20 print:hidden">
           <div className="flex items-center gap-3">

@@ -213,7 +213,7 @@ export default function DashboardPage() {
         </section>
 
         {/* Info Penyelarasan Bukti Dukung Kinerja PMM (dashboard#panduan-pmm) */}
-        <section id="panduan-pmm" className="space-y-4">
+        <section id="panduan-pmm" className="space-y-4 scroll-mt-6">
           <Card className="border-slate-200 bg-white shadow-xs rounded-2xl overflow-hidden">
             <CardHeader className="pb-4 border-b border-slate-100 space-y-1.5">
               <div className="flex items-center gap-2">
