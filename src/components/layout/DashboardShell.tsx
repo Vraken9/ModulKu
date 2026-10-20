@@ -143,6 +143,8 @@ export function DashboardShell({ children, activeItem }: DashboardShellProps) {
           currentUid = (nextAuthSession.user as { id?: string }).id || nextAuthSession.user.email || "google_user";
           displayName = nextAuthSession.user.name || nextAuthSession.user.email?.split("@")[0] || "Pendidik ModulKu";
           setActiveUserId(currentUid);
+          // Sinkronisasi otomatis ke Supabase di latar belakang
+          fetch("/api/auth/sync", { method: "POST" }).catch(() => {});
         } else if (isDemoGuru) {
           currentUid = "demo_guru";
           displayName = "Dra. Siti Rahmawati, M.Pd.";
