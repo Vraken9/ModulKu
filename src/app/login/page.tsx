@@ -133,6 +133,27 @@ export default function LoginPage() {
       };
       checkExistingSession();
 
+      if (params.get("confirmed") === "true") {
+        setAuthSuccess("Alamat email Anda berhasil diverifikasi! Silakan masuk menggunakan email dan kata sandi.");
+      }
+
+      // Deteksi pesan eror dari hash Supabase (seperti otp_expired)
+      if (typeof window !== "undefined" && window.location.hash) {
+        try {
+          const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+          const errCode = hashParams.get("error_code");
+          if (errCode === "otp_expired") {
+            setAuthError(
+              "Tautan konfirmasi email telah kadaluarsa atau telah terpakai. Jika pendaftaran Anda sebelumnya telah tercatat, silakan langsung masuk menggunakan alamat email dan kata sandi Anda."
+            );
+          } else if (hashParams.get("error_description")) {
+            setAuthError(decodeURIComponent(hashParams.get("error_description") || "Tautan tidak valid."));
+          }
+        } catch {
+          // ignore
+        }
+      }
+
       const err = params.get("error");
       if (err) {
         if (err === "OAuthSignin" || err === "OAuthCallback" || err === "Configuration") {
@@ -183,10 +204,16 @@ export default function LoginPage() {
       }
 
       try {
+        const redirectOrigin =
+          typeof window !== "undefined"
+            ? window.location.origin
+            : process.env.NEXT_PUBLIC_APP_URL || "https://modul-ku.vercel.app";
+
         const { data, error } = await supabase.auth.signUp({
           email: email.trim(),
           password: password,
           options: {
+            emailRedirectTo: `${redirectOrigin}/login?confirmed=true`,
             data: {
               full_name: fullName.trim(),
             },
