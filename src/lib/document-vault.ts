@@ -810,11 +810,11 @@ export const SEED_DOCUMENTS: StoredDocument[] = [
 export const DEFAULT_STORAGE_SUMMARY: StorageUsageSummary = {
   tier: "free",
   tierLabel: "Guru Mandiri (Gratis)",
-  usedBytes: 3292160,
+  usedBytes: 0,
   maxBytes: 50 * 1024 * 1024,
-  percentageUsed: 6,
-  totalDocuments: 4,
-  remainingBytes: 50 * 1024 * 1024 - 3292160,
+  percentageUsed: 0,
+  totalDocuments: 0,
+  remainingBytes: 50 * 1024 * 1024,
   isExceeded: false,
 };
 
@@ -857,20 +857,26 @@ export function getStoredDocuments(userId?: string): StoredDocument[] {
   const key = getVaultStorageKey(uid);
 
   if (typeof window === "undefined") {
-    return SEED_DOCUMENTS.map((d) => ({ ...d, user_id: uid }));
+    return uid === "demo_guru" ? SEED_DOCUMENTS.map((d) => ({ ...d, user_id: uid })) : [];
   }
 
   try {
     const raw = localStorage.getItem(key);
     if (!raw) {
-      // Inisialisasi vault khusus untuk user ini dengan dokumen contoh bawaan
-      const userSeeds = SEED_DOCUMENTS.map((doc) => ({
-        ...doc,
-        id: `${doc.id}-${uid.slice(0, 6)}`,
-        user_id: uid,
-      }));
-      localStorage.setItem(key, JSON.stringify(userSeeds));
-      return userSeeds;
+      // Inisialisasi vault khusus dokumen contoh HANYA jika akun adalah mode demo ("demo_guru")
+      if (uid === "demo_guru") {
+        const userSeeds = SEED_DOCUMENTS.map((doc) => ({
+          ...doc,
+          id: `${doc.id}-${uid.slice(0, 6)}`,
+          user_id: uid,
+        }));
+        localStorage.setItem(key, JSON.stringify(userSeeds));
+        return userSeeds;
+      }
+
+      // Akun pendidik nyata yang baru mendaftar: mulai dengan brankas bersih (0 dokumen)
+      localStorage.setItem(key, JSON.stringify([]));
+      return [];
     }
     const parsed = JSON.parse(raw);
     if (Array.isArray(parsed)) {

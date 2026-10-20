@@ -7,15 +7,15 @@ const ACTIVE_TEACHER_KEY = "guru_teacher_profile";
 const ACTIVE_SCHOOL_KEY = "guru_school_profile";
 
 export const DEFAULT_SCHOOL_TEMPLATE: Partial<SchoolProfile> = {
-  government_agency: "PEMERINTAH PROVINSI",
-  education_office: "DINAS PENDIDIKAN DAN KEBUDAYAAN",
-  school_name: "SATUAN PENDIDIKAN INDONESIA",
+  government_agency: "KEMENTERIAN PENDIDIKAN, KEBUDAYAAN, RISET, DAN TEKNOLOGI",
+  education_office: "DINAS PENDIDIKAN",
+  school_name: "Nama Satuan Pendidikan Belum Diatur",
   npsn: "-",
-  accreditation: "A",
-  address: "Jalan Pendidikan Nasional",
+  accreditation: "-",
+  address: "Silakan lengkapi profil sekolah Anda di menu Profil Sekolah",
   postal_code: "-",
   phone: "-",
-  email: "sekolah@pendidikan.sch.id",
+  email: "-",
   website: "",
   left_logo_url: "",
   right_logo_url: "",

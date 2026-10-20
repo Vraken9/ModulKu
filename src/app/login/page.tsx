@@ -27,6 +27,7 @@ import {
   saveTeacherProfile,
   getSchoolProfile,
   saveSchoolProfile,
+  clearCurrentSessionProfile,
 } from "@/lib/user-profile";
 import { isEmailAdmin } from "@/lib/subscription";
 import { PrivacyPolicyModal } from "@/components/legal/PrivacyPolicyModal";
@@ -169,6 +170,7 @@ export default function LoginPage() {
 
   async function handleAuthSubmit(e: React.FormEvent) {
     e.preventDefault();
+    clearCurrentSessionProfile();
     setLoading(true);
     setAuthError(null);
     setAuthSuccess(null);
@@ -318,6 +320,7 @@ export default function LoginPage() {
   }
 
   async function handleGoogleLogin() {
+    clearCurrentSessionProfile();
     setGoogleLoading(true);
     setAuthError(null);
     try {

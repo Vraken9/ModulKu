@@ -75,7 +75,7 @@ export function DashboardShell({ children, activeItem }: DashboardShellProps) {
 
   // Profil Guru & Sekolah dari localStorage
   const [school, setSchool] = useState<Partial<SchoolProfile>>({
-    school_name: "SMA NEGERI 1 PURWANTORO",
+    school_name: "Nama Satuan Pendidikan Belum Diatur",
   });
   const [teacher, setTeacher] = useState<Partial<TeacherProfile>>({
     teacher_name: "Pendidik ModulKu",
