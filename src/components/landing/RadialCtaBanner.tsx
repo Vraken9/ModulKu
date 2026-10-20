@@ -20,7 +20,7 @@ export function RadialCtaBanner({ isLoggedIn = false }: RadialCtaBannerProps) {
       <div className="relative z-10 max-w-3xl lg:max-w-4xl mx-auto text-center space-y-6">
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900 border border-slate-700 text-xs text-slate-300 font-semibold tracking-normal">
           <Sparkles className="w-3.5 h-3.5 text-slate-300" />
-          <span>Akses Resmi Pendidik Indonesia</span>
+          <span>Platform Guru Indonesia</span>
         </div>
 
         <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-tight leading-[1.15]">

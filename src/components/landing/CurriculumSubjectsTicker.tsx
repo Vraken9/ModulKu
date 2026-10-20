@@ -84,7 +84,7 @@ export function CurriculumSubjectsTicker() {
         </h2>
 
         <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed">
-          Daftar capaian pembelajaran komprehensif mulai dari fondasi SD/MI hingga peminatan lanjut SMA dan vokasi SMK sesuai regulasi resmi BKPDM Kemendikdasmen No. 020/2026.
+          Daftar Capaian Pembelajaran komprehensif mulai dari fondasi SD/MI hingga peminatan lanjut SMA dan vokasi SMK selaras dengan Panduan Pembelajaran dan Asesmen Kurikulum Merdeka.
         </p>
 
         {/* Tombol Jenjang Bersih Tanpa Angka & Fase */}

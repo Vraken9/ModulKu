@@ -45,11 +45,11 @@ export function ModernFooter() {
           {/* Kolom 1: Brand & Profil (lg:col-span-4) */}
           <div className="lg:col-span-4 space-y-4">
             <Link href="/" className="flex items-center gap-2.5">
-              <ModulKuLogo size="md" showSubtitle subtitleText="Standar BKPDM Kemendikdasmen" />
+              <ModulKuLogo size="md" showSubtitle subtitleText="Platform Asisten Guru Indonesia" />
             </Link>
 
             <p className="text-xs text-slate-600 leading-relaxed max-w-sm">
-              Platform otomasi administrasi, instrumen evaluasi, dan modul pembelajaran Kurikulum Merdeka yang dirancang untuk efisiensi waktu pendidik Indonesia dengan standar kedinasan resmi.
+              Platform otomasi administrasi, instrumen evaluasi, dan modul pembelajaran Kurikulum Merdeka yang dirancang untuk efisiensi waktu pendidik Indonesia dengan format rapi dan standar tata naskah dinas.
             </p>
 
             <div className="pt-1 space-y-2 text-[11px] text-slate-600">
@@ -106,7 +106,7 @@ export function ModernFooter() {
           {/* Kolom 3: Regulasi & Pedoman (lg:col-span-3) */}
           <div className="lg:col-span-3 space-y-3">
             <span className="font-bold text-slate-900 text-xs block">
-              Landasan Regulasi Resmi
+              Pedoman & Landasan Kurikulum
             </span>
             <ul className="space-y-2 text-xs">
               <li className="flex items-start gap-1.5">

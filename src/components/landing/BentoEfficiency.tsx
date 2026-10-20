@@ -71,7 +71,7 @@ export function BentoEfficiency() {
                 <span className="text-xs text-slate-300 font-semibold">siap cetak .DOCX</span>
               </div>
               <p className="text-[11px] text-slate-300 leading-relaxed">
-                Terstruktur otomatis sesuai taksonomi Bloom, stimulus kontekstual AKM, dan format kedinasan resmi.
+                Terstruktur otomatis sesuai taksonomi Bloom, stimulus kontekstual AKM, dan format tata naskah rapi.
               </p>
             </div>
           </div>
@@ -85,7 +85,7 @@ export function BentoEfficiency() {
                 <ShieldCheck className="w-5 h-5 text-white" />
               </div>
               <span className="text-[11px] font-semibold text-slate-500">
-                Standar Kedinasan Resmi
+                Standar Tata Naskah Dinas
               </span>
             </div>
 
@@ -94,7 +94,7 @@ export function BentoEfficiency() {
                 Standar Format Dinas & Kop Surat 2 Logo
               </h3>
               <p className="text-xs text-slate-600 leading-relaxed">
-                Format berkas langsung menerapkan margin 4-3-3-3 cm, Kop Surat resmi (Pemerintah Daerah & Sekolah), dan lembar pengesahan kepala sekolah serta pengawas.
+                Format berkas langsung menerapkan margin 4-3-3-3 cm, Kop Surat dua logo (Pemerintah Daerah & Sekolah), dan lembar pengesahan kepala sekolah serta pengawas.
               </p>
             </div>
           </div>
@@ -102,7 +102,7 @@ export function BentoEfficiency() {
           <div className="mt-5 pt-4 border-t border-slate-100 space-y-2 text-xs text-slate-700 font-medium">
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-slate-800 shrink-0" />
-              <span>Margin 4-3-3-3 cm Resmi</span>
+              <span>Margin Standar 4-3-3-3 cm</span>
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-slate-800 shrink-0" />

@@ -62,12 +62,12 @@ const TIERS: PricingTier[] = [
     features: [
       "Modul Ajar Deep Learning (Mindful, Meaningful, Joyful) Tanpa Batas",
       "Generator Soal HOTS Taksonomi Bloom C1-C6 Tak Terbatas",
-      "Matriks Kisi-Kisi Penulisan Soal & Kartu Soal Resmi",
+      "Matriks Kisi-Kisi Penulisan Soal & Kartu Soal Lengkap",
       "Penyusunan Otomatis ATP, Prota, & Promes Kalender Akademik",
       "Slide Presentasi (.PPTX) Asli Widescreen 16:9 Siap Tayang",
       "Ekspor Margin Kedinasan 4-3-3-3 cm & Kop Surat Dua Logo",
       "Penyelarasan Bukti Dukung Observasi Kinerja PMM (Perdirjen GTK)",
-      "Prioritas pembaruan regulasi BKPDM Kemendikdasmen",
+      "Pembaruan berkala panduan pembelajaran dan kurikulum",
     ],
     ctaText: "Pilih Paket Profesional",
     ctaHref: "/login",
@@ -88,9 +88,9 @@ const TIERS: PricingTier[] = [
       "Master Kop Surat Kedinasan, NIP Kepala Sekolah, & Pengawas Seragam",
       "Bank Dokumen Ajar Terpusat untuk Seluruh Rumpun Mata Pelajaran",
       "Dashboard Monitoring Kelengkapan Administrasi untuk Kepala Sekolah",
-      "Sesi Pelatihan Teknis & Pendampingan Daring Resmi",
+      "Sesi Pelatihan Teknis & Pendampingan Daring",
       "Dukungan Bantuan Prioritas Jalur WhatsApp Khusus Tim Kurikulum",
-      "Faktur Resmi & Kwitansi BOSP / Komite untuk SPJ Dinas",
+      "Kwitansi & Faktur Lengkap untuk SPJ Dana BOS / BOSP",
     ],
     ctaText: "Hubungi Lisensi Sekolah",
     ctaHref: "/login",
@@ -317,7 +317,7 @@ export function PricingSection({ isLoggedIn: propIsLoggedIn }: PricingSectionPro
         </div>
         <div className="flex items-center gap-2">
           <ShieldCheck className="w-4 h-4 text-slate-800" />
-          <span>Faktur Kedinasan Resmi untuk SPJ Dana BOS</span>
+          <span>Faktur & Kwitansi Lengkap untuk SPJ Dana BOS</span>
         </div>
       </div>
     </div>

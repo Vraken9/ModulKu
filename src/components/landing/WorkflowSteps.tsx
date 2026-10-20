@@ -65,8 +65,8 @@ const WORKFLOW_STEPS: WorkflowStep[] = [
   {
     step: "03",
     code: "Ekspor Kedinasan",
-    title: "Tinjau, Edit, & Ekspor Berkas Resmi",
-    description: "Periksa naskah di layar, lakukan penyuntingan jika diperlukan, lalu unduh dokumen resmi dengan margin kedinasan dan Kop Surat.",
+    title: "Tinjau, Edit, & Ekspor Berkas Siap Cetak",
+    description: "Periksa naskah di layar, lakukan penyuntingan jika diperlukan, lalu unduh dokumen lengkap dengan margin standar dan Kop Surat.",
     points: [
       "Ekspor dokumen Word (.DOCX) asli margin 4-3-3-3 cm",
       "Otomatis memuat Kop Surat dua logo dan lembar tanda tangan",

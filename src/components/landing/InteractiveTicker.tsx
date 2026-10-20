@@ -37,18 +37,18 @@ interface TickerFeature {
 const FEATURES: TickerFeature[] = [
   {
     id: "modul-ajar",
-    badge: "STANDAR BKPDM NO. 020/2026",
+    badge: "DEEP LEARNING & DIFERENSIASI",
     title: "Modul Ajar Deep Learning & Diferensiasi",
     shortDesc: "Prinsip Mindful, Meaningful, & Joyful Terpetakan Nyata",
-    tagline: "Format Resmi Supervisi & Ringkas Harian",
+    tagline: "Format Lengkap Supervisi & Ringkas Harian",
     fullDesc:
       "Menyusun struktur modul ajar lengkap dengan 3 pilar diferensiasi (konten, proses, produk), asesmen diagnostik, formatif, dan sumatif, pemetaan 6 Dimensi Profil Pancasila, serta lampiran LKPD dan Lembar Pengesahan Pengawas Sekolah.",
     points: [
       "Pemetaan diferensiasi belajar siswa terakomodasi nyata",
-      "Format resmi supervisi lengkap (LKPD, Glosarium, Refleksi)",
+      "Format supervisi lengkap (LKPD, Glosarium, Refleksi)",
       "Ekspor dokumen Word (.docx) dengan margin kedinasan 4-3-3-3 cm",
     ],
-    docOutput: "Modul Ajar Resmi (.DOCX & PDF Siap Cetak)",
+    docOutput: "Modul Ajar Lengkap (.DOCX & PDF Siap Cetak)",
     formatType: "Microsoft Word Native",
     link: "/modul-ajar",
     icon: FileText,
@@ -112,15 +112,15 @@ const FEATURES: TickerFeature[] = [
     badge: "MASTER KOP KEDINASAN",
     title: "Kop Surat & Lembar Pengesahan",
     shortDesc: "Konfigurasi Identitas Satuan Pendidikan Otomatis",
-    tagline: "Otomasi Identitas Resmi Dokumen Tanpa Ketik Ulang",
+    tagline: "Otomasi Identitas & Kop Sekolah Tanpa Ketik Ulang",
     fullDesc:
       "Isi data nama sekolah, NPSN, alamat dinas, NIP Kepala Sekolah, dan Pengawas Pembina satu kali. Seluruh naskah soal, modul ajar, dan perangkat otomatis memuat kop surat kedinasan yang valid.",
     points: [
       "Penyimpanan profil lokal aman langsung di peramban guru",
-      "Kop surat bergaris ganda resmi dinas pendidikan",
+      "Kop surat bergaris ganda standar kedinasan",
       "Tanda tangan digital dan lembar verifikasi pengawas",
     ],
-    docOutput: "Kop Surat Resmi & Lembar Pengesahan Supervisi",
+    docOutput: "Kop Surat & Lembar Pengesahan Supervisi",
     formatType: "Integrasi Kop Otomatis Dua Logo",
     link: "/profil-sekolah",
     icon: School,
@@ -192,7 +192,7 @@ export function InteractiveTicker() {
             <span>Fitur Administrasi Modul</span>
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
-            Eksplorasi Modul Perangkat & Instrumen Resmi
+            Eksplorasi Perangkat Ajar & Instrumen Evaluasi
           </h2>
           <p className="text-sm sm:text-base text-slate-600 max-w-2xl leading-relaxed">
             Pilih modul kerja di bawah untuk meninjau rincian luaran, spesifikasi berkas kedinasan, dan format supervisi yang dihasilkan.
@@ -201,7 +201,7 @@ export function InteractiveTicker() {
 
         <div className="hidden sm:flex items-center gap-2.5 text-xs sm:text-sm text-slate-600 font-mono self-start sm:self-end">
           <span className="w-2.5 h-2.5 rounded-full bg-slate-800 animate-pulse" />
-          <span>Status: 6 Modul Aktif Terverifikasi</span>
+          <span>Status: 6 Modul Siap Digunakan</span>
         </div>
       </div>
 
@@ -355,7 +355,7 @@ export function InteractiveTicker() {
                   </Button>
                 </Link>
                 <div className="text-xs sm:text-sm text-slate-600 font-medium">
-                  Luaran Resmi:{" "}
+                  Format Dokumen:{" "}
                   <span className="font-bold text-slate-900">
                     {selectedFeature.docOutput}
                   </span>
@@ -367,10 +367,10 @@ export function InteractiveTicker() {
             <div className="lg:col-span-5 bg-slate-50/90 rounded-2xl p-6 sm:p-7 border border-slate-200 space-y-4">
               <div className="flex items-center justify-between border-b border-slate-200/80 pb-3">
                 <span className="text-xs font-mono font-bold text-slate-500 uppercase tracking-wider">
-                  SPESIFIKASI BERKAS RESMI
+                  SPESIFIKASI BERKAS DOKUMEN
                 </span>
                 <span className="text-xs font-semibold px-2.5 py-1 rounded bg-white border border-slate-200 text-slate-700">
-                  Standar Resmi BKPDM
+                  Format Standar Rapi
                 </span>
               </div>
 

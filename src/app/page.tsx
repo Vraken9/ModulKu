@@ -251,7 +251,7 @@ export default function LandingPage() {
                 {/* Standard Curriculum Emerald Badge */}
                 <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-[#ECFDF5] border border-emerald-200 text-xs sm:text-sm font-semibold text-[#065F46] shadow-2xs">
                   <Sparkles className="w-4 h-4 text-[#059669]" />
-                  <span>Platform Berstandar BKPDM Kemendikdasmen</span>
+                  <span>Platform Asisten Perangkat Ajar & Evaluasi Guru</span>
                 </div>
 
                 <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[54px] font-black text-slate-900 tracking-tight leading-[1.12]">
@@ -289,11 +289,11 @@ export default function LandingPage() {
                   </div>
                   <div className="flex items-center gap-2">
                     <Check className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-slate-900 stroke-[2.5]" />
-                    <span>Standar BKPDM 2026</span>
+                    <span>Format Rapi Siap Cetak DOCX</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Check className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-slate-900 stroke-[2.5]" />
-                    <span>DOCX Margin 4-3-3-3 cm</span>
+                    <span>Margin Standar 4-3-3-3 cm</span>
                   </div>
                 </div>
               </div>

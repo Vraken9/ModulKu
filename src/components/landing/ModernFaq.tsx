@@ -35,7 +35,7 @@ const FAQ_ITEMS: FaqItem[] = [
     id: "faq-4",
     category: "MASTER SEKOLAH",
     question: "Apakah saya harus memasukkan Kop Surat dan profil sekolah berulang kali?",
-    answer: "Tidak. Melalui modul Master Profil Sekolah, Anda cukup mengisi data sekolah (nama sekolah, NPSN, alamat, logo daerah, logo sekolah) dan data penandatangan satu kali. Seluruh naskah soal, modul ajar, ATP, dan LKPD akan otomatis memuat Kop Surat dan Lembar Pengesahan resmi.",
+    answer: "Tidak. Melalui modul Master Profil Sekolah, Anda cukup mengisi data sekolah (nama sekolah, NPSN, alamat, logo daerah, logo sekolah) dan data penandatangan satu kali. Seluruh naskah soal, modul ajar, ATP, dan LKPD akan otomatis memuat Kop Surat dan Lembar Pengesahan.",
   },
   {
     id: "faq-5",

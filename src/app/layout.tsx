@@ -18,9 +18,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ModulKu - Platform Administrasi & Evaluasi Standar BKPDM Kemendikdasmen",
+  title: "ModulKu - Platform Administrasi & Evaluasi Pembelajaran Guru",
   description:
-    "Platform terpadu guru Indonesia untuk penyusunan Modul Ajar Standar BKPDM Kemendikdasmen (Deep Learning), Soal Evaluasi AKM/HOTS, Kisi-kisi, ATP, Prota, Promes, dan Media Ajar PPTX.",
+    "Platform terpadu guru Indonesia untuk penyusunan Modul Ajar Deep Learning (Mindful, Meaningful, Joyful), Soal Evaluasi AKM/HOTS, Kisi-kisi, ATP, Prota, Promes, dan Media Ajar PPTX.",
 };
 
 export default function RootLayout({
