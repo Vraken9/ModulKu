@@ -58,7 +58,7 @@ import { useNotification } from "@/components/providers/NotificationProvider";
 export default function BankDokumenPage() {
   const router = useRouter();
   const { confirm, toast } = useNotification();
-  const [documents, setDocuments] = useState<StoredDocument[]>(SEED_DOCUMENTS);
+  const [documents, setDocuments] = useState<StoredDocument[]>([]);
   const [usage, setUsage] = useState<StorageUsageSummary>(DEFAULT_STORAGE_SUMMARY);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedType, setSelectedType] = useState<string>("all");

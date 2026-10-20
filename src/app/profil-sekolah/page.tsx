@@ -41,7 +41,7 @@ import {
 import { getActiveUserId } from "@/lib/document-vault";
 import { supabase } from "@/lib/supabase/client";
 
-const DEFAULT_SCHOOL: SchoolProfileFormValues = {
+const DEMO_SCHOOL: SchoolProfileFormValues = {
   government_agency: "PEMERINTAH PROVINSI JAWA TIMUR",
   education_office: "DINAS PENDIDIKAN DAN KEBUDAYAAN",
   school_name: "SMA NEGERI 1 PURWANTORO",
@@ -56,24 +56,51 @@ const DEFAULT_SCHOOL: SchoolProfileFormValues = {
   right_logo_url: "",
 };
 
-const DEFAULT_TEACHER: TeacherProfileFormValues = {
-  teacher_name: "Arfian Cahya, S.Pd.",
+const DEMO_TEACHER: TeacherProfileFormValues = {
+  teacher_name: "Dra. Siti Rahmawati, M.Pd.",
   teacher_title: "Guru Mata Pelajaran Fisika",
-  teacher_nip: "19880412 201402 1 003",
-  headmaster_name: "Drs. H. Mulyadi, M.Pd.",
+  teacher_nip: "19820514 200801 2 015",
+  headmaster_name: "Drs. H. Mulyono, M.Pd.",
   headmaster_title: "Kepala Sekolah",
-  headmaster_nip: "19670815 199303 1 005",
+  headmaster_nip: "19681120 199403 1 004",
   supervisor_name: "Dr. Hj. Sri Wahyuni, M.Pd.",
   supervisor_title: "Pengawas Pembina Cabang Dinas",
   supervisor_nip: "19651120 199002 2 002",
+};
+
+const BLANK_SCHOOL: SchoolProfileFormValues = {
+  government_agency: "KEMENTERIAN PENDIDIKAN, KEBUDAYAAN, RISET, DAN TEKNOLOGI",
+  education_office: "DINAS PENDIDIKAN",
+  school_name: "",
+  npsn: "",
+  accreditation: "A",
+  address: "",
+  postal_code: "",
+  phone: "",
+  email: "",
+  website: "",
+  left_logo_url: "",
+  right_logo_url: "",
+};
+
+const BLANK_TEACHER: TeacherProfileFormValues = {
+  teacher_name: "",
+  teacher_title: "Guru Mata Pelajaran",
+  teacher_nip: "-",
+  headmaster_name: "",
+  headmaster_title: "Kepala Sekolah",
+  headmaster_nip: "-",
+  supervisor_name: "",
+  supervisor_title: "Pengawas Pembina",
+  supervisor_nip: "-",
 };
 
 export default function ProfilSekolahPage() {
   const router = useRouter();
   const { confirm, toast } = useNotification();
   const [isOnboarding, setIsOnboarding] = useState(false);
-  const [schoolData, setSchoolData] = useState<SchoolProfileFormValues>(DEFAULT_SCHOOL);
-  const [teacherData, setTeacherData] = useState<TeacherProfileFormValues>(DEFAULT_TEACHER);
+  const [schoolData, setSchoolData] = useState<SchoolProfileFormValues>(BLANK_SCHOOL);
+  const [teacherData, setTeacherData] = useState<TeacherProfileFormValues>(BLANK_TEACHER);
   const [activeTab, setActiveTab] = useState<string>("sekolah");
   const [isSaved, setIsSaved] = useState<boolean>(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -89,22 +116,63 @@ export default function ProfilSekolahPage() {
         const displayName =
           session?.user?.user_metadata?.full_name ||
           session?.user?.email?.split("@")[0] ||
-          "Pendidik ModulKu";
+          "";
+
+        const isDemo = uid === "demo_guru";
+        const baseTeacher = isDemo ? DEMO_TEACHER : BLANK_TEACHER;
+        const baseSchool = isDemo ? DEMO_SCHOOL : BLANK_SCHOOL;
 
         const t = getTeacherProfile(uid, displayName);
         const s = getSchoolProfile(uid);
 
+        const cleanTeacherName =
+          t.teacher_name &&
+          t.teacher_name !== "Arfian Cahya, S.Pd." &&
+          t.teacher_name !== "Dra. Siti Rahmawati, M.Pd." &&
+          t.teacher_name !== "Pendidik ModulKu"
+            ? t.teacher_name
+            : displayName;
+
         setTeacherData({
-          ...DEFAULT_TEACHER,
+          ...baseTeacher,
           ...t,
-          teacher_name: t.teacher_name || displayName,
-          teacher_nip: t.teacher_nip || "-",
+          teacher_name: cleanTeacherName || (isDemo ? DEMO_TEACHER.teacher_name : ""),
+          teacher_nip:
+            t.teacher_nip && !t.teacher_nip.startsWith("19880412") && !t.teacher_nip.startsWith("19820514")
+              ? t.teacher_nip
+              : isDemo
+              ? DEMO_TEACHER.teacher_nip
+              : "-",
         });
 
+        const cleanSchoolName =
+          s.school_name &&
+          s.school_name !== "SMA NEGERI 1 PURWANTORO" &&
+          s.school_name !== "Nama Satuan Pendidikan Belum Diatur" &&
+          s.school_name !== "SATUAN PENDIDIKAN INDONESIA"
+            ? s.school_name
+            : isDemo
+            ? DEMO_SCHOOL.school_name
+            : "";
+
         setSchoolData({
-          ...DEFAULT_SCHOOL,
+          ...baseSchool,
           ...s,
-          accreditation: (s.accreditation as SchoolProfileFormValues["accreditation"]) || DEFAULT_SCHOOL.accreditation,
+          school_name: cleanSchoolName,
+          address:
+            s.address && !s.address.includes("Purwantoro") && !s.address.includes("Pendidikan Nasional")
+              ? s.address
+              : isDemo
+              ? DEMO_SCHOOL.address
+              : "",
+          email:
+            s.email && !s.email.includes("purwantoro") && !s.email.includes("pendidikan.sch.id")
+              ? s.email
+              : isDemo
+              ? DEMO_SCHOOL.email
+              : "",
+          accreditation:
+            (s.accreditation as SchoolProfileFormValues["accreditation"]) || baseSchool.accreditation,
           left_logo_url: s.left_logo_url || "",
           right_logo_url: s.right_logo_url || "",
         });
@@ -188,13 +256,17 @@ export default function ProfilSekolahPage() {
 
     const activeUid = getActiveUserId();
     const uid = activeUid !== "guest" ? activeUid : undefined;
-    setSchoolData(DEFAULT_SCHOOL);
-    setTeacherData(DEFAULT_TEACHER);
-    saveSchoolProfile(DEFAULT_SCHOOL as any, uid);
-    saveTeacherProfile(DEFAULT_TEACHER as any, uid);
+    const isDemo = uid === "demo_guru";
+    const targetSchool = isDemo ? DEMO_SCHOOL : BLANK_SCHOOL;
+    const targetTeacher = isDemo ? DEMO_TEACHER : BLANK_TEACHER;
+
+    setSchoolData(targetSchool);
+    setTeacherData(targetTeacher);
+    saveSchoolProfile(targetSchool as any, uid);
+    saveTeacherProfile(targetTeacher as any, uid);
     setErrors({});
     setIsSaved(true);
-    toast.success("Data profil sekolah dan guru berhasil dikembalikan ke format standar.", "Pengaturan Ulang Berhasil");
+    toast.success("Data profil sekolah dan guru berhasil diatur ulang.", "Pengaturan Ulang Berhasil");
     setTimeout(() => setIsSaved(false), 3000);
   };
 
@@ -215,8 +287,8 @@ export default function ProfilSekolahPage() {
 
     localStorage.removeItem("guru_school_profile");
     localStorage.removeItem("guru_teacher_profile");
-    setSchoolData(DEFAULT_SCHOOL);
-    setTeacherData(DEFAULT_TEACHER);
+    setSchoolData(BLANK_SCHOOL);
+    setTeacherData(BLANK_TEACHER);
     toast.success("Seluruh data identitas kedinasan berhasil dihapus secara permanen.", "Data Dihapus");
   };
 

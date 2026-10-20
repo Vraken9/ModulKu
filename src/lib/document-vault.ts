@@ -880,7 +880,19 @@ export function getStoredDocuments(userId?: string): StoredDocument[] {
     }
     const parsed = JSON.parse(raw);
     if (Array.isArray(parsed)) {
-      // Otomatis lengkapi contentData dokumen seed jika sebelumnya tersimpan tanpa contentData
+      // Jika akun nyata (bukan akun demo), bersihkan dokumen seed yang sempat tersimpan di cache lama
+      if (uid !== "demo_guru") {
+        const realDocs = parsed.filter(
+          (doc: StoredDocument) => !doc.id.includes("seed") && !doc.id.startsWith("doc-seed")
+        );
+        if (realDocs.length !== parsed.length) {
+          localStorage.setItem(key, JSON.stringify(realDocs));
+          return realDocs;
+        }
+        return realDocs;
+      }
+
+      // Otomatis lengkapi contentData dokumen seed untuk akun demo
       const enriched = parsed.map((doc: StoredDocument) => {
         if (!doc.contentData && doc.id.includes("seed")) {
           const matchingSeed = SEED_DOCUMENTS.find((s) => doc.id.startsWith(s.id));

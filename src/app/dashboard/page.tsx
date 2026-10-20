@@ -32,8 +32,8 @@ import { supabase } from "@/lib/supabase/client";
 
 export default function DashboardPage() {
   const [school, setSchool] = useState<Partial<SchoolProfile>>({
-    school_name: "SATUAN PENDIDIKAN INDONESIA",
-    government_agency: "PEMERINTAH PROVINSI",
+    school_name: "Nama Satuan Pendidikan Belum Diatur",
+    government_agency: "DINAS PENDIDIKAN",
   });
   const [teacher, setTeacher] = useState<Partial<TeacherProfile>>({
     teacher_name: "Pendidik ModulKu",
